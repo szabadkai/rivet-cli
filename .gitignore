@@ -1,0 +1,29 @@
+# Rust
+target/
+Cargo.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.history/
+target/
+target/** */
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Reports
+reports/*.html
+reports/*.json
+reports/*.xml
+
+# Environment
+.env
+.env.local
+
+# Temporary files
+*.tmp
+*.temp

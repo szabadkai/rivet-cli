@@ -1,0 +1,58 @@
+name: JSONPlaceholder API Test
+env: ${RIVET_ENV:dev}
+
+vars:
+  baseUrl: ${BASE_URL:https://jsonplaceholder.typicode.com}
+
+setup:
+  - name: Health check
+    request:
+      method: GET
+      url: "{{baseUrl}}/posts/1"
+    expect:
+      status: 200
+      jsonpath:
+        "$.id": 1
+
+tests:
+  - name: Get all posts
+    request:
+      method: GET
+      url: "{{baseUrl}}/posts"
+    expect:
+      status: 200
+      jsonpath:
+        "$.length": 100
+
+  - name: Get specific post
+    request:
+      method: GET
+      url: "{{baseUrl}}/posts/{{postId}}"
+    expect:
+      status: 200
+      jsonpath:
+        "$.id": "{{postId}}"
+        "$.userId": "{{userId}}"
+
+  - name: Create new post
+    request:
+      method: POST
+      url: "{{baseUrl}}/posts"
+      headers:
+        Content-Type: "application/json"
+      body: |
+        {
+          "title": "Test Post",
+          "body": "This is a test post",
+          "userId": 1
+        }
+    expect:
+      status: 201
+      jsonpath:
+        "$.title": "Test Post"
+
+dataset:
+  file: data/posts.csv
+  parallel: 4
+
+teardown: []

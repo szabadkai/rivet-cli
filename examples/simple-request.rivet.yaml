@@ -1,0 +1,6 @@
+request:
+  method: GET
+  url: "https://httpbin.org/json"
+  headers:
+    Accept: "application/json"
+    User-Agent: "rivet/0.1.0"
