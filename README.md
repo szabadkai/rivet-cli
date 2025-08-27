@@ -110,6 +110,11 @@ Rivet supports user configuration via `~/.rivet/config.json`:
 }
 ```
 
+**Default Settings:**
+- Auto-opens HTML reports in browser
+- Uses the interactive `compact` template by default
+- Generates HTML reports by default
+
 This file is automatically created on first run with sensible defaults.
 
 ### Generate tests from OpenAPI spec

@@ -19,7 +19,7 @@ impl Default for ReportConfig {
     fn default() -> Self {
         Self {
             auto_open_browser: true,  // Default to true as requested
-            default_template: "chatty".to_string(), // Default to chatty since user likes it
+            default_template: "compact".to_string(), // Default to compact - interactive and modern
             default_formats: vec!["html".to_string()],
         }
     }

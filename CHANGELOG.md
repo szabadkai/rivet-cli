@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Mobile-responsive design
 - ⚙️ **User configuration system** (`~/.rivet/config.json`):
   - Configurable auto-open browser behavior (default: true)
-  - Configurable default HTML template (default: compact)
+  - Configurable default HTML template (**defaults to compact**)
   - Automatic config file creation with sensible defaults
 - 🎯 **Enhanced HTML templates**:
   - `detailed` - Professional business reports
