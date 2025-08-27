@@ -141,7 +141,7 @@ pub fn print_banner() {
     ██║  ██║██║ ╚████╔╝ ███████╗   ██║      https://github.com/szabadkai/rivet-cli
     ╚═╝  ╚═╝╚═╝  ╚═══╝  ╚══════╝   ╚═╝
 "#;
-    
+
     if atty::is(atty::Stream::Stdout) {
         println!("{}", banner.cyan());
     } else {
@@ -152,7 +152,7 @@ pub fn print_banner() {
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
-    
+
     // Print banner for most commands
     if !matches!(cli.command, Commands::Send { .. }) {
         print_banner();
@@ -183,7 +183,20 @@ async fn main() -> anyhow::Result<()> {
             no_open,
             ci,
         } => {
-            run::handle_run(target, env, data, parallel, grep, bail, report, template, open, no_open, ci).await?;
+            run::handle_run(run::RunOptions {
+                target,
+                env,
+                _data: data,
+                parallel,
+                grep,
+                bail,
+                report,
+                template,
+                open,
+                no_open,
+                ci,
+            })
+            .await?;
         }
         Commands::Gen { spec, out } => {
             gen::handle_gen(spec, out).await?;

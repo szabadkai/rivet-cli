@@ -11,17 +11,17 @@ pub async fn handle_grpc(
     println!("Making gRPC call: {}", call);
     println!("Proto directory: {}", proto.display());
     println!("Timeout: {}", timeout);
-    
+
     if let Some(request_data) = data {
         println!("Request data: {}", request_data);
     }
-    
+
     for expectation in expect_jsonpath {
         println!("JSONPath expectation: {}", expectation);
     }
-    
+
     // TODO: Implement gRPC client
     println!("✔ gRPC client not yet implemented");
-    
+
     Ok(())
 }

@@ -18,51 +18,51 @@ pub async fn handle_send(
     timeout: String,
 ) -> Result<()> {
     let start = Instant::now();
-    
+
     // Build HTTP client
-    let mut client_builder = Client::builder()
-        .timeout(parse_timeout(&timeout)?);
-    
+    let mut client_builder = Client::builder().timeout(parse_timeout(&timeout)?);
+
     if insecure {
         client_builder = client_builder.danger_accept_invalid_certs(true);
     }
-    
+
     let client = client_builder.build()?;
-    
+
     // Parse headers
     let parsed_headers = parse_headers(&headers)?;
-    
+
     // Build request
-    let mut request = client.request(
-        method.parse()?,
-        &url,
-    );
-    
+    let mut request = client.request(method.parse()?, &url);
+
     for (key, value) in parsed_headers {
         request = request.header(key, value);
     }
-    
+
     if let Some(ref body) = data {
         request = request.body(body.clone());
     }
-    
+
     // Show request box
     request_box::print_request_box(&method, &url, &headers);
-    
+
     // Send request
     let response = request.send().await?;
     let duration = start.elapsed();
-    
+
     // Get response info
     let status = response.status();
-    let status_text = format!("{} {}", status.as_u16(), status.canonical_reason().unwrap_or(""));
+    let status_text = format!(
+        "{} {}",
+        status.as_u16(),
+        status.canonical_reason().unwrap_or("")
+    );
     let response_headers = response.headers().clone();
     let body_bytes = response.bytes().await?;
     let body_size = body_bytes.len();
-    
+
     // Show response box
     response_box::print_response_box(&status_text, duration, body_size, &response_headers);
-    
+
     // Pretty print JSON if possible
     if let Ok(json_value) = serde_json::from_slice::<Value>(&body_bytes) {
         let pretty_json = serde_json::to_string_pretty(&json_value)?;
@@ -77,13 +77,13 @@ pub async fn handle_send(
             println!("{}", "[Binary data]".dimmed());
         }
     }
-    
+
     // Save request file if requested
     if let Some(save_path) = save {
         save_request_file(&save_path, &method, &url, &headers, &data).await?;
         println!("\n{} Saved request to {}", "✓".green(), save_path.display());
     }
-    
+
     Ok(())
 }
 
@@ -94,11 +94,8 @@ async fn save_request_file(
     headers: &[String],
     data: &Option<String>,
 ) -> Result<()> {
-    let mut request_yaml = format!(
-        "request:\n  method: {}\n  url: \"{}\"\n",
-        method, url
-    );
-    
+    let mut request_yaml = format!("request:\n  method: {}\n  url: \"{}\"\n", method, url);
+
     if !headers.is_empty() {
         request_yaml.push_str("  headers:\n");
         for header in headers {
@@ -112,11 +109,11 @@ async fn save_request_file(
             }
         }
     }
-    
+
     if let Some(body) = data {
         request_yaml.push_str(&format!("  body: \"{}\"\n", body));
     }
-    
+
     tokio::fs::write(path, request_yaml).await?;
     Ok(())
 }

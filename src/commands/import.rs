@@ -4,7 +4,7 @@ use std::path::PathBuf;
 pub async fn handle_import(tool: String, file: PathBuf, out: PathBuf) -> Result<()> {
     println!("Importing from {}: {}", tool, file.display());
     println!("Output directory: {}", out.display());
-    
+
     match tool.to_lowercase().as_str() {
         "postman" => {
             println!("✔ Postman importer not yet implemented");
@@ -22,6 +22,6 @@ pub async fn handle_import(tool: String, file: PathBuf, out: PathBuf) -> Result<
             anyhow::bail!("Unsupported import tool: {}", tool);
         }
     }
-    
+
     Ok(())
 }

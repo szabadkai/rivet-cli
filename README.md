@@ -55,6 +55,28 @@ cargo build --release
 
 ## Quick Start
 
+### Development (no Make required)
+
+Common dev tasks are available via Cargo aliases/xtask:
+
+```bash
+# One-time setup (git hooks)
+cargo dev-setup
+
+# Build / Test / Lints
+cargo build
+cargo test
+cargo fmt
+cargo fmt-check
+cargo clippy
+
+# Run all checks like CI
+cargo ci
+
+# Start a release (maintainers)
+cargo release patch   # or minor/major
+```
+
 ### Send a simple HTTP request
 
 ```bash

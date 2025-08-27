@@ -1,0 +1,12 @@
+[alias]
+# Run local xtasks: `cargo xtask <task>`
+xtask = "run --manifest-path xtask/Cargo.toml --"
+
+# Convenience wrappers
+ci = "xtask ci"
+install-hooks = "xtask install-hooks"
+dev-setup = "xtask dev-setup"
+release = "xtask release"
+
+# Formatting check to mirror Makefile
+fmt-check = "fmt -- --check"

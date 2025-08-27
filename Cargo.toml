@@ -67,3 +67,7 @@ url = "2.4"
 
 # Regular expressions
 regex = "1.10"
+
+[dev-dependencies]
+# Testing utilities
+tempfile = "3.8"
