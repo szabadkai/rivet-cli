@@ -87,6 +87,8 @@ jobs:
     name: Create Release
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
       - name: Checkout code
@@ -119,7 +121,11 @@ jobs:
         id: get_version
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+            INP="${{ github.event.inputs.version }}"
+            case "$INP" in
+              v*) echo "VERSION=$INP" >> $GITHUB_OUTPUT ;;
+              *)  echo "VERSION=v$INP" >> $GITHUB_OUTPUT ;;
+            esac
           else
             echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
           fi
