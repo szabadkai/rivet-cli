@@ -16,9 +16,39 @@ Rivet is a modern API testing tool designed for command-line workflows. It allow
 
 ## Installation
 
+### Pre-built Binaries
+
+Download the latest release for your platform:
+
+**macOS (Apple Silicon):**
 ```bash
-# Build from source (requires Rust)
-git clone https://github.com/yourusername/rivet-cli
+curl -L https://github.com/szabadkai/rivet-cli/releases/latest/download/rivet-macos-arm64 -o rivet
+chmod +x rivet
+sudo mv rivet /usr/local/bin/
+```
+
+**macOS (Intel):**
+```bash
+curl -L https://github.com/szabadkai/rivet-cli/releases/latest/download/rivet-macos-x86_64 -o rivet
+chmod +x rivet
+sudo mv rivet /usr/local/bin/
+```
+
+**Linux:**
+```bash
+curl -L https://github.com/szabadkai/rivet-cli/releases/latest/download/rivet-linux-x86_64 -o rivet
+chmod +x rivet
+sudo mv rivet /usr/local/bin/
+```
+
+**Windows:**
+Download `rivet-windows-x86_64.exe` from the [latest release](https://github.com/szabadkai/rivet-cli/releases/latest) and add to your PATH.
+
+### Build from Source
+
+```bash
+# Requires Rust 1.70+
+git clone https://github.com/szabadkai/rivet-cli
 cd rivet-cli
 cargo build --release
 ```
@@ -43,8 +73,44 @@ rivet send POST https://httpbin.org/post \
 ### Run a test suite
 
 ```bash
-rivet run tests/example.rivet.yaml --report html,json --parallel 8
+# Basic test run
+rivet run tests/example.rivet.yaml
+
+# With HTML report (auto-opens in browser)
+rivet run tests/example.rivet.yaml --report html
+
+# With custom template and multiple formats
+rivet run tests/example.rivet.yaml --report html,json --template compact --parallel 8
 ```
+
+### HTML Report Templates
+
+Rivet includes several beautiful HTML report templates:
+
+- **`detailed`** - Professional, comprehensive business reports
+- **`compact`** - Interactive, filterable, space-efficient with expandable test details
+- **`chatty`** - Friendly, conversational with storytelling elements
+- **`simple`** - Clean, minimal reports with basic metrics
+
+```bash
+rivet run tests/ --report html --template compact --open
+```
+
+### Configuration
+
+Rivet supports user configuration via `~/.rivet/config.json`:
+
+```json
+{
+  "reports": {
+    "auto_open_browser": true,
+    "default_template": "compact",
+    "default_formats": ["html"]
+  }
+}
+```
+
+This file is automatically created on first run with sensible defaults.
 
 ### Generate tests from OpenAPI spec
 
