@@ -18,6 +18,7 @@ pub struct TestResult {
     pub response_body: Option<String>,
 }
 
+#[derive(Clone)]
 pub struct RequestExecutor {
     client: Client,
 }

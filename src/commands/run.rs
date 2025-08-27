@@ -43,28 +43,32 @@ pub async fn handle_run(
     
     println!();
     if total_failed == 0 {
-        println!("{} {} tests passed in {:?}", 
-            "✔".green().bold(), 
-            total_tests, 
-            total_duration
-        );
-        
-        if !ci && total_tests > 0 {
-            // Add some celebration for successful runs
-            println!("      .       .  *     .     *");
-            println!("   *    .   *   .  *      .        *");
+        if ci {
+            println!("PASS {} tests in {:?}", total_tests, total_duration);
+        } else {
+            println!("{} {} tests passed in {:?}", 
+                "✔".green().bold(), 
+                total_tests, 
+                total_duration
+            );
+            
+            if total_tests > 0 {
+                // Add some celebration for successful runs (only in interactive mode)
+                println!("      .       .  *     .     *");
+                println!("   *    .   *   .  *      .        *");
+            }
         }
-        
-        // Don't show banner at end anymore
     } else {
-        println!("{} {} passed, {} failed in {:?}", 
-            "✖".red().bold(),
-            total_passed, 
-            total_failed, 
-            total_duration
-        );
-        
-        // Don't show banner at end anymore
+        if ci {
+            println!("FAIL {} passed, {} failed in {:?}", total_passed, total_failed, total_duration);
+        } else {
+            println!("{} {} passed, {} failed in {:?}", 
+                "✖".red().bold(),
+                total_passed, 
+                total_failed, 
+                total_duration
+            );
+        }
         
         // Exit with error code if any tests failed
         std::process::exit(1);

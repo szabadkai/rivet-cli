@@ -1,0 +1,37 @@
+name: Basic API Tests
+description: Simple GET requests to test endpoints
+env: ${RIVET_ENV:test}
+
+vars:
+  baseUrl: ${BASE_URL:https://jsonplaceholder.typicode.com}
+
+tests:
+  - name: Get user by ID
+    description: Fetch a user by their ID
+    request:
+      method: GET
+      url: "{{baseUrl}}/users/1"
+    expect:
+      status: 200
+      jsonpath:
+        "$.id": 1
+        "$.name": "Leanne Graham"
+
+  - name: Get posts
+    description: Fetch all posts
+    request:
+      method: GET
+      url: "{{baseUrl}}/posts"
+    expect:
+      status: 200
+
+  - name: Get specific post
+    description: Fetch a specific post
+    request:
+      method: GET
+      url: "{{baseUrl}}/posts/1"
+    expect:
+      status: 200
+      jsonpath:
+        "$.userId": 1
+        "$.id": 1

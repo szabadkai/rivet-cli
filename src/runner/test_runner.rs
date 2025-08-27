@@ -15,6 +15,7 @@ pub struct TestRunner {
     parallel_workers: usize,
     bail_on_failure: bool,
     filter_pattern: Option<String>,
+    ci_mode: bool,
 }
 
 pub struct TestSuiteResult {
@@ -33,7 +34,7 @@ impl TestRunner {
         parallel_workers: usize,
         bail_on_failure: bool,
         filter_pattern: Option<String>,
-        _ci_mode: bool,
+        ci_mode: bool,
     ) -> Result<Self> {
         let executor = RequestExecutor::new(timeout)?;
         
@@ -42,15 +43,31 @@ impl TestRunner {
             parallel_workers,
             bail_on_failure,
             filter_pattern,
+            ci_mode,
         })
     }
     
     pub async fn run_tests(&self, target: &Path, env: Option<&str>) -> Result<Vec<TestSuiteResult>> {
         let test_suites = load_test_suite(target).await?;
+        
+        if test_suites.len() <= 1 || self.parallel_workers <= 1 {
+            // Sequential execution for single suite or when parallel is disabled
+            self.run_suites_sequential(test_suites, env).await
+        } else {
+            // Parallel execution for multiple suites
+            self.run_suites_parallel(test_suites, env).await
+        }
+    }
+    
+    async fn run_suites_sequential(&self, test_suites: Vec<(String, crate::config::RivetConfig)>, env: Option<&str>) -> Result<Vec<TestSuiteResult>> {
         let mut all_results = Vec::new();
         
         for (suite_name, config) in test_suites {
-            println!("\n{} {}", "RUN".cyan().bold(), suite_name.bright_white());
+            if self.ci_mode {
+                println!("RUN {}", suite_name);
+            } else {
+                println!("\n{} {}", "RUN".cyan().bold(), suite_name.bright_white());
+            }
             
             let suite_start = Instant::now();
             let results = self.run_single_suite(&config, env).await?;
@@ -59,21 +76,7 @@ impl TestRunner {
             let passed = results.iter().filter(|r| r.passed).count();
             let failed = results.len() - passed;
             
-            // Print summary
-            if failed == 0 {
-                println!("  {} {} tests passed in {:?}", 
-                    "✔".green().bold(), 
-                    passed, 
-                    duration
-                );
-            } else {
-                println!("  {} {} passed, {} failed in {:?}", 
-                    if failed > 0 { "✖".red().bold().to_string() } else { "✔".green().bold().to_string() },
-                    passed, 
-                    failed, 
-                    duration
-                );
-            }
+            self.print_suite_summary(&suite_name, passed, failed, duration);
             
             all_results.push(TestSuiteResult {
                 name: suite_name,
@@ -89,6 +92,108 @@ impl TestRunner {
         }
         
         Ok(all_results)
+    }
+    
+    async fn run_suites_parallel(&self, test_suites: Vec<(String, crate::config::RivetConfig)>, env: Option<&str>) -> Result<Vec<TestSuiteResult>> {
+        use futures::stream::{FuturesUnordered, StreamExt};
+        use std::sync::Arc;
+        
+        let env = Arc::new(env);
+        let mut all_results = Vec::new();
+        
+        // Process suites in chunks to limit concurrency
+        for chunk in test_suites.chunks(self.parallel_workers) {
+            let mut futures = FuturesUnordered::new();
+            
+            for (suite_name, config) in chunk {
+                let suite_name = suite_name.clone();
+                let config = config.clone();
+                let env = Arc::clone(&env);
+                let executor = self.executor.clone();
+                let ci_mode = self.ci_mode;
+                let bail_on_failure = self.bail_on_failure;
+                let filter_pattern = self.filter_pattern.clone();
+                
+                // Announce start
+                if ci_mode {
+                    println!("RUN {}", suite_name);
+                } else {
+                    println!("\n{} {}", "RUN".cyan().bold(), suite_name.bright_white());
+                }
+                
+                futures.push(async move {
+                    let suite_start = Instant::now();
+                    
+                    // Create a temporary runner for this suite
+                    let temp_runner = TestRunner {
+                        executor,
+                        parallel_workers: 1, // Use sequential within each suite for parallel suite execution
+                        bail_on_failure,
+                        filter_pattern,
+                        ci_mode,
+                    };
+                    
+                    let results = temp_runner.run_single_suite(&config, env.as_deref()).await;
+                    let duration = suite_start.elapsed();
+                    
+                    (suite_name, results, duration)
+                });
+            }
+            
+            // Collect results from this chunk
+            while let Some((suite_name, results, duration)) = futures.next().await {
+                match results {
+                    Ok(results) => {
+                        let passed = results.iter().filter(|r| r.passed).count();
+                        let failed = results.len() - passed;
+                        
+                        self.print_suite_summary(&suite_name, passed, failed, duration);
+                        
+                        all_results.push(TestSuiteResult {
+                            name: suite_name,
+                            results,
+                            duration,
+                            passed,
+                            failed,
+                        });
+                        
+                        if self.bail_on_failure && failed > 0 {
+                            return Ok(all_results);
+                        }
+                    }
+                    Err(e) => {
+                        return Err(e);
+                    }
+                }
+            }
+        }
+        
+        Ok(all_results)
+    }
+    
+    fn print_suite_summary(&self, _suite_name: &str, passed: usize, failed: usize, duration: Duration) {
+        if failed == 0 {
+            if self.ci_mode {
+                println!("  PASS {} tests in {:?}", passed, duration);
+            } else {
+                println!("  {} {} tests passed in {:?}", 
+                    "✔".green().bold(), 
+                    passed, 
+                    duration
+                );
+            }
+        } else {
+            if self.ci_mode {
+                println!("  FAIL {} passed, {} failed in {:?}", passed, failed, duration);
+            } else {
+                println!("  {} {} passed, {} failed in {:?}", 
+                    if failed > 0 { "✖".red().bold().to_string() } else { "✔".green().bold().to_string() },
+                    passed, 
+                    failed, 
+                    duration
+                );
+            }
+        }
     }
     
     async fn run_single_suite(&self, config: &RivetConfig, env: Option<&str>) -> Result<Vec<TestResult>> {
@@ -192,25 +297,47 @@ impl TestRunner {
             }
             results
         } else {
-            // For now, use sequential execution even when parallel is requested
-            // TODO: Implement proper parallel execution
+            // Parallel execution
+            use futures::stream::{FuturesUnordered, StreamExt};
+            use std::sync::Arc;
+            
+            let executor = Arc::new(&self.executor);
+            let context = Arc::new(context);
             let mut results = Vec::new();
-            for step in filtered_steps {
-                let result = self.executor.execute_test(
-                    &step.name,
-                    &step.request,
-                    step.expect.as_ref(),
-                    context,
-                ).await;
+            
+            // Process in chunks to limit concurrency
+            for chunk in filtered_steps.chunks(parallel) {
+                let mut futures = FuturesUnordered::new();
                 
-                self.print_test_result(&result);
-                let passed = result.passed;
-                results.push(result);
+                for step in chunk {
+                    let executor = Arc::clone(&executor);
+                    let context = Arc::clone(&context);
+                    let step_name = step.name.clone();
+                    let step_request = step.request.clone();
+                    let step_expect = step.expect.clone();
+                    
+                    futures.push(async move {
+                        executor.execute_test(
+                            &step_name,
+                            &step_request,
+                            step_expect.as_ref(),
+                            &context,
+                        ).await
+                    });
+                }
                 
-                if self.bail_on_failure && !passed {
-                    break;
+                // Collect results from this chunk
+                while let Some(result) = futures.next().await {
+                    self.print_test_result(&result);
+                    let passed = result.passed;
+                    results.push(result);
+                    
+                    if self.bail_on_failure && !passed {
+                        return results;
+                    }
                 }
             }
+            
             results
         }
     }
@@ -224,21 +351,34 @@ impl TestRunner {
     }
     
     fn print_test_result(&self, result: &TestResult) {
-        if result.passed {
-            println!("  {} {} ({:?})", 
-                "✔".green(), 
-                result.name, 
-                result.duration
-            );
+        if self.ci_mode {
+            // CI mode: plain text, no colors or fancy symbols
+            if result.passed {
+                println!("  PASS {} ({:?})", result.name, result.duration);
+            } else {
+                println!("  FAIL {} ({:?})", result.name, result.duration);
+                if let Some(error) = &result.error {
+                    println!("    Error: {}", error);
+                }
+            }
         } else {
-            println!("  {} {} ({:?})", 
-                "✖".red(), 
-                result.name, 
-                result.duration
-            );
-            
-            if let Some(error) = &result.error {
-                println!("    {}: {}", "Error".red().bold(), error);
+            // Interactive mode: colors and symbols
+            if result.passed {
+                println!("  {} {} ({:?})", 
+                    "✔".green(), 
+                    result.name, 
+                    result.duration
+                );
+            } else {
+                println!("  {} {} ({:?})", 
+                    "✖".red(), 
+                    result.name, 
+                    result.duration
+                );
+                
+                if let Some(error) = &result.error {
+                    println!("    {}: {}", "Error".red().bold(), error);
+                }
             }
         }
     }
