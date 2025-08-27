@@ -135,7 +135,7 @@ mod tests {
     fn test_parse_timeout_edge_cases() {
         assert_eq!(parse_timeout("0s").unwrap(), Duration::from_secs(0));
         assert_eq!(parse_timeout("0ms").unwrap(), Duration::from_millis(0));
-        
+
         // Test invalid edge cases
         assert!(parse_timeout("s").is_err());
         assert!(parse_timeout("ms").is_err());

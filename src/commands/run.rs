@@ -43,7 +43,8 @@ pub async fn handle_run(options: RunOptions) -> Result<()> {
     let user_config = UserConfig::load().unwrap_or_default();
 
     // Determine final template to use (CLI overrides config)
-    let final_template = options.template
+    let final_template = options
+        .template
         .as_ref()
         .unwrap_or(&user_config.reports.default_template);
 
@@ -57,7 +58,10 @@ pub async fn handle_run(options: RunOptions) -> Result<()> {
     };
 
     println!("Running tests from: {}", options.target.display());
-    println!("Environment: {}", options.env.as_deref().unwrap_or("default"));
+    println!(
+        "Environment: {}",
+        options.env.as_deref().unwrap_or("default")
+    );
     println!("Parallel workers: {}", options.parallel);
 
     if let Some(pattern) = &options.grep {
@@ -66,10 +70,18 @@ pub async fn handle_run(options: RunOptions) -> Result<()> {
 
     // Create test runner
     let timeout = Duration::from_secs(30); // Default timeout
-    let runner = TestRunner::new(timeout, options.parallel, options.bail, options.grep, options.ci)?;
+    let runner = TestRunner::new(
+        timeout,
+        options.parallel,
+        options.bail,
+        options.grep,
+        options.ci,
+    )?;
 
     // Run tests
-    let results = runner.run_tests(&options.target, options.env.as_deref()).await?;
+    let results = runner
+        .run_tests(&options.target, options.env.as_deref())
+        .await?;
 
     // Generate reports if requested
     if let Some(report_formats) = &options.report {

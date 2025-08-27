@@ -575,7 +575,7 @@ mod tests {
 
             let content = std::fs::read_to_string(&path).unwrap();
             assert!(content.contains("<!DOCTYPE html") || content.contains("<html"));
-            
+
             // Verify it's valid HTML (contains basic structure)
             assert!(content.len() > 100); // Should be a substantial HTML file
         }
