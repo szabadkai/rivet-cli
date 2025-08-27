@@ -42,7 +42,7 @@ openapiv3 = "2.0"
 
 # Terminal UI and colors
 crossterm = "0.27"
-indicatif = "0.17"
+indicatif = "0.18"
 owo-colors = "4.0"
 atty = "0.2"
 
