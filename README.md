@@ -16,6 +16,20 @@ Rivet is a modern API testing tool designed for command-line workflows. It allow
 
 ## Installation
 
+### Homebrew (core)
+
+Once accepted into Homebrew/homebrew-core, install with:
+
+```bash
+brew install rivet
+```
+
+Until then, you can install directly from this repo:
+
+```bash
+brew install --formula https://raw.githubusercontent.com/szabadkai/rivet-cli/main/Formula/rivet.rb
+```
+
 ### Pre-built Binaries
 
 Download the latest release for your platform:

@@ -1,0 +1,62 @@
+name: Homebrew Bump PR
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to bump (e.g., v0.1.1)'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  bump-homebrew-core:
+    name: Bump formula in homebrew-core
+    runs-on: macos-latest
+    steps:
+      - name: Resolve version and URL
+        id: meta
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            INP="${{ github.event.inputs.version }}"
+            case "$INP" in
+              v*) VERSION="$INP" ;;
+              *)  VERSION="v$INP" ;;
+            esac
+          else
+            VERSION="${GITHUB_REF#refs/tags/}"
+          fi
+          URL="https://github.com/${{ github.repository }}/archive/refs/tags/${VERSION}.tar.gz"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "url=$URL" >> $GITHUB_OUTPUT
+
+      - name: Compute source tarball sha256
+        id: shasum
+        run: |
+          curl -fsSL "${{ steps.meta.outputs.url }}" -o source.tar.gz
+          SHA=$(shasum -a 256 source.tar.gz | awk '{print $1}')
+          echo "sha256=$SHA" >> $GITHUB_OUTPUT
+
+      - name: Setup Homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Bump formula PR (requires token)
+        env:
+          HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.HOMEBREW_CORE_TOKEN }}
+        run: |
+          set -euxo pipefail
+          brew --version
+          brew tap homebrew/core
+          # This updates an existing formula named 'rivet'. For first-time submission, open a manual PR to homebrew-core.
+          brew bump-formula-pr \
+            --no-audit \
+            --url="${{ steps.meta.outputs.url }}" \
+            --sha256="${{ steps.shasum.outputs.sha256 }}" \
+            rivet
+

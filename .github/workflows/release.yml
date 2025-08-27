@@ -111,11 +111,7 @@ jobs:
           cp artifacts/rivet-macos-x86_64/rivet-macos-x86_64 release-assets/
           cp artifacts/rivet-macos-arm64/rivet-macos-arm64 release-assets/
           cp artifacts/rivet-windows-x86_64.exe/rivet-windows-x86_64.exe release-assets/
-          
-          # Create checksums
-          cd release-assets
-          sha256sum * > checksums.txt
-          ls -la
+          ls -la release-assets
 
       - name: Get version from tag
         id: get_version
@@ -128,6 +124,94 @@ jobs:
             esac
           else
             echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Package Homebrew archives
+        id: hb
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.get_version.outputs.VERSION }}"
+          VERSION_STRIP_V="${VERSION#v}"
+          BASE_URL="https://github.com/${{ github.repository }}/releases/download/${VERSION}"
+
+          mkdir -p tmp-pkg
+
+          pkg() {
+            local src="$1"; shift
+            local outname="$1"; shift
+            rm -rf tmp-pkg/rivet
+            mkdir -p tmp-pkg/rivet
+            cp "$src" tmp-pkg/rivet/rivet
+            chmod +x tmp-pkg/rivet/rivet
+            # include license and readme
+            cp -f LICENSE README.md tmp-pkg/rivet/ 2>/dev/null || true
+            tar -C tmp-pkg -czf "release-assets/${outname}" rivet
+          }
+
+          pkg "release-assets/rivet-macos-x86_64"    "rivet-${VERSION}-macos-x86_64.tar.gz"
+          pkg "release-assets/rivet-macos-arm64"     "rivet-${VERSION}-macos-arm64.tar.gz"
+          pkg "release-assets/rivet-linux-x86_64"    "rivet-${VERSION}-linux-x86_64.tar.gz"
+
+          MAC_INTEL_SHA=$(sha256sum "release-assets/rivet-${VERSION}-macos-x86_64.tar.gz" | awk '{print $1}')
+          MAC_ARM_SHA=$(sha256sum   "release-assets/rivet-${VERSION}-macos-arm64.tar.gz"    | awk '{print $1}')
+          LINUX_SHA=$(sha256sum     "release-assets/rivet-${VERSION}-linux-x86_64.tar.gz"   | awk '{print $1}')
+
+          FORMULA_PATH="release-assets/rivet.rb"
+          cat > "$FORMULA_PATH" <<EOF
+class Rivet < Formula
+  desc "API testing that lives in git"
+  homepage "https://github.com/${{ github.repository }}"
+  version "${VERSION_STRIP_V}"
+  license "MIT"
+
+  on_macos do
+    if Hardware::CPU.arm?
+      url "${BASE_URL}/rivet-${VERSION}-macos-arm64.tar.gz"
+      sha256 "${MAC_ARM_SHA}"
+    else
+      url "${BASE_URL}/rivet-${VERSION}-macos-x86_64.tar.gz"
+      sha256 "${MAC_INTEL_SHA}"
+    end
+  end
+
+  on_linux do
+    url "${BASE_URL}/rivet-${VERSION}-linux-x86_64.tar.gz"
+    sha256 "${LINUX_SHA}"
+  end
+
+  def install
+    bin.install "rivet"
+  end
+
+  test do
+    system "#{bin}/rivet", "--version"
+  end
+end
+EOF
+
+          echo "mac_intel_sha=${MAC_INTEL_SHA}" >> $GITHUB_OUTPUT
+          echo "mac_arm_sha=${MAC_ARM_SHA}" >> $GITHUB_OUTPUT
+          echo "linux_sha=${LINUX_SHA}" >> $GITHUB_OUTPUT
+
+      - name: Finalize checksums
+        run: |
+          cd release-assets
+          sha256sum * > checksums.txt
+          ls -la
+
+      - name: Commit Homebrew formula to repo
+        run: |
+          set -e
+          mkdir -p Formula
+          cp release-assets/rivet.rb Formula/rivet.rb
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          if ! git diff --quiet -- Formula/rivet.rb; then
+            git add Formula/rivet.rb
+            git commit -m "chore(homebrew): update formula for ${{ steps.get_version.outputs.VERSION }}"
+            git push
+          else
+            echo "No changes to formula."
           fi
 
       - name: Generate changelog
