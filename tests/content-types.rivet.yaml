@@ -1,0 +1,166 @@
+name: Content Types Test Suite
+description: Test various content types and payload formats
+env: ${RIVET_ENV:test}
+
+vars:
+  baseUrl: ${BASE_URL:https://httpbin.org}
+
+tests:
+  - name: Test JSON content type
+    description: POST with application/json
+    request:
+      method: POST
+      url: "{{baseUrl}}/post"
+      headers:
+        Content-Type: "application/json"
+      body: |
+        {
+          "message": "Hello JSON",
+          "timestamp": "2025-08-27T04:30:00Z",
+          "data": {
+            "nested": true,
+            "count": 42
+          }
+        }
+    expect:
+      status: 200
+      jsonpath:
+        "$.json.message": "Hello JSON"
+        "$.json.data.nested": true
+        "$.json.data.count": 42
+
+  - name: Test form-encoded content
+    description: POST with application/x-www-form-urlencoded
+    request:
+      method: POST
+      url: "{{baseUrl}}/post"
+      headers:
+        Content-Type: "application/x-www-form-urlencoded"
+      body: "name=John+Doe&email=john%40example.com&age=30&subscribe=true"
+    expect:
+      status: 200
+      jsonpath:
+        "$.form.name": "John Doe"
+        "$.form.email": "john@example.com"
+        "$.form.age": "30"
+        "$.form.subscribe": "true"
+
+  - name: Test plain text content
+    description: POST with text/plain
+    request:
+      method: POST
+      url: "{{baseUrl}}/post"
+      headers:
+        Content-Type: "text/plain"
+      body: |
+        This is a plain text message.
+        It can span multiple lines.
+        And contain various characters: !@#$%^&*()
+    expect:
+      status: 200
+
+  - name: Test XML content
+    description: POST with application/xml
+    request:
+      method: POST
+      url: "{{baseUrl}}/post"
+      headers:
+        Content-Type: "application/xml"
+      body: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <user>
+          <name>Jane Doe</name>
+          <email>jane@example.com</email>
+          <active>true</active>
+        </user>
+    expect:
+      status: 200
+
+  - name: Test custom content type
+    description: POST with custom content type
+    request:
+      method: POST
+      url: "{{baseUrl}}/post"
+      headers:
+        Content-Type: "application/vnd.api+json"
+      body: |
+        {
+          "data": {
+            "type": "articles",
+            "attributes": {
+              "title": "JSON:API Example"
+            }
+          }
+        }
+    expect:
+      status: 200
+      headers:
+        content-type: "application/json"
+
+  - name: Test binary content
+    description: Handle binary-like content
+    request:
+      method: POST
+      url: "{{baseUrl}}/post"
+      headers:
+        Content-Type: "application/octet-stream"
+      body: "Binary data simulation: \x00\x01\x02\x03"
+    expect:
+      status: 200
+
+  - name: Test multipart form (simulated)
+    description: Simulate multipart form data
+    request:
+      method: POST
+      url: "{{baseUrl}}/post"
+      headers:
+        Content-Type: "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW"
+      body: |
+        ------WebKitFormBoundary7MA4YWxkTrZu0gW
+        Content-Disposition: form-data; name="field1"
+
+        value1
+        ------WebKitFormBoundary7MA4YWxkTrZu0gW
+        Content-Disposition: form-data; name="field2"
+
+        value2
+        ------WebKitFormBoundary7MA4YWxkTrZu0gW--
+    expect:
+      status: 200
+
+  - name: Test empty body
+    description: POST with empty body
+    request:
+      method: POST
+      url: "{{baseUrl}}/post"
+      headers:
+        Content-Type: "application/json"
+    expect:
+      status: 200
+
+  - name: Test large JSON payload
+    description: POST with large JSON body
+    request:
+      method: POST
+      url: "{{baseUrl}}/post"
+      headers:
+        Content-Type: "application/json"
+      body: |
+        {
+          "large_array": [
+            {"id": 1, "data": "item1"}, {"id": 2, "data": "item2"}, {"id": 3, "data": "item3"},
+            {"id": 4, "data": "item4"}, {"id": 5, "data": "item5"}, {"id": 6, "data": "item6"},
+            {"id": 7, "data": "item7"}, {"id": 8, "data": "item8"}, {"id": 9, "data": "item9"},
+            {"id": 10, "data": "item10"}
+          ],
+          "metadata": {
+            "created": "2025-08-27T04:30:00Z",
+            "version": "1.0",
+            "description": "Large payload test with multiple nested objects and arrays"
+          }
+        }
+    expect:
+      status: 200
+      jsonpath:
+        "$.json.large_array[0].id": 1
+        "$.json.metadata.version": "1.0"

@@ -1,0 +1,19 @@
+name: HTTP Status Code Tests
+description: Test various HTTP status codes
+env: ${RIVET_ENV:test}
+
+vars:
+  baseUrl: ${BASE_URL:https://httpbin.org}
+
+tests:
+  - name: Test status code {{statusCode}}
+    description: Verify API returns expected status code
+    request:
+      method: GET
+      url: "{{baseUrl}}/status/{{statusCode}}"
+    expect:
+      status: "{{statusCode}}"
+
+dataset:
+  file: data/status-codes.csv
+  parallel: 4

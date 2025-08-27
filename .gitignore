@@ -14,7 +14,6 @@ target/** */
 # OS
 .DS_Store
 Thumbs.db
-
 # Reports
 reports/*.html
 reports/*.json
@@ -27,3 +26,7 @@ reports/*.xml
 # Temporary files
 *.tmp
 *.temp
+
+#AI
+CLAUDE.md
+AGENTS.md

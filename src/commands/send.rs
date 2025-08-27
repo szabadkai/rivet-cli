@@ -5,7 +5,7 @@ use serde_json::Value;
 use std::path::PathBuf;
 use std::time::Instant;
 
-use crate::ui::response_box;
+use crate::ui::{request_box, response_box};
 use crate::utils::{parse_headers, parse_timeout};
 
 pub async fn handle_send(
@@ -47,23 +47,7 @@ pub async fn handle_send(
     }
     
     // Show request box
-    println!("╭─ Request ──────────────────────────────╮");
-    println!("│ {} {}   │", method.bright_green(), url);
-    for header_str in &headers {
-        let display_header = if header_str.to_lowercase().contains("authorization") {
-            let parts: Vec<&str> = header_str.splitn(2, ':').collect();
-            if parts.len() == 2 {
-                format!("{}: ****", parts[0].trim())
-            } else {
-                header_str.clone()
-            }
-        } else {
-            header_str.clone()
-        };
-        println!("│ {}             │", display_header);
-    }
-    println!("╰────────────────────────────────────────╯");
-    println!();
+    request_box::print_request_box(&method, &url, &headers);
     
     // Send request
     let response = request.send().await?;

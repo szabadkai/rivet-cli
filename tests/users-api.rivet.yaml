@@ -1,0 +1,66 @@
+name: Users API Data-Driven Tests
+description: Test user endpoints with multiple datasets
+env: ${RIVET_ENV:test}
+
+vars:
+  baseUrl: ${BASE_URL:https://jsonplaceholder.typicode.com}
+  userAgent: "rivet/0.1.0"
+
+setup:
+  - name: Verify API is available
+    request:
+      method: GET
+      url: "{{baseUrl}}/posts/1"
+    expect:
+      status: 200
+
+tests:
+  - name: Get user by ID
+    description: Fetch user details by ID from dataset
+    request:
+      method: GET
+      url: "{{baseUrl}}/users/{{userId}}"
+      headers:
+        User-Agent: "{{userAgent}}"
+    expect:
+      status: 200
+      jsonpath:
+        "$.id": "{{userId}}"
+        "$.name": "{{expectedName}}"
+        "$.email": "{{expectedEmail}}"
+
+  - name: Get user posts
+    description: Fetch posts by user ID
+    request:
+      method: GET
+      url: "{{baseUrl}}/posts"
+      params:
+        userId: "{{userId}}"
+    expect:
+      status: 200
+      jsonpath:
+        "$[0].userId": "{{userId}}"
+
+  - name: Get user albums
+    description: Fetch albums by user ID
+    request:
+      method: GET
+      url: "{{baseUrl}}/albums"
+      params:
+        userId: "{{userId}}"
+    expect:
+      status: 200
+      jsonpath:
+        "$[0].userId": "{{userId}}"
+
+dataset:
+  file: data/users-test-data.csv
+  parallel: 3
+
+teardown:
+  - name: Final health check
+    request:
+      method: GET
+      url: "{{baseUrl}}/users"
+    expect:
+      status: 200

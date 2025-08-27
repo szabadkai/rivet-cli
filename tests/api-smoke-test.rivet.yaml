@@ -1,0 +1,163 @@
+name: API Smoke Test Suite
+description: Comprehensive test suite covering basic API functionality
+env: ${RIVET_ENV:test}
+
+vars:
+  baseUrl: ${BASE_URL:https://httpbin.org}
+  userAgent: "rivet/0.1.0"
+  
+setup:
+  - name: Health check
+    description: Verify the API is responding
+    request:
+      method: GET
+      url: "{{baseUrl}}/status/200"
+    expect:
+      status: 200
+
+tests:
+  - name: Get request with query parameters
+    description: Test GET with query string
+    request:
+      method: GET
+      url: "{{baseUrl}}/get"
+      params:
+        foo: bar
+        test: value
+      headers:
+        User-Agent: "{{userAgent}}"
+    expect:
+      status: 200
+      headers:
+        content-type: "application/json"
+      jsonpath:
+        "$.args.foo": "bar"
+        "$.args.test": "value"
+
+  - name: POST with JSON body
+    description: Test JSON POST request
+    request:
+      method: POST
+      url: "{{baseUrl}}/post"
+      headers:
+        Content-Type: "application/json"
+        User-Agent: "{{userAgent}}"
+      body: |
+        {
+          "name": "Test User",
+          "email": "test@example.com",
+          "active": true,
+          "count": 42
+        }
+    expect:
+      status: 200
+      jsonpath:
+        "$.json.name": "Test User"
+        "$.json.email": "test@example.com"
+        "$.json.active": true
+        "$.json.count": 42
+
+  - name: PUT request
+    description: Test PUT method
+    request:
+      method: PUT
+      url: "{{baseUrl}}/put"
+      headers:
+        Content-Type: "application/json"
+      body: |
+        {
+          "id": 123,
+          "status": "updated"
+        }
+    expect:
+      status: 200
+      jsonpath:
+        "$.json.id": 123
+        "$.json.status": "updated"
+
+  - name: DELETE request
+    description: Test DELETE method
+    request:
+      method: DELETE
+      url: "{{baseUrl}}/delete"
+    expect:
+      status: 200
+
+  - name: Test different status codes
+    description: Verify 404 response
+    request:
+      method: GET
+      url: "{{baseUrl}}/status/404"
+    expect:
+      status: 404
+
+  - name: Test response headers
+    description: Verify custom headers in response
+    request:
+      method: GET
+      url: "{{baseUrl}}/response-headers"
+      params:
+        X-Custom-Header: "test-value"
+        Cache-Control: "no-cache"
+    expect:
+      status: 200
+      headers:
+        X-Custom-Header: "test-value"
+        Cache-Control: "no-cache"
+
+  - name: Test authentication
+    description: Test basic auth
+    request:
+      method: GET
+      url: "{{baseUrl}}/basic-auth/user/pass"
+      headers:
+        Authorization: "Basic dXNlcjpwYXNz"  # user:pass in base64
+    expect:
+      status: 200
+      jsonpath:
+        "$.authenticated": true
+        "$.user": "user"
+
+  - name: Test redirect
+    description: Test redirect handling
+    request:
+      method: GET
+      url: "{{baseUrl}}/redirect/3"
+    expect:
+      status: 200
+
+  - name: Test large response
+    description: Test handling of large JSON response
+    request:
+      method: GET
+      url: "{{baseUrl}}/json"
+    expect:
+      status: 200
+      headers:
+        content-type: "application/json"
+      jsonpath:
+        "$.slideshow.title": "Sample Slide Show"
+
+  - name: Test form data
+    description: Test form-encoded POST
+    request:
+      method: POST
+      url: "{{baseUrl}}/post"
+      headers:
+        Content-Type: "application/x-www-form-urlencoded"
+      body: "username=testuser&password=secret&remember=true"
+    expect:
+      status: 200
+      jsonpath:
+        "$.form.username": "testuser"
+        "$.form.password": "secret"
+        "$.form.remember": "true"
+
+teardown:
+  - name: Cleanup check
+    description: Final status check
+    request:
+      method: GET
+      url: "{{baseUrl}}/status/200"
+    expect:
+      status: 200

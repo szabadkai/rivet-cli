@@ -1,0 +1,118 @@
+name: Error Handling Test Suite
+description: Test various error scenarios and edge cases
+env: ${RIVET_ENV:test}
+
+vars:
+  baseUrl: ${BASE_URL:https://httpbin.org}
+  invalidUrl: ${INVALID_URL:https://invalid-domain-that-does-not-exist-12345.com}
+
+tests:
+  - name: Test 400 Bad Request
+    description: Verify proper handling of client errors
+    request:
+      method: GET
+      url: "{{baseUrl}}/status/400"
+    expect:
+      status: 400
+
+  - name: Test 401 Unauthorized
+    description: Test authentication failure
+    request:
+      method: GET
+      url: "{{baseUrl}}/basic-auth/user/wrongpass"
+    expect:
+      status: 401
+
+  - name: Test 403 Forbidden
+    description: Test access denied
+    request:
+      method: GET
+      url: "{{baseUrl}}/status/403"
+    expect:
+      status: 403
+
+  - name: Test 404 Not Found
+    description: Test resource not found
+    request:
+      method: GET
+      url: "{{baseUrl}}/status/404"
+    expect:
+      status: 404
+
+  - name: Test 429 Rate Limited
+    description: Test rate limiting
+    request:
+      method: GET
+      url: "{{baseUrl}}/status/429"
+    expect:
+      status: 429
+
+  - name: Test 500 Server Error
+    description: Test internal server error
+    request:
+      method: GET
+      url: "{{baseUrl}}/status/500"
+    expect:
+      status: 500
+
+  - name: Test 502 Bad Gateway
+    description: Test bad gateway error
+    request:
+      method: GET
+      url: "{{baseUrl}}/status/502"
+    expect:
+      status: 502
+
+  - name: Test 503 Service Unavailable
+    description: Test service unavailable
+    request:
+      method: GET
+      url: "{{baseUrl}}/status/503"
+    expect:
+      status: 503
+
+  - name: Test large response body
+    description: Test handling of large responses
+    request:
+      method: GET
+      url: "{{baseUrl}}/bytes/10000"
+    expect:
+      status: 200
+      headers:
+        content-length: "10000"
+
+  - name: Test empty response
+    description: Test handling of empty responses
+    request:
+      method: GET
+      url: "{{baseUrl}}/status/204"
+    expect:
+      status: 204
+
+  - name: Test malformed JSON response
+    description: Test handling of invalid JSON (should not fail)
+    request:
+      method: GET
+      url: "{{baseUrl}}/html"
+    expect:
+      status: 200
+      headers:
+        content-type: "text/html; charset=utf-8"
+
+  - name: Test slow response
+    description: Test timeout handling (2 second delay)
+    request:
+      method: GET
+      url: "{{baseUrl}}/delay/2"
+    expect:
+      status: 200
+      jsonpath:
+        "$.url": "{{baseUrl}}/delay/2"
+
+  - name: Test very slow response
+    description: Test longer timeout handling (5 second delay)
+    request:
+      method: GET
+      url: "{{baseUrl}}/delay/5"
+    expect:
+      status: 200

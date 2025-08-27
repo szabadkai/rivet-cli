@@ -4,9 +4,9 @@ use std::path::PathBuf;
 
 mod commands;
 mod config;
-mod http;
 mod grpc;
 mod report;
+mod runner;
 mod ui;
 mod utils;
 
@@ -123,14 +123,14 @@ enum Commands {
     },
 }
 
-fn print_banner() {
+pub fn print_banner() {
     let banner = r#"
-██████╗ ██╗██╗   ██╗███████╗████████╗
-██╔══██╗██║╚██╗ ██╔╝██╔════╝╚══██╔══╝   rivet v0.1.0
-██████╔╝██║ ╚████╔╝ ███████╗   ██║      API testing that lives in git.
-██╔═══╝ ██║  ╚██╔╝  ╚════██║   ██║
-██║     ██║   ██║   ███████║   ██║      https://rivet.dev
-╚═╝     ╚═╝   ╚═╝   ╚══════╝   ╚═╝
+    ██████╗ ██╗██╗   ██╗███████╗████████╗
+    ██╔══██╗██║██║   ██║██╔════╝╚══██╔══╝   rivet v0.1.0
+    ██████╔╝██║██║   ██║█████╗     ██║      API testing that lives in git
+    ██╔══██╗██║╚██╗ ██╔╝██╔══╝     ██║      
+    ██║  ██║██║ ╚████╔╝ ███████╗   ██║      https://github.com/szabadkai/rivet-cli
+    ╚═╝  ╚═╝╚═╝  ╚═══╝  ╚══════╝   ╚═╝
 "#;
     
     if atty::is(atty::Stream::Stdout) {

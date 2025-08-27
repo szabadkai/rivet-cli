@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 description = "API testing that lives in git"
 license = "MIT"
-repository = "https://github.com/yourusername/rivet-cli"
+repository = "https://github.com/szabadkai/rivet-cli"
 keywords = ["api", "testing", "cli", "http", "grpc"]
 categories = ["command-line-utilities", "development-tools::testing"]
 
@@ -63,3 +63,6 @@ chrono = { version = "0.4", features = ["serde"] }
 
 # HTTP/URL parsing
 url = "2.4"
+
+# Regular expressions
+regex = "1.10"
