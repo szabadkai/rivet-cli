@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔬 Rivet Test Report - Compact</title>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --secondary: #6366f1;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --bg: #ffffff;
+            --surface: #f8fafc;
+            --surface-hover: #f1f5f9;
+            --surface-active: #e2e8f0;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --text-light: #94a3b8;
+            --border: #e2e8f0;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+        
+        [data-theme="dark"] {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-hover: #334155;
+            --surface-active: #475569;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-light: #cbd5e1;
+            --border: #334155;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .title-section h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .meta {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+        
+        .theme-toggle {
+            background: var(--surface-hover);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.5rem;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.2s ease;
+        }
+        
+        .theme-toggle:hover {
+            background: var(--surface-active);
+        }
+        
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .text-success { color: var(--success); }
+        .text-error { color: var(--error); }
+        .text-warning { color: var(--warning); }
+        
+        /* Controls */
+        .controls {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .controls-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.875rem;
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgb(59 130 246 / 0.1);
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            background: var(--surface-hover);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .filter-btn:hover {
+            background: var(--surface-active);
+        }
+        
+        .filter-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+        
+        .filter-btn.success.active {
+            background: var(--success);
+            border-color: var(--success);
+        }
+        
+        .filter-btn.error.active {
+            background: var(--error);
+            border-color: var(--error);
+        }
+        
+        /* Test Suite List */
+        .test-suites {
+            space-y: 1rem;
+        }
+        
+        .suite-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: box-shadow 0.2s ease;
+        }
+        
+        .suite-card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .suite-header {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            transition: background-color 0.2s ease;
+        }
+        
+        .suite-header:hover {
+            background: var(--surface-hover);
+        }
+        
+        .suite-info {
+            flex: 1;
+        }
+        
+        .suite-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .suite-stats {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .suite-toggle {
+            background: var(--surface-hover);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .suite-toggle:hover {
+            background: var(--surface-active);
+        }
+        
+        .suite-toggle.expanded {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+        
+        /* Test List */
+        .test-list {
+            display: none;
+            border-top: 1px solid var(--border);
+        }
+        
+        .test-list.expanded {
+            display: block;
+        }
+        
+        .test-item {
+            padding: 0.75rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .test-item:hover {
+            background: var(--surface-hover);
+        }
+        
+        .test-item:last-child {
+            border-bottom: none;
+        }
+        
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .test-name {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .status-pass { background: var(--success); }
+        .status-fail { background: var(--error); }
+        
+        .test-meta {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        /* Test Details */
+        .test-details {
+            display: none;
+            padding: 1rem 1.5rem 1.5rem;
+            background: var(--bg);
+            border-top: 1px solid var(--border);
+        }
+        
+        .test-details.expanded {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .test-explanation {
+            background: var(--surface);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .test-explanation h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .test-explanation p {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+        
+        .test-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--error);
+            margin-top: 1rem;
+            white-space: pre-wrap;
+        }
+        
+        /* Hidden items */
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0.5rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .controls-grid {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="title-section">
+                    <h1>🔬 Rivet Test Report</h1>
+                    <div class="meta">{{ timestamp }} • {{ report.summary.total }} tests • {{ total_duration_secs }}s</div>
+                </div>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-value">{{ report.summary.total }}</div>
+                <div class="stat-label">Total</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value text-success">{{ report.summary.passed }}</div>
+                <div class="stat-label">Passed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value text-error">{{ report.summary.failed }}</div>
+                <div class="stat-label">Failed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ success_rate_rounded }}%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <div class="controls-grid">
+                <input type="text" class="search-box" placeholder="Search tests..." id="searchInput">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn success" data-filter="passed">✓ Passed</button>
+                    <button class="filter-btn error" data-filter="failed">✗ Failed</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Suites -->
+        <div class="test-suites" id="testSuites">
+            {% for suite in enhanced_suites %}
+            <div class="suite-card" data-suite="{{ suite.name }}">
+                <div class="suite-header" onclick="toggleSuite(this)">
+                    <div class="suite-info">
+                        <div class="suite-name">{{ suite.name }}</div>
+                        <div class="suite-stats">
+                            <span>{{ suite.summary.total }} tests</span>
+                            <span class="text-success">{{ suite.summary.passed }} passed</span>
+                            {% if suite.summary.failed > 0 %}
+                            <span class="text-error">{{ suite.summary.failed }} failed</span>
+                            {% endif %}
+                            <span>{{ suite.duration_secs }}s</span>
+                        </div>
+                    </div>
+                    <div class="suite-toggle">
+                        <span>▼</span>
+                    </div>
+                </div>
+                <div class="test-list">
+                    {% for test in suite.tests %}
+                    <div class="test-item" data-status="{{ test.status }}" data-name="{{ test.name }}" onclick="toggleTest(this)">
+                        <div class="test-header">
+                            <div class="test-name">
+                                <div class="status-indicator {% if test.status == "Passed" %}status-pass{% else %}status-fail{% endif %}"></div>
+                                <span>{{ test.name }}</span>
+                            </div>
+                            <div class="test-meta">
+                                {% if test.response_status %}<span>{{ test.response_status }}</span>{% endif %}
+                                <span>{{ test.duration_ms }}ms</span>
+                                <span>ⓘ</span>
+                            </div>
+                        </div>
+                        <div class="test-details">
+                            <div class="test-explanation">
+                                <h4>Test Purpose</h4>
+                                <p>{{ test.name }} - This test validates the API endpoint behavior and ensures it responds correctly according to the specification. {% if test.status == "Passed" %}The test executed successfully and all assertions passed.{% else %}The test encountered an issue during execution.{% endif %}</p>
+                            </div>
+                            
+                            {% if test.status == "Failed" and test.error %}
+                            <div class="test-explanation">
+                                <h4>What Went Wrong</h4>
+                                <p>The test failed because the actual response didn't match the expected behavior. This could indicate an issue with the API implementation, test data, or network connectivity.</p>
+                            </div>
+                            <div class="test-error">{{ test.error }}</div>
+                            {% endif %}
+                            
+                            <div class="test-explanation">
+                                <h4>Technical Details</h4>
+                                <p>
+                                    Status: {{ test.status }}<br>
+                                    {% if test.response_status %}HTTP Status: {{ test.response_status }}<br>{% endif %}
+                                    Execution Time: {{ test.duration_ms }}ms<br>
+                                    Test Type: API Integration Test
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            const currentTheme = body.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                icon.textContent = '🌙';
+                localStorage.setItem('rivet-theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                icon.textContent = '☀️';
+                localStorage.setItem('rivet-theme', 'dark');
+            }
+        }
+        
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('rivet-theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme);
+            document.getElementById('theme-icon').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        });
+
+        // Suite toggle functionality
+        function toggleSuite(header) {
+            const suiteCard = header.closest('.suite-card');
+            const testList = suiteCard.querySelector('.test-list');
+            const toggle = header.querySelector('.suite-toggle');
+            const arrow = toggle.querySelector('span');
+            
+            if (testList.classList.contains('expanded')) {
+                testList.classList.remove('expanded');
+                toggle.classList.remove('expanded');
+                arrow.textContent = '▼';
+            } else {
+                testList.classList.add('expanded');
+                toggle.classList.add('expanded');
+                arrow.textContent = '▲';
+            }
+        }
+
+        // Test detail toggle functionality
+        function toggleTest(testItem) {
+            const details = testItem.querySelector('.test-details');
+            
+            if (details.classList.contains('expanded')) {
+                details.classList.remove('expanded');
+            } else {
+                // Close other expanded test details in the same suite
+                const suite = testItem.closest('.suite-card');
+                suite.querySelectorAll('.test-details.expanded').forEach(detail => {
+                    detail.classList.remove('expanded');
+                });
+                
+                details.classList.add('expanded');
+            }
+        }
+
+        // Filter functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const searchInput = document.getElementById('searchInput');
+            
+            // Filter button clicks
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Apply filter
+                    applyFilters();
+                });
+            });
+            
+            // Search input
+            searchInput.addEventListener('input', applyFilters);
+        });
+
+        function applyFilters() {
+            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const testItems = document.querySelectorAll('.test-item');
+            const suiteCards = document.querySelectorAll('.suite-card');
+            
+            testItems.forEach(item => {
+                const status = item.dataset.status.toLowerCase();
+                const name = item.dataset.name.toLowerCase();
+                
+                // Check filter match
+                const filterMatch = activeFilter === 'all' || 
+                                  (activeFilter === 'passed' && status === 'passed') ||
+                                  (activeFilter === 'failed' && status === 'failed');
+                
+                // Check search match
+                const searchMatch = searchTerm === '' || name.includes(searchTerm);
+                
+                // Show/hide item
+                if (filterMatch && searchMatch) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                    // Collapse details if hiding
+                    const details = item.querySelector('.test-details');
+                    if (details) details.classList.remove('expanded');
+                }
+            });
+            
+            // Hide suites with no visible tests
+            suiteCards.forEach(suite => {
+                const visibleTests = suite.querySelectorAll('.test-item:not(.hidden)');
+                if (visibleTests.length === 0) {
+                    suite.classList.add('hidden');
+                } else {
+                    suite.classList.remove('hidden');
+                }
+            });
+        }
+
+        // Auto-expand first failed test for immediate attention
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstFailedTest = document.querySelector('.test-item[data-status="Failed"]');
+            if (firstFailedTest) {
+                // Expand the suite containing the failed test
+                const suite = firstFailedTest.closest('.suite-card');
+                const suiteHeader = suite.querySelector('.suite-header');
+                const testList = suite.querySelector('.test-list');
+                const toggle = suite.querySelector('.suite-toggle');
+                
+                if (!testList.classList.contains('expanded')) {
+                    toggleSuite(suiteHeader);
+                }
+                
+                // Expand the failed test details
+                setTimeout(() => {
+                    toggleTest(firstFailedTest);
+                }, 300);
+            }
+        });
+    </script>
+</body>
+</html>

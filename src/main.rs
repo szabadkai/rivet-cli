@@ -68,6 +68,15 @@ enum Commands {
         /// Report formats (comma-separated)
         #[arg(long = "report")]
         report: Option<String>,
+        /// HTML template to use (detailed, simple, chatty, compact)
+        #[arg(long = "template")]
+        template: Option<String>,
+        /// Auto-open HTML report in browser
+        #[arg(long = "open", conflicts_with = "no_open")]
+        open: bool,
+        /// Disable auto-opening HTML report in browser
+        #[arg(long = "no-open", conflicts_with = "open")]
+        no_open: bool,
         /// CI mode (no animations)
         #[arg(long = "ci")]
         ci: bool,
@@ -169,9 +178,12 @@ async fn main() -> anyhow::Result<()> {
             grep,
             bail,
             report,
+            template,
+            open,
+            no_open,
             ci,
         } => {
-            run::handle_run(target, env, data, parallel, grep, bail, report, ci).await?;
+            run::handle_run(target, env, data, parallel, grep, bail, report, template, open, no_open, ci).await?;
         }
         Commands::Gen { spec, out } => {
             gen::handle_gen(spec, out).await?;

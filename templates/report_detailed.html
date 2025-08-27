@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rivet Test Report</title>
+    <style>
+        :root {
+            --primary: #06b6d4;
+            --secondary: #0891b2;
+            --success: #059669;
+            --error: #dc2626;
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-hover: #334155;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .rivet-logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        
+        .status-banner {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            margin: 1rem 0;
+        }
+        
+        .status-pass { background: var(--success); color: white; }
+        .status-fail { background: var(--error); color: white; }
+        
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .metric-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-label {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+        }
+        
+        .suite-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .suite-header {
+            padding: 1.5rem;
+            background: var(--surface-hover);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .suite-content {
+            padding: 1.5rem;
+        }
+        
+        .test-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .test-item:last-child {
+            border-bottom: none;
+        }
+        
+        .status-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-right: 0.75rem;
+        }
+        
+        .status-pass { background: var(--success); color: white; }
+        .status-fail { background: var(--error); color: white; }
+        
+        .text-success { color: var(--success); }
+        .text-error { color: var(--error); }
+        .text-muted { color: var(--text-muted); }
+        
+        .failure-details {
+            background: var(--bg);
+            border: 1px solid var(--error);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 0.5rem;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.8rem;
+            white-space: pre-wrap;
+            color: #fca5a5;
+            line-height: 1.4;
+        }
+        
+        .footer {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="rivet-logo">🔬 RIVET</div>
+        <div class="status-banner {% if report.summary.failed == 0 %}status-pass{% else %}status-fail{% endif %}">
+            {% if report.summary.failed == 0 %}✅ ALL TESTS PASSED{% else %}❌ TESTS FAILED{% endif %}
+        </div>
+        <div style="color: rgba(255, 255, 255, 0.8); margin-top: 1rem;">
+            Generated {{ timestamp }} • {{ report.summary.total }} tests • {{ total_duration_secs }}s
+        </div>
+    </div>
+
+    <div class="content">
+        <!-- Summary Dashboard -->
+        <div class="dashboard">
+            <div class="metric-card">
+                <div class="metric-value">{{ report.summary.total }}</div>
+                <div class="metric-label">Total Tests</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value text-success">{{ report.summary.passed }}</div>
+                <div class="metric-label">Passed</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value text-error">{{ report.summary.failed }}</div>
+                <div class="metric-label">Failed</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">{{ success_rate_rounded }}%</div>
+                <div class="metric-label">Pass Rate</div>
+            </div>
+        </div>
+
+        <!-- Test Suites -->
+        {% for suite in enhanced_suites %}
+        <div class="suite-section">
+            <div class="suite-header">
+                <div>
+                    <strong>{{ suite.name }}</strong>
+                    <span class="text-muted">({{ suite.summary.passed }} passed, {{ suite.summary.failed }} failed)</span>
+                </div>
+                <div>{{ suite.duration_secs }}s</div>
+            </div>
+            <div class="suite-content">
+                {% for test in suite.tests %}
+                <div class="test-item">
+                    <div>
+                        <span class="status-icon {% if test.status == "Passed" %}status-pass{% else %}status-fail{% endif %}">
+                            {% if test.status == "Passed" %}✓{% else %}✗{% endif %}
+                        </span>
+                        <strong>{{ test.name }}</strong>
+                        {% if test.error %}
+                        <div class="failure-details">{{ test.error }}</div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        {% if test.response_status %}{{ test.response_status }} • {% endif %}
+                        {{ test.duration_ms }}ms
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <footer class="footer">
+        <div class="text-muted">
+            {% if report.summary.failed == 0 %}
+                🎉 All tests passed! 🎉
+            {% else %}
+                ❌ Some tests failed - check the details above
+            {% endif %}
+        </div>
+        <div class="text-muted" style="margin-top: 1rem;">
+            Powered by <strong>Rivet CLI</strong>
+        </div>
+    </footer>
+</body>
+</html>

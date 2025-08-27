@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔬 Rivet Test Results - {{ timestamp }}</title>
+    <style>
+        :root {
+            --primary: #06b6d4;
+            --secondary: #0891b2;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-hover: #334155;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="40" cy="80" r="1.5" fill="rgba(255,255,255,0.08)"/></svg>');
+            animation: float 20s linear infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .title {
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .meta {
+            color: rgba(255, 255, 255, 0.7);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .status-message {
+            background: var(--surface);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 1.3rem;
+            border: 2px solid;
+        }
+        
+        .status-pass {
+            border-color: var(--success);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+        }
+        
+        .status-fail {
+            border-color: var(--error);
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
+        }
+        
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .metric {
+            background: var(--surface);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid var(--border);
+            transition: transform 0.2s ease;
+        }
+        
+        .metric:hover {
+            transform: translateY(-2px);
+        }
+        
+        .metric-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .story-section {
+            background: var(--surface);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+        
+        .story-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .suite-story {
+            margin-bottom: 2rem;
+        }
+        
+        .suite-header {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .test-story {
+            background: var(--bg);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid;
+        }
+        
+        .test-pass {
+            border-left-color: var(--success);
+        }
+        
+        .test-fail {
+            border-left-color: var(--error);
+        }
+        
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .test-name {
+            font-weight: 600;
+        }
+        
+        .test-result {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        
+        .test-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.85rem;
+            color: #fca5a5;
+        }
+        
+        .conversation {
+            font-style: italic;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            margin-top: 3rem;
+        }
+        
+        .emoji {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">🔬 RIVET</h1>
+            <p class="subtitle">Test Report & Story</p>
+            <p class="meta">Generated {{ timestamp }} • {{ report.summary.total }} tests • {{ total_duration_secs }}s</p>
+        </header>
+
+        {% if report.summary.failed == 0 %}
+        <div class="status-message status-pass">
+            <span class="emoji">🎉</span> Fantastic! All {{ report.summary.total }} tests passed successfully! <span class="emoji">✨</span>
+        </div>
+        {% else %}
+        <div class="status-message status-fail">
+            <span class="emoji">🚨</span> Heads up! {{ report.summary.failed }} out of {{ report.summary.total }} tests didn't go as expected. <span class="emoji">🔍</span>
+        </div>
+        {% endif %}
+
+        <div class="metrics">
+            <div class="metric">
+                <div class="metric-icon">📊</div>
+                <div class="metric-value">{{ report.summary.total }}</div>
+                <div class="metric-label">Total Tests</div>
+            </div>
+            <div class="metric">
+                <div class="metric-icon">✅</div>
+                <div class="metric-value" style="color: var(--success);">{{ report.summary.passed }}</div>
+                <div class="metric-label">Passed</div>
+            </div>
+            <div class="metric">
+                <div class="metric-icon">❌</div>
+                <div class="metric-value" style="color: var(--error);">{{ report.summary.failed }}</div>
+                <div class="metric-label">Failed</div>
+            </div>
+            <div class="metric">
+                <div class="metric-icon">🎯</div>
+                <div class="metric-value">{{ success_rate_rounded }}%</div>
+                <div class="metric-label">Success Rate</div>
+            </div>
+        </div>
+
+        <div class="story-section">
+            <h2 class="story-title">
+                <span class="emoji">📖</span>
+                Test Story
+            </h2>
+            
+            {% if report.summary.failed == 0 %}
+            <p class="conversation">
+                "Well, this is wonderful news! Every single test we ran today decided to cooperate. 
+                It's like having a perfectly orchestrated symphony where every instrument played in harmony."
+            </p>
+            {% else %}
+            <p class="conversation">
+                "So here's what happened today: we ran {{ report.summary.total }} tests, and while {{ report.summary.passed }} of them 
+                were absolute stars ⭐, {{ report.summary.failed }} of them had some... let's call them 'learning opportunities' 🤔"
+            </p>
+            {% endif %}
+
+            {% for suite in enhanced_suites %}
+            <div class="suite-story">
+                <div class="suite-header">
+                    <span>📁 {{ suite.name }}</span>
+                    <span>{{ suite.duration_secs }}s</span>
+                </div>
+                
+                {% if suite.summary.failed == 0 %}
+                <p class="conversation">This test suite was a complete success story! All {{ suite.summary.passed }} tests passed like champions.</p>
+                {% else %}
+                <p class="conversation">This suite had a mixed day: {{ suite.summary.passed }} tests succeeded, but {{ suite.summary.failed }} ran into some trouble.</p>
+                {% endif %}
+
+                {% for test in suite.tests %}
+                <div class="test-story {% if test.status == "Passed" %}test-pass{% else %}test-fail{% endif %}">
+                    <div class="test-header">
+                        <div class="test-name">
+                            {% if test.status == "Passed" %}
+                                ✨ {{ test.name }}
+                            {% else %}
+                                🔧 {{ test.name }}
+                            {% endif %}
+                        </div>
+                        <div class="test-result">
+                            {% if test.response_status %}{{ test.response_status }} • {% endif %}{{ test.duration_ms }}ms
+                        </div>
+                    </div>
+                    
+                    {% if test.status == "Passed" %}
+                        <p style="color: var(--success); font-size: 0.9rem;">Passed with flying colors!</p>
+                    {% else %}
+                        <p style="color: var(--error); font-size: 0.9rem;">Hit a snag, but that's how we learn:</p>
+                        {% if test.error %}
+                        <div class="test-error">{{ test.error }}</div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if report.summary.failed > 0 %}
+        <div class="story-section">
+            <h2 class="story-title">
+                <span class="emoji">💡</span>
+                What's Next?
+            </h2>
+            <p class="conversation">
+                Don't worry! Failed tests are just your API's way of saying "Hey, let's make this even better!" 
+                Each failure is a roadmap to improvement. Take a look at the error messages above - they're quite chatty 
+                and will tell you exactly what went sideways. 🛠️
+            </p>
+        </div>
+        {% endif %}
+
+        <footer class="footer">
+            {% if report.summary.failed == 0 %}
+                <p>🎊 Congratulations on a perfect test run! Your API is behaving beautifully. 🎊</p>
+            {% else %}
+                <p>📈 Every expert was once a beginner. Every failure is a step towards success! 📈</p>
+            {% endif %}
+            <p style="margin-top: 1rem;">
+                Generated with ❤️ by <strong>Rivet CLI</strong> • 
+                Happy Testing! 🚀
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

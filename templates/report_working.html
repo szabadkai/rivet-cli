@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rivet Test Report</title>
+    <style>
+        body { font-family: system-ui; background: #0f172a; color: #f8fafc; margin: 0; }
+        .header { background: linear-gradient(135deg, #06b6d4, #0891b2); padding: 2rem; text-align: center; }
+        .content { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        .metric { display: inline-block; margin: 1rem; padding: 1rem; background: #1e293b; border-radius: 8px; }
+        .suite { background: #1e293b; margin: 1rem 0; padding: 1.5rem; border-radius: 8px; }
+        .test { padding: 0.5rem; margin: 0.25rem 0; background: #334155; border-radius: 4px; }
+        .pass { color: #10b981; }
+        .fail { color: #ef4444; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔬 RIVET</h1>
+        <p>Test Report - {{ timestamp }}</p>
+    </div>
+    <div class="content">
+        <div class="metric">Total: {{ report.summary.total }}</div>
+        <div class="metric">Passed: {{ report.summary.passed }}</div>
+        <div class="metric">Failed: {{ report.summary.failed }}</div>
+        <div class="metric">Success Rate: {{ report.summary.success_rate }}%</div>
+        
+        <h2>Test Suites</h2>
+        {% for suite in report.suites %}
+        <div class="suite">
+            <h3>{{ suite.name }}</h3>
+            <p>{{ suite.summary.passed }} passed, {{ suite.summary.failed }} failed</p>
+            
+            {% for test in suite.tests %}
+            <div class="test {% if test.status == "Passed" %}pass{% else %}fail{% endif %}">
+                <strong>{{ test.name }}</strong> - {{ test.status }}
+                {% if test.error %}
+                <br><small>Error: {{ test.error }}</small>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

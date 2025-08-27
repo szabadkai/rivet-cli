@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>API Test Results</title>
+  <style>
+    :root{
+      --bg: #0b0d10;          /* dark by default */
+      --panel: #12151a;
+      --muted: #99a3ad;
+      --text: #f2f5f7;
+      --ok: #22c55e;
+      --fail: #ef4444;
+      --skip: #f59e0b;
+      --info: #60a5fa;
+      --border: #1f2430;
+      --chip: #222834;
+      --shadow: 0 6px 24px rgba(0,0,0,.35);
+      --radius: 16px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    @media (prefers-color-scheme: light){
+      :root{ --bg:#f6f7f9; --panel:#ffffff; --text:#0c1116; --muted:#5b6773; --border:#e6e9ee; --chip:#eef2f7; --shadow:0 8px 24px rgba(13,23,41,.08);}    }
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 var(--font);}    
+    .container{max-width:1200px;margin:24px auto; padding:0 16px;}
+    header{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:16px}
+    .title{display:flex;gap:12px;align-items:center}
+    .title h1{margin:0;font-size:20px}
+    .badge{padding:4px 10px;border-radius:999px;background:var(--chip);border:1px solid var(--border);color:var(--muted);font-weight:600;}
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    .controls{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:12px; box-shadow:var(--shadow);}
+    input[type="text"], select{background:transparent;border:1px solid var(--border); color:var(--text); padding:8px 10px;border-radius:10px;outline:none}
+    input[type="file"]{display:none}
+    .btn{border:1px solid var(--border); background:var(--chip); color:var(--text); padding:8px 12px; border-radius:10px; font-weight:600; cursor:pointer}
+    .btn:hover{filter:brightness(1.05)}
+    .btn.ghost{background:transparent}
+    .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin:16px 0}
+    @media (max-width:980px){.kpis{grid-template-columns:repeat(3,1fr)}}
+    @media (max-width:640px){.kpis{grid-template-columns:repeat(2,1fr)}}
+    .card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:16px; box-shadow:var(--shadow);}
+    .kpi .label{color:var(--muted);font-weight:600}
+    .kpi .value{font-size:24px;font-weight:800;margin-top:6px}
+    .kpi.ok .value{color:var(--ok)}
+    .kpi.fail .value{color:var(--fail)}
+    .kpi.skip .value{color:var(--skip)}
+    /* chart */
+    .charts{display:grid;grid-template-columns:2fr 1.2fr; gap:12px}
+    @media (max-width:980px){.charts{grid-template-columns:1fr}}
+    canvas{width:100%; height:220px; background:linear-gradient(180deg,transparent, rgba(255,255,255,.02) 60%); border-radius:12px;}
+    /* table */
+    .table{margin-top:16px}
+    table{width:100%; border-collapse:separate; border-spacing:0 8px}
+    thead th{color:var(--muted); text-align:left; font-size:12px; padding:0 10px 8px 10px; cursor:default}
+    thead th.sortable{cursor:pointer}
+    thead th.sortable:after{content:'\25B4\25BE'; font-size:10px; opacity:.35; margin-left:6px}
+    tbody tr{background:var(--panel); box-shadow:var(--shadow);}
+    tbody td{padding:12px 10px; border-top:1px solid var(--border); border-bottom:1px solid var(--border)}
+    tbody td:first-child{border-left:1px solid var(--border); border-top-left-radius:12px; border-bottom-left-radius:12px}
+    tbody td:last-child{border-right:1px solid var(--border); border-top-right-radius:12px; border-bottom-right-radius:12px}
+    .status{display:inline-flex;align-items:center; gap:8px; font-weight:700}
+    .dot{width:10px;height:10px;border-radius:999px; display:inline-block}
+    .dot.ok{background:var(--ok)}
+    .dot.fail{background:var(--fail)}
+    .dot.skip{background:var(--skip)}
+    code, pre{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
+    details summary{cursor:pointer;color:var(--muted)}
+    .pill{display:inline-flex; gap:6px; align-items:center; padding:4px 8px; border-radius:999px; background:var(--chip); border:1px solid var(--border); font-weight:600; color:var(--muted)}
+    .nowrap{white-space:nowrap}
+    .right{display:flex; gap:8px; align-items:center}
+    .sticky-controls{position:sticky; top:0; z-index:10}
+    .muted{color:var(--muted)}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+    .footer{margin:24px 0; color:var(--muted)}
+    .tag{display:inline-flex; align-items:center; gap:6px; background:var(--chip); border:1px solid var(--border); padding:2px 8px; border-radius:999px; font-weight:600}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="title">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 12h7l2-2h9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 6h7l2 2h9M3 18h7l2-2h9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h1>API Test Results</h1>
+        <span id="envBadge" class="badge">env: -</span>
+        <span id="branchBadge" class="badge">branch: -</span>
+      </div>
+      <div class="right">
+        <button id="themeBtn" class="btn ghost" title="Toggle theme">🌓</button>
+        <label class="btn" for="fileInput">Load JSON</label>
+        <input id="fileInput" type="file" accept="application/json" />
+        <button id="pasteBtn" class="btn">Paste JSON</button>
+        <button id="exportBtn" class="btn">Export filtered</button>
+      </div>
+    </header>
+
+    <div class="controls sticky-controls row">
+      <div class="row" style="flex:1 1 520px">
+        <input id="search" type="text" placeholder="Search: test name, endpoint, error, tag… (⌘/Ctrl+K)" style="flex:1"/>
+        <select id="statusFilter">
+          <option value="all">All statuses</option>
+          <option value="passed">Passed</option>
+          <option value="failed">Failed</option>
+          <option value="skipped">Skipped</option>
+        </select>
+        <select id="methodFilter">
+          <option value="all">Any method</option>
+          <option>GET</option><option>POST</option><option>PUT</option><option>PATCH</option><option>DELETE</option>
+        </select>
+        <label class="pill"><input id="onlyFailures" type="checkbox"/> only failures</label>
+      </div>
+      <div class="row">
+        <span id="runId" class="pill">run: -</span>
+        <span id="timing" class="pill">duration: -</span>
+        <span id="commit" class="pill mono">commit: -</span>
+      </div>
+    </div>
+
+    <section class="kpis">
+      <div class="card kpi"><div class="label">Total</div><div id="k_total" class="value">-</div></div>
+      <div class="card kpi ok"><div class="label">Passed</div><div id="k_passed" class="value">-</div></div>
+      <div class="card kpi fail"><div class="label">Failed</div><div id="k_failed" class="value">-</div></div>
+      <div class="card kpi skip"><div class="label">Skipped</div><div id="k_skipped" class="value">-</div></div>
+      <div class="card kpi"><div class="label">Pass rate</div><div id="k_rate" class="value">-</div></div>
+      <div class="card kpi"><div class="label">p95 duration</div><div id="k_p95" class="value">-</div></div>
+    </section>
+
+    <section class="charts">
+      <div class="card">
+        <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div class="label">Duration histogram (ms)</div>
+          <div class="muted">p50:<span id="c_p50" class="mono">-</span> · p90:<span id="c_p90" class="mono">-</span> · p95:<span id="c_p95" class="mono">-</span> · p99:<span id="c_p99" class="mono">-</span></div>
+        </div>
+        <canvas id="hist"></canvas>
+      </div>
+      <div class="card">
+        <div class="label" style="margin-bottom:8px">Pass rate by endpoint</div>
+        <div id="endpointBars"></div>
+      </div>
+    </section>
+
+    <section class="table">
+      <table id="resultsTable">
+        <thead>
+          <tr>
+            <th>Status</th>
+            <th class="sortable" data-sort="method">Method</th>
+            <th class="sortable" data-sort="endpoint">Endpoint</th>
+            <th class="sortable" data-sort="name">Test name</th>
+            <th class="sortable" data-sort="suite">Suite</th>
+            <th class="sortable" data-sort="code">Code</th>
+            <th class="sortable" data-sort="duration_ms">Duration</th>
+            <th class="sortable" data-sort="retries">Retries</th>
+            <th>Tags</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </section>
+
+    <div class="footer">
+      <div>Keyboard: <span class="mono">⌘/Ctrl+K</span> focus search, <span class="mono">/</span> toggle only-failures, <span class="mono">g</span> go to top. UI state is persisted. No dependencies.</div>
+    </div>
+  </div>
+
+  <script>
+    // ===== Schema =====
+    // {
+    //   run: { id, startTime, endTime, env:{name, baseUrl}, branch, commit, ci:{provider, buildNumber, workflow} },
+    //   tests: [
+    //     { id, name, suite, status:"passed|failed|skipped", method, url, endpoint, duration_ms, timestamp,
+    //       code, retries, tags:[], request:{headers:{}, body:any}, response:{headers:{}, body:any, size, truncated},
+    //       assertions:[{name, passed, message}], error }
+    //   ]
+    // }
+
+    const sampleData = {
+      run: {
+        id: "R-2025-08-27T07:15:12Z",
+        startTime: "2025-08-27T07:15:12Z",
+        endTime:   "2025-08-27T07:18:46Z",
+        env: { name: "staging", baseUrl: "https://staging.api.example.com" },
+        branch: "main",
+        commit: "f3c9d5b",
+        ci: { provider: "GitHub Actions", workflow: "api-e2e", buildNumber: "#842" }
+      },
+      tests: [
+        { id:"t1", name:"GET /users returns list", suite:"Users", status:"passed", method:"GET", url:"https://staging.api.example.com/users?limit=5", endpoint:"/users", duration_ms:182, timestamp:"2025-08-27T07:16:03Z", code:200, retries:0, tags:["smoke"], request:{ headers:{ Accept:"application/json" }, body:null }, response:{ headers:{ "content-type":"application/json" }, body:[{id:1},{id:2}], size:512, truncated:false }, assertions:[{name:"status is 200", passed:true},{name:"has >0 users", passed:true}] },
+        { id:"t2", name:"POST /users creates user (400 on duplicate)", suite:"Users", status:"failed", method:"POST", url:"https://staging.api.example.com/users", endpoint:"/users", duration_ms:324, timestamp:"2025-08-27T07:16:48Z", code:500, retries:1, tags:["regression","negative"], request:{ headers:{ "content-type":"application/json" }, body:{ email:"dupe@example.com" } }, response:{ headers:{ "content-type":"application/json" }, body:{ error:"internal" }, size:420, truncated:false }, assertions:[{name:"returns 400", passed:false, message:"Expected 400, got 500"}], error:"AssertionError: returns 400\n    at /tests/users.spec.js:88:15" },
+        { id:"t3", name:"DELETE /users/{id} requires auth", suite:"Users", status:"skipped", method:"DELETE", url:"https://staging.api.example.com/users/42", endpoint:"/users/{id}", duration_ms:0, timestamp:"2025-08-27T07:17:11Z", code:null, retries:0, tags:["auth"], request:{ headers:{}, body:null }, response:{ headers:{}, body:null, size:0, truncated:false }, assertions:[], error:"Skipped: feature flag disabled" },
+        { id:"t4", name:"GET /health responds fast", suite:"Infra", status:"passed", method:"GET", url:"https://staging.api.example.com/health", endpoint:"/health", duration_ms:48, timestamp:"2025-08-27T07:17:31Z", code:200, retries:0, tags:["healthcheck"], request:{ headers:{}, body:null }, response:{ headers:{ "content-type":"application/json" }, body:{ ok:true }, size:160, truncated:false }, assertions:[{name:"duration < 150ms", passed:true, message:"48ms"}] },
+        { id:"t5", name:"GET /orders returns 401 without token", suite:"Orders", status:"passed", method:"GET", url:"https://staging.api.example.com/orders", endpoint:"/orders", duration_ms:95, timestamp:"2025-08-27T07:18:02Z", code:401, retries:0, tags:["auth","negative"], request:{ headers:{}, body:null }, response:{ headers:{ "www-authenticate":"Bearer" }, body:{ error:"unauthorized" }, size:210, truncated:false }, assertions:[{name:"returns 401", passed:true}] }
+      ]
+    };
+
+    // ===== Utilities =====
+    const el = sel => document.querySelector(sel);
+    const fmtPct = n => (isFinite(n) ? (n*100).toFixed(1)+"%" : "-");
+    const fmtMs = n => (n==null?"-":Math.round(n)+" ms");
+    const percentile = (arr, p)=>{
+      if(!arr.length) return 0;
+      const s = [...arr].sort((a,b)=>a-b);
+      const idx = (s.length-1)*p; const lo = Math.floor(idx), hi = Math.ceil(idx);
+      return lo===hi ? s[lo] : s[lo]*(1-(idx-lo)) + s[hi]*(idx-lo);
+    };
+    const groupBy = (arr, keyFn)=>arr.reduce((m,x)=>{const k=keyFn(x); (m[k]??=[]).push(x); return m;},{});
+    const escapeHtml = s => String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c]));
+
+    // ===== State =====
+    let data = sampleData;
+    let filters = JSON.parse(localStorage.getItem("apiResults.filters")||"null") || { q:"", status:"all", method:"all", onlyFailures:false };
+    let sort = JSON.parse(localStorage.getItem("apiResults.sort")||"null") || { key:"", dir:1 };
+
+    // ===== Renderers =====
+    function renderMeta(){
+      const r=data.run||{};
+      el('#envBadge').textContent = `env: ${r.env?.name||'-'}`;
+      el('#branchBadge').textContent = `branch: ${r.branch||'-'}`;
+      el('#runId').textContent = `run: ${r.id||'-'}`;
+      el('#commit').textContent = `commit: ${r.commit||'-'}`;
+      const start = r.startTime? new Date(r.startTime): null; const end = r.endTime? new Date(r.endTime): null;
+      const dur = (start && end)? (end - start) : null;
+      el('#timing').textContent = `duration: ${dur!=null? fmtMs(dur):'-'}${start?` • ${start.toLocaleString()} → ${end?.toLocaleTimeString()||''}`:''}`;
+    }
+
+    function computeStats(tests){
+      const total = tests.length;
+      const passed = tests.filter(t=>t.status==='passed').length;
+      const failed = tests.filter(t=>t.status==='failed').length;
+      const skipped= tests.filter(t=>t.status==='skipped').length;
+      const rate = total? passed/total : 0;
+      const durs = tests.filter(t=>t.duration_ms>0).map(t=>t.duration_ms);
+      return { total, passed, failed, skipped, rate, p50:percentile(durs,.50), p90:percentile(durs,.90), p95:percentile(durs,.95), p99:percentile(durs,.99), durs };
+    }
+
+    function renderKPIs(stats){
+      el('#k_total').textContent = stats.total;
+      el('#k_passed').textContent = stats.passed;
+      el('#k_failed').textContent = stats.failed;
+      el('#k_skipped').textContent = stats.skipped;
+      el('#k_rate').textContent = fmtPct(stats.rate);
+      el('#k_p95').textContent = fmtMs(stats.p95);
+      el('#c_p50').textContent = Math.round(stats.p50);
+      el('#c_p90').textContent = Math.round(stats.p90);
+      el('#c_p95').textContent = Math.round(stats.p95);
+      el('#c_p99').textContent = Math.round(stats.p99);
+    }
+
+    function renderHistogram(stats){
+      const canvas = el('#hist'); const ctx = canvas.getContext('2d');
+      const width = canvas.clientWidth; const height = canvas.clientHeight;
+      canvas.width = width * devicePixelRatio; canvas.height = height * devicePixelRatio; ctx.scale(devicePixelRatio, devicePixelRatio);
+      ctx.clearRect(0,0,width,height);
+      const data = stats.durs; if(!data.length){ ctx.fillStyle = '#777'; ctx.fillText('No duration data', 12, 20); return; }
+      const max = Math.max(...data);
+      const bins = Math.min(30, Math.ceil(Math.sqrt(data.length)));
+      const binSize = (max||1)/bins; const counts = new Array(bins).fill(0);
+      data.forEach(v=>{ const i=Math.min(bins-1, Math.floor(v/binSize)); counts[i]++; });
+      const maxCount = Math.max(...counts);
+      const pad = { l: 28, r: 8, t: 8, b: 22 };
+      for(let i=0;i<bins;i++){
+        const x = pad.l + i*( (width-pad.l-pad.r)/bins );
+        const w = (width-pad.l-pad.r)/bins - 2;
+        const h = (counts[i]/maxCount) * (height-pad.t-pad.b);
+        ctx.fillStyle = 'rgba(96,165,250,.7)';
+        ctx.fillRect(x, height-pad.b-h, w, h);
+      }
+      ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--muted');
+      ctx.font = '12px ui-sans-serif';
+      [0,.25,.5,.75,1].forEach(p=>{ const v = Math.round(max*p); const x = pad.l + (width-pad.l-pad.r)*p; ctx.fillText(String(v), x-6, height-6); });
+    }
+
+    function renderEndpointBars(tests){
+      const holder = el('#endpointBars');
+      const byEp = groupBy(tests, t=>t.endpoint||t.url||'');
+      const items = Object.entries(byEp).map(([k,v])=>{
+        const p = v.filter(x=>x.status==='passed').length; const rate = v.length? p/v.length : 0; return { endpoint:k, rate, total:v.length };
+      }).sort((a,b)=>b.rate-a.rate);
+      holder.innerHTML = items.map(it=>{
+        const w = Math.round(it.rate*100);
+        return `<div style="margin:10px 0">
+          <div class="row" style="justify-content:space-between"><div class="mono">${escapeHtml(it.endpoint)}</div><div class="muted">${it.total} tests • ${fmtPct(it.rate)}</div></div>
+          <div style="height:10px;background:var(--chip);border:1px solid var(--border);border-radius:999px;overflow:hidden">
+            <div style="width:${w}%;height:100%;background:linear-gradient(90deg,var(--ok),#86efac)"></div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function matchesFilters(t){
+      if(filters.status!=='all' && t.status!==filters.status) return false;
+      if(filters.method!=='all' && t.method!==filters.method) return false;
+      if(filters.onlyFailures && t.status==='passed') return false;
+      const q = filters.q.trim().toLowerCase();
+      if(q){
+        const hay = [t.name, t.endpoint, t.url, t.suite, (t.error||''), ...(t.tags||[])].join('\n').toLowerCase();
+        if(!hay.includes(q)) return false;
+      }
+      return true;
+    }
+
+    function sortTests(arr){
+      if(!sort.key) return arr;
+      const key = sort.key; const dir = sort.dir;
+      const copy = [...arr];
+      copy.sort((a,b)=>{
+        const va = a[key]; const vb = b[key];
+        if(va==null && vb==null) return 0; if(va==null) return -1*dir; if(vb==null) return 1*dir;
+        if(typeof va === 'number' && typeof vb === 'number') return (va - vb) * dir;
+        return String(va).localeCompare(String(vb)) * dir;
+      });
+      return copy;
+    }
+
+    function renderRows(tests){
+      const rows = el('#rows');
+      const filtered = tests.filter(matchesFilters);
+      const sorted = sortTests(filtered);
+      let html = '';
+      for(const t of sorted){
+        const statusDot = `<span class="dot ${t.status==='passed'?'ok':t.status==='failed'?'fail':'skip'}"></span>`;
+        const tags = (t.tags||[]).map(x=>`<span class="tag">${escapeHtml(x)}</span>`).join(' ');
+        const req = escapeHtml(JSON.stringify(t.request?.body, null, 2));
+        const res = escapeHtml(JSON.stringify(t.response?.body, null, 2));
+        const hdrsReq = escapeHtml(JSON.stringify(t.request?.headers||{}, null, 2));
+        const hdrsRes = escapeHtml(JSON.stringify(t.response?.headers||{}, null, 2));
+        const curl = buildCurl(t);
+        html += `
+        <tr>
+          <td><span class="status">${statusDot}${t.status}</span></td>
+          <td class="mono">${t.method||''}</td>
+          <td class="mono">${escapeHtml(t.endpoint||'')}</td>
+          <td>${escapeHtml(t.name||'')}</td>
+          <td>${escapeHtml(t.suite||'')}</td>
+          <td class="mono">${t.code!=null?t.code:'-'}</td>
+          <td class="mono">${t.duration_ms!=null?t.duration_ms+' ms':'-'}</td>
+          <td class="mono">${t.retries||0}</td>
+          <td>${tags||''}</td>
+          <td>
+            <details>
+              <summary>Open</summary>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px">
+                <div>
+                  <div class="label">Request</div>
+                  <div class="muted mono">${escapeHtml((t.method||'') + ' ' + (t.url||''))}</div>
+                  <button class="btn" onclick="copyText(`${escapeHtml(curl).replace(/\n/g,'\\n')}`)">Copy as cURL</button>
+                  <details style="margin-top:8px"><summary>Headers</summary><pre><code>${hdrsReq||'-'}</code></pre></details>
+                  <details style="margin-top:8px"><summary>Body</summary><pre><code>${req||'-'}</code></pre></details>
+                </div>
+                <div>
+                  <div class="label">Response</div>
+                  <div class="muted mono">status: ${t.code!=null?t.code:'-'}, size: ${t.response?.size||0} B</div>
+                  <details style="margin-top:8px"><summary>Headers</summary><pre><code>${hdrsRes||'-'}</code></pre></details>
+                  <details style="margin-top:8px"><summary>Body</summary><pre><code>${res||'-'}</code></pre></details>
+                </div>
+              </div>
+              ${ t.assertions?.length? `<div style=\"margin-top:8px\"><div class=\"label\">Assertions</div>${t.assertions.map(a=>`<div class=\"row\" style=\"gap:8px\"><span class=\"pill\" style=\"border-color:${a.passed?'var(--ok)':'var(--fail)'}\">${a.passed?'pass':'fail'}</span><div>${escapeHtml(a.name)}</div><div class=\"muted\">${escapeHtml(a.message||'')}</div></div>`).join('')}</div>`:'' }
+              ${ t.error? `<pre style=\"margin-top:8px\"><code>${escapeHtml(t.error)}</code></pre>`:'' }
+            </details>
+          </td>
+        </tr>`;
+      }
+      rows.innerHTML = html || `<tr><td colspan="10" class="muted" style="text-align:center;padding:20px">No tests match filters.</td></tr>`;
+      return filtered;
+    }
+
+    function buildCurl(t){
+      try{
+        const m = (t.method||'GET').toUpperCase();
+        const url = t.url || '';
+        let cmd = `curl -X ${m} '${url}'`;
+        const headers = t.request?.headers || {};
+        for(const [k,v] of Object.entries(headers)){
+          cmd += `\n  -H '${k}: ${String(v).replace(/'/g,"'\\''")}'`;
+        }
+        if(t.request?.body!=null){
+          cmd += `\n  --data '${JSON.stringify(t.request.body).replace(/'/g,"'\\''")}'`;
+        }
+        return cmd;
+      }catch{ return 'curl'; }
+    }
+
+    function copyText(s){
+      navigator.clipboard.writeText(s).then(()=>{
+        const old = document.title; document.title = '✓ copied'; setTimeout(()=>document.title=old, 600);
+      });
+    }
+
+    // ===== I/O =====
+    function loadFromFile(file){
+      const reader = new FileReader();
+      reader.onload = e=>{ try{ setData(JSON.parse(e.target.result)); } catch(err){ alert('Invalid JSON: '+err.message); } };
+      reader.readAsText(file);
+    }
+    function setData(newData){ data = newData; localStorage.setItem('apiResults.latest', JSON.stringify(newData)); hydrate(); }
+
+    // ===== Main =====
+    function hydrate(){
+      renderMeta();
+      const shown = renderRows(data.tests||[]);
+      const stats = computeStats(shown);
+      renderKPIs(stats);
+      renderHistogram(stats);
+      renderEndpointBars(shown);
+    }
+
+    // ===== Wire-up =====
+    window.addEventListener('DOMContentLoaded', ()=>{
+      // restore last data if any
+      const last = localStorage.getItem('apiResults.latest');
+      if(last){ try{ data = JSON.parse(last); }catch{ /* ignore */ } }
+      // controls
+      el('#fileInput').addEventListener('change', e=>{ if(e.target.files?.[0]) loadFromFile(e.target.files[0]); });
+      el('#pasteBtn').addEventListener('click', ()=>{
+        const txt = prompt('Paste JSON here');
+        if(!txt) return; try{ setData(JSON.parse(txt)); } catch(err){ alert('Invalid JSON: '+err.message); }
+      });
+      el('#exportBtn').addEventListener('click', ()=>{
+        const tests = (data.tests||[]).filter(matchesFilters);
+        const out = { run: data.run, tests };
+        const blob = new Blob([JSON.stringify(out,null,2)], { type:'application/json' });
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `api-results-filtered-${Date.now()}.json`; a.click();
+      });
+      // filters
+      const s = el('#search'); const st = el('#statusFilter'); const mf = el('#methodFilter'); const of = el('#onlyFailures');
+      s.value = filters.q; st.value = filters.status; mf.value = filters.method; of.checked = filters.onlyFailures;
+      s.addEventListener('input', ()=>{ filters.q = s.value; localStorage.setItem('apiResults.filters', JSON.stringify(filters)); hydrate(); });
+      st.addEventListener('change', ()=>{ filters.status = st.value; localStorage.setItem('apiResults.filters', JSON.stringify(filters)); hydrate(); });
+      mf.addEventListener('change', ()=>{ filters.method = mf.value; localStorage.setItem('apiResults.filters', JSON.stringify(filters)); hydrate(); });
+      of.addEventListener('change', ()=>{ filters.onlyFailures = of.checked; localStorage.setItem('apiResults.filters', JSON.stringify(filters)); hydrate(); });
+
+      // keyboard
+      document.addEventListener('keydown', (e)=>{
+        if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); s.focus(); s.select(); }
+        if(e.key === '/'){ e.preventDefault(); of.checked = !of.checked; of.dispatchEvent(new Event('change')); }
+        if(e.key.toLowerCase() === 'g'){ window.scrollTo({ top:0, behavior:'smooth' }); }
+      });
+
+      // theme toggle (persist)
+      const userTheme = localStorage.getItem('apiResults.theme');
+      if(userTheme==='light') document.documentElement.style.filter = 'invert(1) hue-rotate(180deg)';
+      document.getElementById('themeBtn').addEventListener('click', ()=>{
+        const curr = localStorage.getItem('apiResults.theme')||'dark';
+        const next = curr==='dark'?'light':'dark';
+        localStorage.setItem('apiResults.theme', next);
+        document.documentElement.style.filter = next==='light' ? 'invert(1) hue-rotate(180deg)' : '';
+      });
+
+      // sorting
+      document.querySelectorAll('th.sortable').forEach(th=>{
+        th.addEventListener('click', ()=>{
+          const key = th.dataset.sort; if(sort.key===key){ sort.dir*=-1; } else { sort.key=key; sort.dir=1; }
+          localStorage.setItem('apiResults.sort', JSON.stringify(sort)); hydrate();
+        });
+      });
+
+      hydrate();
+    });
+  </script>
+</body>
+</html>

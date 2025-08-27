@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rivet Test Report</title>
+    <style>
+        body { font-family: system-ui; background: #0f172a; color: #f8fafc; margin: 0; }
+        .header { background: linear-gradient(135deg, #06b6d4, #0891b2); padding: 2rem; text-align: center; }
+        .content { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        .metric { display: inline-block; margin: 1rem; padding: 1rem; background: #1e293b; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔬 RIVET</h1>
+        <p>Test Report</p>
+    </div>
+    <div class="content">
+        <div class="metric">Total: {{ report.summary.total }}</div>
+        <div class="metric">Passed: {{ report.summary.passed }}</div>
+        <div class="metric">Failed: {{ report.summary.failed }}</div>
+    </div>
+</body>
+</html>
