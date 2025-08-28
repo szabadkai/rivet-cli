@@ -17,6 +17,12 @@ pub struct PerformanceMetrics {
     pub connection_errors: u64,
 }
 
+impl Default for PerformanceMetrics {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl PerformanceMetrics {
     pub fn new() -> Self {
         Self {

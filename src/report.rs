@@ -410,7 +410,7 @@ mod tests {
             failed: 0,
         };
 
-        let report = ReportGenerator::build_report(&vec![suite_result]);
+        let report = ReportGenerator::build_report(&[suite_result]);
         assert_eq!(report.summary.success_rate, 100.0);
     }
 
@@ -441,7 +441,7 @@ mod tests {
             failed: 2,
         };
 
-        let report = ReportGenerator::build_report(&vec![suite_result]);
+        let report = ReportGenerator::build_report(&[suite_result]);
         assert_eq!(report.summary.success_rate, 0.0);
     }
 
@@ -487,7 +487,7 @@ mod tests {
             failed: 1,
         };
 
-        let report = ReportGenerator::build_report(&vec![suite1, suite2]);
+        let report = ReportGenerator::build_report(&[suite1, suite2]);
 
         // Overall summary should aggregate both suites
         assert_eq!(report.summary.total, 3);

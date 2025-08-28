@@ -198,6 +198,7 @@ impl PerformanceTestRunner {
         Ok(())
     }
 
+    #[allow(clippy::too_many_arguments)]
     async fn worker_task(
         worker_id: u32,
         config: RivetConfig,

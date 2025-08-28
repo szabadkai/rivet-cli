@@ -281,7 +281,7 @@ mod tests {
         // This tests the private function indirectly by checking that load() doesn't panic
         // when HOME/USERPROFILE is set
         std::env::set_var("HOME", "/tmp");
-        let result = std::panic::catch_unwind(|| UserConfig::default());
+        let result = std::panic::catch_unwind(UserConfig::default);
         assert!(result.is_ok());
     }
 }

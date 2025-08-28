@@ -194,43 +194,17 @@ jobs:
           LINUX_SHA=$(sha256sum     "release-assets/rivet-${VERSION}-linux-x86_64.tar.gz"   | awk '{print $1}')
 
           FORMULA_PATH="release-assets/rivet.rb"
-          cat > "$FORMULA_PATH" <<EOF
-class Rivet < Formula
-  desc "API testing that lives in git"
-  homepage "https://github.com/${{ github.repository }}"
-  version "${VERSION_STRIP_V}"
-  license "MIT"
-
-  on_macos do
-    if Hardware::CPU.arm?
-      url "${BASE_URL}/rivet-${VERSION}-macos-arm64.tar.gz"
-      sha256 "${MAC_ARM_SHA}"
-    else
-      url "${BASE_URL}/rivet-${VERSION}-macos-x86_64.tar.gz"
-      sha256 "${MAC_INTEL_SHA}"
-    end
-  end
-
-  on_linux do
-    url "${BASE_URL}/rivet-${VERSION}-linux-x86_64.tar.gz"
-    sha256 "${LINUX_SHA}"
-  end
-
-  def install
-    bin.install "rivet"
-    # Install shell completions (bash, zsh, fish)
-    (bash_completion/"rivet").write Utils.safe_popen_read(bin/"rivet", "completions", "bash")
-    (zsh_completion/"_rivet").write Utils.safe_popen_read(bin/"rivet", "completions", "zsh")
-    (fish_completion/"rivet.fish").write Utils.safe_popen_read(bin/"rivet", "completions", "fish")
-    # Install man page
-    (man1/"rivet.1").write Utils.safe_popen_read(bin/"rivet", "man")
-  end
-
-  test do
-    system "#{bin}/rivet", "--version"
-  end
-end
-EOF
+          cp packaging/homebrew/Formula.template.rb "$FORMULA_PATH"
+          sed -i.bak \
+            -e "s#__REPO__#${{ github.repository }}#g" \
+            -e "s#__VERSION_STRIP_V__#${VERSION_STRIP_V}#g" \
+            -e "s#__VERSION__#${VERSION}#g" \
+            -e "s#__BASE_URL__#${BASE_URL}#g" \
+            -e "s#__MAC_INTEL_SHA__#${MAC_INTEL_SHA}#g" \
+            -e "s#__MAC_ARM_SHA__#${MAC_ARM_SHA}#g" \
+            -e "s#__LINUX_SHA__#${LINUX_SHA}#g" \
+            "$FORMULA_PATH"
+          rm -f "$FORMULA_PATH.bak"
 
           echo "mac_intel_sha=${MAC_INTEL_SHA}" >> $GITHUB_OUTPUT
           echo "mac_arm_sha=${MAC_ARM_SHA}" >> $GITHUB_OUTPUT

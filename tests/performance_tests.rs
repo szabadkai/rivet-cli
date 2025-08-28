@@ -16,8 +16,7 @@ async fn test_performance_test_runner_creation() -> Result<()> {
         LoadPattern::Constant,  // load pattern
     )?;
 
-    // Just verify we can create the runner successfully
-    assert!(true);
+    // Just verify we can create the runner successfully - if we get here, it worked
     Ok(())
 }
 
