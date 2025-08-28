@@ -1,0 +1,28 @@
+name: Update a pull request branch
+description: |-
+  Updates the pull request branch with the latest upstream changes by merging HEAD from the base branch into the pull request branch.
+  Note: If making a request on behalf of a GitHub App you must also have permissions to write the contents of the head repository.
+env: null
+vars: null
+setup: null
+tests:
+- name: Update a pull request branch
+  description: |-
+    Updates the pull request branch with the latest upstream changes by merging HEAD from the base branch into the pull request branch.
+    Note: If making a request on behalf of a GitHub App you must also have permissions to write the contents of the head repository.
+  request:
+    method: PUT
+    url: https://api.github.com/repos/{owner}/{repo}/pulls/{pull_number}/update-branch
+    headers: null
+    params: null
+    body: |-
+      {
+        "expected_head_sha": "example"
+      }
+  expect:
+    status: 202
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

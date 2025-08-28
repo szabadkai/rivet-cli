@@ -1,0 +1,31 @@
+name: Update a release
+description: Users with push access to the repository can edit a release.
+env: null
+vars: null
+setup: null
+tests:
+- name: Update a release
+  description: Users with push access to the repository can edit a release.
+  request:
+    method: PATCH
+    url: https://api.github.com/repos/{owner}/{repo}/releases/{release_id}
+    headers: null
+    params: null
+    body: |-
+      {
+        "body": "example",
+        "discussion_category_name": "example",
+        "draft": true,
+        "make_latest": "example",
+        "name": "example",
+        "prerelease": true,
+        "tag_name": "example",
+        "target_commitish": "example"
+      }
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,24 @@
+name: Create reaction for an issue
+description: Create a reaction to an [issue](https://docs.github.com/rest/issues/issues#get-an-issue). A response with an HTTP `200` status means that you already added the reaction type to this issue.
+env: null
+vars: null
+setup: null
+tests:
+- name: Create reaction for an issue
+  description: Create a reaction to an [issue](https://docs.github.com/rest/issues/issues#get-an-issue). A response with an HTTP `200` status means that you already added the reaction type to this issue.
+  request:
+    method: POST
+    url: https://api.github.com/repos/{owner}/{repo}/issues/{issue_number}/reactions
+    headers: null
+    params: null
+    body: |-
+      {
+        "content": "example"
+      }
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

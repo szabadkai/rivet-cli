@@ -1,0 +1,21 @@
+name: GitHub API Root
+description: Get Hypermedia links to resources accessible in GitHub's REST API
+env: null
+vars: null
+setup: null
+tests:
+- name: GitHub API Root
+  description: Get Hypermedia links to resources accessible in GitHub's REST API
+  request:
+    method: GET
+    url: https://api.github.com/
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,21 @@
+name: Get GitHub-hosted runners machine specs for an organization
+description: Get the list of machine specs available for GitHub-hosted runners for an organization.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get GitHub-hosted runners machine specs for an organization
+  description: Get the list of machine specs available for GitHub-hosted runners for an organization.
+  request:
+    method: GET
+    url: https://api.github.com/orgs/{org}/actions/hosted-runners/machine-sizes
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

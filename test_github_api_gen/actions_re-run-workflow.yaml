@@ -1,0 +1,30 @@
+name: Re-run a workflow
+description: |-
+  Re-runs your workflow run using its `id`.
+
+  OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Re-run a workflow
+  description: |-
+    Re-runs your workflow run using its `id`.
+
+    OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+  request:
+    method: POST
+    url: https://api.github.com/repos/{owner}/{repo}/actions/runs/{run_id}/rerun
+    headers: null
+    params: null
+    body: |-
+      {
+        "enable_debug_logging": true
+      }
+  expect:
+    status: 201
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

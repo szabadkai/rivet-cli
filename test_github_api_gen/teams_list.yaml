@@ -1,0 +1,21 @@
+name: List teams
+description: Lists all teams in an organization that are visible to the authenticated user.
+env: null
+vars: null
+setup: null
+tests:
+- name: List teams
+  description: Lists all teams in an organization that are visible to the authenticated user.
+  request:
+    method: GET
+    url: https://api.github.com/orgs/{org}/teams
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

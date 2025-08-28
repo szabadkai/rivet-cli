@@ -1,0 +1,27 @@
+name: List releases
+description: |-
+  This returns a list of releases, which does not include regular Git tags that have not been associated with a release. To get a list of Git tags, use the [Repository Tags API](https://docs.github.com/rest/repos/repos#list-repository-tags).
+
+  Information about published releases are available to everyone. Only users with push access will receive listings for draft releases.
+env: null
+vars: null
+setup: null
+tests:
+- name: List releases
+  description: |-
+    This returns a list of releases, which does not include regular Git tags that have not been associated with a release. To get a list of Git tags, use the [Repository Tags API](https://docs.github.com/rest/repos/repos#list-repository-tags).
+
+    Information about published releases are available to everyone. Only users with push access will receive listings for draft releases.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/releases
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

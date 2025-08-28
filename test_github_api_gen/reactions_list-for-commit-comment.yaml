@@ -1,0 +1,22 @@
+name: List reactions for a commit comment
+description: List the reactions to a [commit comment](https://docs.github.com/rest/commits/comments#get-a-commit-comment).
+env: null
+vars: null
+setup: null
+tests:
+- name: List reactions for a commit comment
+  description: List the reactions to a [commit comment](https://docs.github.com/rest/commits/comments#get-a-commit-comment).
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/comments/{comment_id}/reactions
+    headers: null
+    params:
+      content: '{{queryValue}}'
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

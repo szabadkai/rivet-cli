@@ -64,6 +64,26 @@ jobs:
       - name: Build binary
         run: cargo build --release --target ${{ matrix.target }}
 
+      - name: Generate completions and man (Linux only)
+        if: matrix.target == 'x86_64-unknown-linux-gnu'
+        run: |
+          set -euo pipefail
+          BIN="target/${{ matrix.target }}/release/${{ matrix.artifact_name }}"
+          mkdir -p artifacts/gen
+          "$BIN" completions bash > artifacts/gen/rivet.bash
+          "$BIN" completions zsh  > artifacts/gen/_rivet
+          "$BIN" completions fish > artifacts/gen/rivet.fish
+          "$BIN" completions powershell > artifacts/gen/rivet.ps1
+          "$BIN" completions elvish    > artifacts/gen/rivet.elv
+          "$BIN" man               > artifacts/gen/rivet.1
+
+      - name: Upload completions/man (Linux only)
+        if: matrix.target == 'x86_64-unknown-linux-gnu'
+        uses: actions/upload-artifact@v4
+        with:
+          name: rivet-completions-man
+          path: artifacts/gen/*
+
       - name: Prepare artifact (Unix)
         if: matrix.os != 'windows-latest'
         run: |
@@ -111,7 +131,24 @@ jobs:
           cp artifacts/rivet-macos-x86_64/rivet-macos-x86_64 release-assets/
           cp artifacts/rivet-macos-arm64/rivet-macos-arm64 release-assets/
           cp artifacts/rivet-windows-x86_64.exe/rivet-windows-x86_64.exe release-assets/
+          # Include generated completions and man page (if present)
+          if [ -d artifacts/rivet-completions-man ]; then
+            cp artifacts/rivet-completions-man/* release-assets/
+          fi
           ls -la release-assets
+
+      - name: Create Windows ZIP with PowerShell completion
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.get_version.outputs.VERSION }}"
+          VERSION_STRIP_V="${VERSION#v}"
+          mkdir -p tmp-zip
+          cp release-assets/rivet-windows-x86_64.exe tmp-zip/rivet.exe
+          if [ -f release-assets/rivet.ps1 ]; then
+            cp release-assets/rivet.ps1 tmp-zip/rivet.ps1
+          fi
+          (cd tmp-zip && zip -9 ../release-assets/rivet-${VERSION}-windows-x86_64.zip *)
+          rm -rf tmp-zip
 
       - name: Get version from tag
         id: get_version
@@ -181,6 +218,12 @@ class Rivet < Formula
 
   def install
     bin.install "rivet"
+    # Install shell completions (bash, zsh, fish)
+    (bash_completion/"rivet").write Utils.safe_popen_read(bin/"rivet", "completions", "bash")
+    (zsh_completion/"_rivet").write Utils.safe_popen_read(bin/"rivet", "completions", "zsh")
+    (fish_completion/"rivet.fish").write Utils.safe_popen_read(bin/"rivet", "completions", "fish")
+    # Install man page
+    (man1/"rivet.1").write Utils.safe_popen_read(bin/"rivet", "man")
   end
 
   test do

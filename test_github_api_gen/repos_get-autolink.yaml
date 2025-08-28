@@ -1,0 +1,27 @@
+name: Get an autolink reference of a repository
+description: |-
+  This returns a single autolink reference by ID that was configured for the given repository.
+
+  Information about autolinks are only available to repository administrators.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get an autolink reference of a repository
+  description: |-
+    This returns a single autolink reference by ID that was configured for the given repository.
+
+    Information about autolinks are only available to repository administrators.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/autolinks/{autolink_id}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,39 @@
+name: Create a repository from an unpublished codespace
+description: |-
+  Publishes an unpublished codespace, creating a new repository and assigning it to the codespace.
+
+  The codespace's token is granted write permissions to the repository, allowing the user to push their changes.
+
+  This will fail for a codespace that is already published, meaning it has an associated repository.
+
+  OAuth app tokens and personal access tokens (classic) need the `codespace` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Create a repository from an unpublished codespace
+  description: |-
+    Publishes an unpublished codespace, creating a new repository and assigning it to the codespace.
+
+    The codespace's token is granted write permissions to the repository, allowing the user to push their changes.
+
+    This will fail for a codespace that is already published, meaning it has an associated repository.
+
+    OAuth app tokens and personal access tokens (classic) need the `codespace` scope to use this endpoint.
+  request:
+    method: POST
+    url: https://api.github.com/user/codespaces/{codespace_name}/publish
+    headers: null
+    params: null
+    body: |-
+      {
+        "name": "example",
+        "private": true
+      }
+  expect:
+    status: 201
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

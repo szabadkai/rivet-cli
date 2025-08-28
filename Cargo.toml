@@ -49,8 +49,9 @@ serde_yaml = "0.9"
 jsonpath-rust = "0.3"
 jsonschema = "0.17"
 
-# OpenAPI
+# OpenAPI and API imports
 openapiv3 = "2.0"
+uuid = { version = "1.0", features = ["v4"] }
 
 # Terminal UI and colors
 crossterm = "0.27"
@@ -81,9 +82,13 @@ url = "2.4"
 # Regular expressions
 regex = "1.10"
 
+# IndexMap for ordered maps
+indexmap = "2.0"
+
 [dev-dependencies]
 # Testing utilities
 tempfile = "3.8"
+# HTTP client for integration tests (reqwest is already a main dependency)
 
 [package.metadata.deb]
 # Package name for Debian/Ubuntu (avoid collisions with other 'rivet')

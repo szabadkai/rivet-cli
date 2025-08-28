@@ -1,0 +1,25 @@
+name: Get all custom property values for a repository
+description: |-
+  Gets all custom property values that are set for a repository.
+  Users with read access to the repository can use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get all custom property values for a repository
+  description: |-
+    Gets all custom property values that are set for a repository.
+    Users with read access to the repository can use this endpoint.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/properties/values
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

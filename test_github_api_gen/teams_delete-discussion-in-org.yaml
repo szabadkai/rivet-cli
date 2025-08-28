@@ -1,0 +1,33 @@
+name: Delete a discussion
+description: |-
+  Delete a discussion from a team's page.
+
+  > [!NOTE]
+  > You can also specify a team by `org_id` and `team_id` using the route `DELETE /organizations/{org_id}/team/{team_id}/discussions/{discussion_number}`.
+
+  OAuth app tokens and personal access tokens (classic) need the `write:discussion` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Delete a discussion
+  description: |-
+    Delete a discussion from a team's page.
+
+    > [!NOTE]
+    > You can also specify a team by `org_id` and `team_id` using the route `DELETE /organizations/{org_id}/team/{team_id}/discussions/{discussion_number}`.
+
+    OAuth app tokens and personal access tokens (classic) need the `write:discussion` scope to use this endpoint.
+  request:
+    method: DELETE
+    url: https://api.github.com/orgs/{org}/teams/{team_slug}/discussions/{discussion_number}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

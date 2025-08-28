@@ -1,0 +1,26 @@
+name: Reprioritize sub-issue
+description: You can use the REST API to reprioritize a sub-issue to a different position in the parent list.
+env: null
+vars: null
+setup: null
+tests:
+- name: Reprioritize sub-issue
+  description: You can use the REST API to reprioritize a sub-issue to a different position in the parent list.
+  request:
+    method: PATCH
+    url: https://api.github.com/repos/{owner}/{repo}/issues/{issue_number}/sub_issues/priority
+    headers: null
+    params: null
+    body: |-
+      {
+        "after_id": 42,
+        "before_id": 42,
+        "sub_issue_id": 42
+      }
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

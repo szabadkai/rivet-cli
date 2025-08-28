@@ -1,0 +1,21 @@
+name: List installation requests for the authenticated app
+description: Lists all the pending installation requests for the authenticated GitHub App.
+env: null
+vars: null
+setup: null
+tests:
+- name: List installation requests for the authenticated app
+  description: Lists all the pending installation requests for the authenticated GitHub App.
+  request:
+    method: GET
+    url: https://api.github.com/app/installation-requests
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

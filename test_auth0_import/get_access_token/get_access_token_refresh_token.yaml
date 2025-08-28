@@ -1,0 +1,22 @@
+name: Refresh Token
+description: null
+env: null
+vars: null
+setup: null
+tests:
+- name: Refresh Token
+  description: null
+  request:
+    method: POST
+    url: https://{{auth0_domain}}/oauth/token
+    headers:
+      Content-Type: application/x-www-form-urlencoded
+    params: null
+    body: grant_type=refresh_token&client_id=&refresh_token=
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

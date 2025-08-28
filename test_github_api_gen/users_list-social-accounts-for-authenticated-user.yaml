@@ -1,0 +1,21 @@
+name: List social accounts for the authenticated user
+description: Lists all of your social accounts.
+env: null
+vars: null
+setup: null
+tests:
+- name: List social accounts for the authenticated user
+  description: Lists all of your social accounts.
+  request:
+    method: GET
+    url: https://api.github.com/user/social_accounts
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

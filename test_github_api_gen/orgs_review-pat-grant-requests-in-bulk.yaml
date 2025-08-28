@@ -1,0 +1,34 @@
+name: Review requests to access organization resources with fine-grained personal access tokens
+description: |-
+  Approves or denies multiple pending requests to access organization resources via a fine-grained personal access token.
+
+  Only GitHub Apps can use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Review requests to access organization resources with fine-grained personal access tokens
+  description: |-
+    Approves or denies multiple pending requests to access organization resources via a fine-grained personal access token.
+
+    Only GitHub Apps can use this endpoint.
+  request:
+    method: POST
+    url: https://api.github.com/orgs/{org}/personal-access-token-requests
+    headers: null
+    params: null
+    body: |-
+      {
+        "action": "example",
+        "pat_request_ids": [
+          "example"
+        ],
+        "reason": "example"
+      }
+  expect:
+    status: 202
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

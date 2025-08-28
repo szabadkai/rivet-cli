@@ -1,0 +1,33 @@
+name: Get a webhook configuration for an organization
+description: |-
+  Returns the webhook configuration for an organization. To get more information about the webhook, including the `active` state and `events`, use "[Get an organization webhook ](/rest/orgs/webhooks#get-an-organization-webhook)."
+
+  You must be an organization owner to use this endpoint.
+
+  OAuth app tokens and personal access tokens (classic) need `admin:org_hook` scope. OAuth apps cannot list, view, or edit
+  webhooks that they did not create and users cannot list, view, or edit webhooks that were created by OAuth apps.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get a webhook configuration for an organization
+  description: |-
+    Returns the webhook configuration for an organization. To get more information about the webhook, including the `active` state and `events`, use "[Get an organization webhook ](/rest/orgs/webhooks#get-an-organization-webhook)."
+
+    You must be an organization owner to use this endpoint.
+
+    OAuth app tokens and personal access tokens (classic) need `admin:org_hook` scope. OAuth apps cannot list, view, or edit
+    webhooks that they did not create and users cannot list, view, or edit webhooks that were created by OAuth apps.
+  request:
+    method: GET
+    url: https://api.github.com/orgs/{org}/hooks/{hook_id}/config
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

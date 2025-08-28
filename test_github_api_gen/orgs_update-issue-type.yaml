@@ -1,0 +1,33 @@
+name: Update issue type for an organization
+description: |-
+  Updates an issue type for an organization.
+
+  You can find out more about issue types in [Managing issue types in an organization](https://docs.github.com/issues/tracking-your-work-with-issues/configuring-issues/managing-issue-types-in-an-organization).
+
+  To use this endpoint, the authenticated user must be an administrator for the organization. OAuth app tokens and
+  personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Update issue type for an organization
+  description: |-
+    Updates an issue type for an organization.
+
+    You can find out more about issue types in [Managing issue types in an organization](https://docs.github.com/issues/tracking-your-work-with-issues/configuring-issues/managing-issue-types-in-an-organization).
+
+    To use this endpoint, the authenticated user must be an administrator for the organization. OAuth app tokens and
+    personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+  request:
+    method: PUT
+    url: https://api.github.com/orgs/{org}/issue-types/{issue_type_id}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

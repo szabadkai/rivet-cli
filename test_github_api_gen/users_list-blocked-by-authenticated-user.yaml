@@ -1,0 +1,21 @@
+name: List users blocked by the authenticated user
+description: List the users you've blocked on your personal account.
+env: null
+vars: null
+setup: null
+tests:
+- name: List users blocked by the authenticated user
+  description: List the users you've blocked on your personal account.
+  request:
+    method: GET
+    url: https://api.github.com/user/blocks
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

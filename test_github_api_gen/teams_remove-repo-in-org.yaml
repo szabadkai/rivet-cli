@@ -1,0 +1,29 @@
+name: Remove a repository from a team
+description: |-
+  If the authenticated user is an organization owner or a team maintainer, they can remove any repositories from the team. To remove a repository from a team as an organization member, the authenticated user must have admin access to the repository and must be able to see the team. This does not delete the repository, it just removes it from the team.
+
+  > [!NOTE]
+  > You can also specify a team by `org_id` and `team_id` using the route `DELETE /organizations/{org_id}/team/{team_id}/repos/{owner}/{repo}`.
+env: null
+vars: null
+setup: null
+tests:
+- name: Remove a repository from a team
+  description: |-
+    If the authenticated user is an organization owner or a team maintainer, they can remove any repositories from the team. To remove a repository from a team as an organization member, the authenticated user must have admin access to the repository and must be able to see the team. This does not delete the repository, it just removes it from the team.
+
+    > [!NOTE]
+    > You can also specify a team by `org_id` and `team_id` using the route `DELETE /organizations/{org_id}/team/{team_id}/repos/{owner}/{repo}`.
+  request:
+    method: DELETE
+    url: https://api.github.com/orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

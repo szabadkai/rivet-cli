@@ -1,0 +1,31 @@
+name: Delete a repository variable
+description: |-
+  Deletes a repository variable using the variable name.
+
+  Authenticated users must have collaborator access to a repository to create, update, or read variables.
+
+  OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Delete a repository variable
+  description: |-
+    Deletes a repository variable using the variable name.
+
+    Authenticated users must have collaborator access to a repository to create, update, or read variables.
+
+    OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+  request:
+    method: DELETE
+    url: https://api.github.com/repos/{owner}/{repo}/actions/variables/{name}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

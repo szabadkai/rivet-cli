@@ -1,0 +1,25 @@
+name: Set a repository subscription
+description: If you would like to watch a repository, set `subscribed` to `true`. If you would like to ignore notifications made within a repository, set `ignored` to `true`. If you would like to stop watching a repository, [delete the repository's subscription](https://docs.github.com/rest/activity/watching#delete-a-repository-subscription) completely.
+env: null
+vars: null
+setup: null
+tests:
+- name: Set a repository subscription
+  description: If you would like to watch a repository, set `subscribed` to `true`. If you would like to ignore notifications made within a repository, set `ignored` to `true`. If you would like to stop watching a repository, [delete the repository's subscription](https://docs.github.com/rest/activity/watching#delete-a-repository-subscription) completely.
+  request:
+    method: PUT
+    url: https://api.github.com/repos/{owner}/{repo}/subscription
+    headers: null
+    params: null
+    body: |-
+      {
+        "ignored": true,
+        "subscribed": true
+      }
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

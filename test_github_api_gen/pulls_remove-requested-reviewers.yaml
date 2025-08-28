@@ -1,0 +1,21 @@
+name: Remove requested reviewers from a pull request
+description: Removes review requests from a pull request for a given set of users and/or teams.
+env: null
+vars: null
+setup: null
+tests:
+- name: Remove requested reviewers from a pull request
+  description: Removes review requests from a pull request for a given set of users and/or teams.
+  request:
+    method: DELETE
+    url: https://api.github.com/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

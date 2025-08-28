@@ -1,0 +1,33 @@
+name: Delete a repository
+description: |-
+  Deleting a repository requires admin access.
+
+  If an organization owner has configured the organization to prevent members from deleting organization-owned
+  repositories, you will get a `403 Forbidden` response.
+
+  OAuth app tokens and personal access tokens (classic) need the `delete_repo` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Delete a repository
+  description: |-
+    Deleting a repository requires admin access.
+
+    If an organization owner has configured the organization to prevent members from deleting organization-owned
+    repositories, you will get a `403 Forbidden` response.
+
+    OAuth app tokens and personal access tokens (classic) need the `delete_repo` scope to use this endpoint.
+  request:
+    method: DELETE
+    url: https://api.github.com/repos/{owner}/{repo}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,21 @@
+name: Add a repository to an app installation
+description: "Add a single repository to an installation. The authenticated user must have admin access to the repository.    \n\nThis endpoint only works for PATs (classic) with the `repo` scope."
+env: null
+vars: null
+setup: null
+tests:
+- name: Add a repository to an app installation
+  description: "Add a single repository to an installation. The authenticated user must have admin access to the repository.    \n\nThis endpoint only works for PATs (classic) with the `repo` scope."
+  request:
+    method: PUT
+    url: https://api.github.com/user/installations/{installation_id}/repositories/{repository_id}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

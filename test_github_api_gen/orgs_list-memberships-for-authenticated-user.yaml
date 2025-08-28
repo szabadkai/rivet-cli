@@ -1,0 +1,22 @@
+name: List organization memberships for the authenticated user
+description: Lists all of the authenticated user's organization memberships.
+env: null
+vars: null
+setup: null
+tests:
+- name: List organization memberships for the authenticated user
+  description: Lists all of the authenticated user's organization memberships.
+  request:
+    method: GET
+    url: https://api.github.com/user/memberships/orgs
+    headers: null
+    params:
+      state: '{{queryValue}}'
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

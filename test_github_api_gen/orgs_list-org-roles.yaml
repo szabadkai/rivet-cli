@@ -1,0 +1,37 @@
+name: Get all organization roles for an organization
+description: |-
+  Lists the organization roles available in this organization. For more information on organization roles, see "[Using organization roles](https://docs.github.com/organizations/managing-peoples-access-to-your-organization-with-roles/using-organization-roles)."
+
+  To use this endpoint, the authenticated user must be one of:
+
+  - An administrator for the organization.
+  - A user, or a user on a team, with the fine-grained permissions of `read_organization_custom_org_role` in the organization.
+
+  OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get all organization roles for an organization
+  description: |-
+    Lists the organization roles available in this organization. For more information on organization roles, see "[Using organization roles](https://docs.github.com/organizations/managing-peoples-access-to-your-organization-with-roles/using-organization-roles)."
+
+    To use this endpoint, the authenticated user must be one of:
+
+    - An administrator for the organization.
+    - A user, or a user on a team, with the fine-grained permissions of `read_organization_custom_org_role` in the organization.
+
+    OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+  request:
+    method: GET
+    url: https://api.github.com/orgs/{org}/organization-roles
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

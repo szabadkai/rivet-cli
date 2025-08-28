@@ -1,0 +1,34 @@
+name: List repository security advisories
+description: |-
+  Lists security advisories in a repository.
+
+  The authenticated user can access unpublished security advisories from a repository if they are a security manager or administrator of that repository, or if they are a collaborator on any security advisory.
+
+  OAuth app tokens and personal access tokens (classic) need the `repo` or `repository_advisories:read` scope to to get a published security advisory in a private repository, or any unpublished security advisory that the authenticated user has access to.
+env: null
+vars: null
+setup: null
+tests:
+- name: List repository security advisories
+  description: |-
+    Lists security advisories in a repository.
+
+    The authenticated user can access unpublished security advisories from a repository if they are a security manager or administrator of that repository, or if they are a collaborator on any security advisory.
+
+    OAuth app tokens and personal access tokens (classic) need the `repo` or `repository_advisories:read` scope to to get a published security advisory in a private repository, or any unpublished security advisory that the authenticated user has access to.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/security-advisories
+    headers: null
+    params:
+      per_page: '{{queryValue}}'
+      sort: '{{queryValue}}'
+      state: '{{queryValue}}'
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

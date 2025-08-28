@@ -1,0 +1,21 @@
+name: Get all codes of conduct
+description: Returns array of all GitHub's codes of conduct.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get all codes of conduct
+  description: Returns array of all GitHub's codes of conduct.
+  request:
+    method: GET
+    url: https://api.github.com/codes_of_conduct
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

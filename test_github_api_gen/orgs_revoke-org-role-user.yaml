@@ -1,0 +1,31 @@
+name: Remove an organization role from a user
+description: |-
+  Remove an organization role from a user. For more information on organization roles, see "[Using organization roles](https://docs.github.com/organizations/managing-peoples-access-to-your-organization-with-roles/using-organization-roles)."
+
+  The authenticated user must be an administrator for the organization to use this endpoint.
+
+  OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Remove an organization role from a user
+  description: |-
+    Remove an organization role from a user. For more information on organization roles, see "[Using organization roles](https://docs.github.com/organizations/managing-peoples-access-to-your-organization-with-roles/using-organization-roles)."
+
+    The authenticated user must be an administrator for the organization to use this endpoint.
+
+    OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+  request:
+    method: DELETE
+    url: https://api.github.com/orgs/{org}/organization-roles/users/{username}/{role_id}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,27 @@
+name: Set the customization template for an OIDC subject claim for an organization
+description: |-
+  Creates or updates the customization template for an OpenID Connect (OIDC) subject claim.
+
+  OAuth app tokens and personal access tokens (classic) need the `write:org` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Set the customization template for an OIDC subject claim for an organization
+  description: |-
+    Creates or updates the customization template for an OpenID Connect (OIDC) subject claim.
+
+    OAuth app tokens and personal access tokens (classic) need the `write:org` scope to use this endpoint.
+  request:
+    method: PUT
+    url: https://api.github.com/orgs/{org}/actions/oidc/customization/sub
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 201
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

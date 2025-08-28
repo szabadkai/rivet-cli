@@ -1,0 +1,27 @@
+name: List CodeQL databases for a repository
+description: |-
+  Lists the CodeQL databases that are available in a repository.
+
+  OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint with private or public repositories, or the `public_repo` scope to use this endpoint with only public repositories.
+env: null
+vars: null
+setup: null
+tests:
+- name: List CodeQL databases for a repository
+  description: |-
+    Lists the CodeQL databases that are available in a repository.
+
+    OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint with private or public repositories, or the `public_repo` scope to use this endpoint with only public repositories.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/code-scanning/codeql/databases
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

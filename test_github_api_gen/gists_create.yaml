@@ -1,0 +1,33 @@
+name: Create a gist
+description: |-
+  Allows you to add a new gist with one or more files.
+
+  > [!NOTE]
+  > Don't name your files "gistfile" with a numerical suffix. This is the format of the automatic naming scheme that Gist uses internally.
+env: null
+vars: null
+setup: null
+tests:
+- name: Create a gist
+  description: |-
+    Allows you to add a new gist with one or more files.
+
+    > [!NOTE]
+    > Don't name your files "gistfile" with a numerical suffix. This is the format of the automatic naming scheme that Gist uses internally.
+  request:
+    method: POST
+    url: https://api.github.com/gists
+    headers: null
+    params: null
+    body: |-
+      {
+        "description": "example",
+        "files": {}
+      }
+  expect:
+    status: 201
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

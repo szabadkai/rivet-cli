@@ -1,0 +1,29 @@
+name: Get default attributes for a codespace
+description: |-
+  Gets the default attributes for codespaces created by the user with the repository.
+
+  OAuth app tokens and personal access tokens (classic) need the `codespace` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get default attributes for a codespace
+  description: |-
+    Gets the default attributes for codespaces created by the user with the repository.
+
+    OAuth app tokens and personal access tokens (classic) need the `codespace` scope to use this endpoint.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/codespaces/new
+    headers: null
+    params:
+      client_ip: '{{queryValue}}'
+      ref: '{{queryValue}}'
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

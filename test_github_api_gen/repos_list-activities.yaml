@@ -1,0 +1,33 @@
+name: List repository activities
+description: |-
+  Lists a detailed history of changes to a repository, such as pushes, merges, force pushes, and branch changes, and associates these changes with commits and users.
+
+  For more information about viewing repository activity,
+  see "[Viewing activity and data for your repository](https://docs.github.com/repositories/viewing-activity-and-data-for-your-repository)."
+env: null
+vars: null
+setup: null
+tests:
+- name: List repository activities
+  description: |-
+    Lists a detailed history of changes to a repository, such as pushes, merges, force pushes, and branch changes, and associates these changes with commits and users.
+
+    For more information about viewing repository activity,
+    see "[Viewing activity and data for your repository](https://docs.github.com/repositories/viewing-activity-and-data-for-your-repository)."
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/activity
+    headers: null
+    params:
+      activity_type: '{{queryValue}}'
+      time_period: '{{queryValue}}'
+      ref: '{{queryValue}}'
+      actor: '{{queryValue}}'
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

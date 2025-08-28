@@ -1,0 +1,21 @@
+name: Get a repository webhook
+description: Returns a webhook configured in a repository. To get only the webhook `config` properties, see "[Get a webhook configuration for a repository](/rest/webhooks/repo-config#get-a-webhook-configuration-for-a-repository)."
+env: null
+vars: null
+setup: null
+tests:
+- name: Get a repository webhook
+  description: Returns a webhook configured in a repository. To get only the webhook `config` properties, see "[Get a webhook configuration for a repository](/rest/webhooks/repo-config#get-a-webhook-configuration-for-a-repository)."
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/hooks/{hook_id}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

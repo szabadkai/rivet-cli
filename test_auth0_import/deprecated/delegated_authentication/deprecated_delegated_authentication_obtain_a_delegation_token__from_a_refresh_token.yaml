@@ -1,0 +1,21 @@
+name: Obtain a delegation token (from a refresh_token)
+description: null
+env: null
+vars: null
+setup: null
+tests:
+- name: Obtain a delegation token (from a refresh_token)
+  description: null
+  request:
+    method: POST
+    url: https://{{auth0_domain}}/delegation
+    headers: null
+    params: null
+    body: client_id=&grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&refresh_token=&scope=
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,31 @@
+name: Get the level of access for workflows outside of the repository
+description: |-
+  Gets the level of access that workflows outside of the repository have to actions and reusable workflows in the repository.
+  This endpoint only applies to private repositories.
+  For more information, see "[Allowing access to components in a private repository](https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#allowing-access-to-components-in-a-private-repository)."
+
+  OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get the level of access for workflows outside of the repository
+  description: |-
+    Gets the level of access that workflows outside of the repository have to actions and reusable workflows in the repository.
+    This endpoint only applies to private repositories.
+    For more information, see "[Allowing access to components in a private repository](https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#allowing-access-to-components-in-a-private-repository)."
+
+    OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/actions/permissions/access
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

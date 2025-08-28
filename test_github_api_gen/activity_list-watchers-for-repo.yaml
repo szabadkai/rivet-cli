@@ -1,0 +1,21 @@
+name: List watchers
+description: Lists the people watching the specified repository.
+env: null
+vars: null
+setup: null
+tests:
+- name: List watchers
+  description: Lists the people watching the specified repository.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/subscribers
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

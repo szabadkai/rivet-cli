@@ -1,0 +1,29 @@
+name: Get a release
+description: |-
+  Gets a public release with the specified release ID.
+
+  > [!NOTE]
+  > This returns an `upload_url` key corresponding to the endpoint for uploading release assets. This key is a hypermedia resource. For more information, see "[Getting started with the REST API](https://docs.github.com/rest/using-the-rest-api/getting-started-with-the-rest-api#hypermedia)."
+env: null
+vars: null
+setup: null
+tests:
+- name: Get a release
+  description: |-
+    Gets a public release with the specified release ID.
+
+    > [!NOTE]
+    > This returns an `upload_url` key corresponding to the endpoint for uploading release assets. This key is a hypermedia resource. For more information, see "[Getting started with the REST API](https://docs.github.com/rest/using-the-rest-api/getting-started-with-the-rest-api#hypermedia)."
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/releases/{release_id}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

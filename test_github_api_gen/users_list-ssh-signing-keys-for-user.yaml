@@ -1,0 +1,21 @@
+name: List SSH signing keys for a user
+description: Lists the SSH signing keys for a user. This operation is accessible by anyone.
+env: null
+vars: null
+setup: null
+tests:
+- name: List SSH signing keys for a user
+  description: Lists the SSH signing keys for a user. This operation is accessible by anyone.
+  request:
+    method: GET
+    url: https://api.github.com/users/{username}/ssh_signing_keys
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

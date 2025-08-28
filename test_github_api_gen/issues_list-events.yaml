@@ -1,0 +1,21 @@
+name: List issue events
+description: Lists all events for an issue.
+env: null
+vars: null
+setup: null
+tests:
+- name: List issue events
+  description: Lists all events for an issue.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/issues/{issue_number}/events
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

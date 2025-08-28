@@ -1,0 +1,21 @@
+name: Unstar a repository for the authenticated user
+description: Unstar a repository that the authenticated user has previously starred.
+env: null
+vars: null
+setup: null
+tests:
+- name: Unstar a repository for the authenticated user
+  description: Unstar a repository that the authenticated user has previously starred.
+  request:
+    method: DELETE
+    url: https://api.github.com/user/starred/{owner}/{repo}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

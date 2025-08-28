@@ -1,0 +1,26 @@
+name: List custom property values for organization repositories
+description: |-
+  Lists organization repositories with all of their custom property values.
+  Organization members can read these properties.
+env: null
+vars: null
+setup: null
+tests:
+- name: List custom property values for organization repositories
+  description: |-
+    Lists organization repositories with all of their custom property values.
+    Organization members can read these properties.
+  request:
+    method: GET
+    url: https://api.github.com/orgs/{org}/properties/values
+    headers: null
+    params:
+      repository_query: '{{queryValue}}'
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

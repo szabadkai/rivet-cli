@@ -1,0 +1,22 @@
+name: List forks
+description: ''
+env: null
+vars: null
+setup: null
+tests:
+- name: List forks
+  description: ''
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/forks
+    headers: null
+    params:
+      sort: '{{queryValue}}'
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

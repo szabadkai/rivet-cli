@@ -1,0 +1,21 @@
+name: Delete a deploy key
+description: Deploy keys are immutable. If you need to update a key, remove the key and create a new one instead.
+env: null
+vars: null
+setup: null
+tests:
+- name: Delete a deploy key
+  description: Deploy keys are immutable. If you need to update a key, remove the key and create a new one instead.
+  request:
+    method: DELETE
+    url: https://api.github.com/repos/{owner}/{repo}/keys/{key_id}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

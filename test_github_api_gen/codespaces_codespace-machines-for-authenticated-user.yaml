@@ -1,0 +1,27 @@
+name: List machine types for a codespace
+description: |-
+  List the machine types a codespace can transition to use.
+
+  OAuth app tokens and personal access tokens (classic) need the `codespace` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: List machine types for a codespace
+  description: |-
+    List the machine types a codespace can transition to use.
+
+    OAuth app tokens and personal access tokens (classic) need the `codespace` scope to use this endpoint.
+  request:
+    method: GET
+    url: https://api.github.com/user/codespaces/{codespace_name}/machines
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

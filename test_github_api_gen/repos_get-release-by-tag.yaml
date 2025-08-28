@@ -1,0 +1,21 @@
+name: Get a release by tag name
+description: Get a published release with the specified tag.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get a release by tag name
+  description: Get a published release with the specified tag.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/releases/tags/{tag}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

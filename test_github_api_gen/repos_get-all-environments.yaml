@@ -1,0 +1,31 @@
+name: List environments
+description: |-
+  Lists the environments for a repository.
+
+  Anyone with read access to the repository can use this endpoint.
+
+  OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint with a private repository.
+env: null
+vars: null
+setup: null
+tests:
+- name: List environments
+  description: |-
+    Lists the environments for a repository.
+
+    Anyone with read access to the repository can use this endpoint.
+
+    OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint with a private repository.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/environments
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

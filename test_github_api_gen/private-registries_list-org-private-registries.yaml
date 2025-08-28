@@ -1,0 +1,31 @@
+name: List private registries for an organization
+description: |2-
+
+  Lists all private registry configurations available at the organization-level without revealing their encrypted
+  values.
+
+  OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: List private registries for an organization
+  description: |2-
+
+    Lists all private registry configurations available at the organization-level without revealing their encrypted
+    values.
+
+    OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+  request:
+    method: GET
+    url: https://api.github.com/orgs/{org}/private-registries
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

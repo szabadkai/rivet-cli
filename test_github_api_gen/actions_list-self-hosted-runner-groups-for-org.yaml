@@ -1,0 +1,27 @@
+name: List self-hosted runner groups for an organization
+description: |-
+  Lists all self-hosted runner groups configured in an organization and inherited from an enterprise.
+
+  OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: List self-hosted runner groups for an organization
+  description: |-
+    Lists all self-hosted runner groups configured in an organization and inherited from an enterprise.
+
+    OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+  request:
+    method: GET
+    url: https://api.github.com/orgs/{org}/actions/runner-groups
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,31 @@
+name: Update an existing project card
+description: |-
+  > [!WARNING]
+  > **Closing down notice:** Projects (classic) is being deprecated in favor of the new Projects experience.
+  > See the [changelog](https://github.blog/changelog/2024-05-23-sunset-notice-projects-classic/) for more information.
+env: null
+vars: null
+setup: null
+tests:
+- name: Update an existing project card
+  description: |-
+    > [!WARNING]
+    > **Closing down notice:** Projects (classic) is being deprecated in favor of the new Projects experience.
+    > See the [changelog](https://github.blog/changelog/2024-05-23-sunset-notice-projects-classic/) for more information.
+  request:
+    method: PATCH
+    url: https://api.github.com/projects/columns/cards/{card_id}
+    headers: null
+    params: null
+    body: |-
+      {
+        "archived": true,
+        "note": "example"
+      }
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

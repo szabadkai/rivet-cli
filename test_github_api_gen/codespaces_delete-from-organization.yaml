@@ -1,0 +1,27 @@
+name: Delete a codespace from the organization
+description: |-
+  Deletes a user's codespace.
+
+  OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Delete a codespace from the organization
+  description: |-
+    Deletes a user's codespace.
+
+    OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+  request:
+    method: DELETE
+    url: https://api.github.com/orgs/{org}/members/{username}/codespaces/{codespace_name}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 202
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

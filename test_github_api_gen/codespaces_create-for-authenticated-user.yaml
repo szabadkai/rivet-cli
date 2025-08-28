@@ -1,0 +1,31 @@
+name: Create a codespace for the authenticated user
+description: |-
+  Creates a new codespace, owned by the authenticated user.
+
+  This endpoint requires either a `repository_id` OR a `pull_request` but not both.
+
+  OAuth app tokens and personal access tokens (classic) need the `codespace` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Create a codespace for the authenticated user
+  description: |-
+    Creates a new codespace, owned by the authenticated user.
+
+    This endpoint requires either a `repository_id` OR a `pull_request` but not both.
+
+    OAuth app tokens and personal access tokens (classic) need the `codespace` scope to use this endpoint.
+  request:
+    method: POST
+    url: https://api.github.com/user/codespaces
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 201
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

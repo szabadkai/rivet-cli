@@ -1,0 +1,31 @@
+name: List public email addresses for the authenticated user
+description: |-
+  Lists your publicly visible email address, which you can set with the
+  [Set primary email visibility for the authenticated user](https://docs.github.com/rest/users/emails#set-primary-email-visibility-for-the-authenticated-user)
+  endpoint.
+
+  OAuth app tokens and personal access tokens (classic) need the `user:email` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: List public email addresses for the authenticated user
+  description: |-
+    Lists your publicly visible email address, which you can set with the
+    [Set primary email visibility for the authenticated user](https://docs.github.com/rest/users/emails#set-primary-email-visibility-for-the-authenticated-user)
+    endpoint.
+
+    OAuth app tokens and personal access tokens (classic) need the `user:email` scope to use this endpoint.
+  request:
+    method: GET
+    url: https://api.github.com/user/public_emails
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

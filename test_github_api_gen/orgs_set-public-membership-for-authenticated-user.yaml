@@ -1,0 +1,27 @@
+name: Set public organization membership for the authenticated user
+description: |-
+  The user can publicize their own membership. (A user cannot publicize the membership for another user.)
+
+  Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP method](https://docs.github.com/rest/guides/getting-started-with-the-rest-api#http-method)."
+env: null
+vars: null
+setup: null
+tests:
+- name: Set public organization membership for the authenticated user
+  description: |-
+    The user can publicize their own membership. (A user cannot publicize the membership for another user.)
+
+    Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP method](https://docs.github.com/rest/guides/getting-started-with-the-rest-api#http-method)."
+  request:
+    method: PUT
+    url: https://api.github.com/orgs/{org}/public_members/{username}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

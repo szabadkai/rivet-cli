@@ -1,0 +1,27 @@
+name: Get an SSH signing key for the authenticated user
+description: |-
+  Gets extended details for an SSH signing key.
+
+  OAuth app tokens and personal access tokens (classic) need the `read:ssh_signing_key` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get an SSH signing key for the authenticated user
+  description: |-
+    Gets extended details for an SSH signing key.
+
+    OAuth app tokens and personal access tokens (classic) need the `read:ssh_signing_key` scope to use this endpoint.
+  request:
+    method: GET
+    url: https://api.github.com/user/ssh_signing_keys/{ssh_signing_key_id}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

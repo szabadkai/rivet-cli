@@ -1,0 +1,28 @@
+name: List packages for the authenticated user's namespace
+description: |-
+  Lists packages owned by the authenticated user within the user's namespace.
+
+  OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. For more information, see "[About permissions for GitHub Packages](https://docs.github.com/packages/learn-github-packages/about-permissions-for-github-packages#permissions-for-repository-scoped-packages)."
+env: null
+vars: null
+setup: null
+tests:
+- name: List packages for the authenticated user's namespace
+  description: |-
+    Lists packages owned by the authenticated user within the user's namespace.
+
+    OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. For more information, see "[About permissions for GitHub Packages](https://docs.github.com/packages/learn-github-packages/about-permissions-for-github-packages#permissions-for-repository-scoped-packages)."
+  request:
+    method: GET
+    url: https://api.github.com/user/packages
+    headers: null
+    params:
+      package_type: '{{queryValue}}'
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

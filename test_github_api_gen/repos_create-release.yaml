@@ -1,0 +1,38 @@
+name: Create a release
+description: |-
+  Users with push access to the repository can create a release.
+
+  This endpoint triggers [notifications](https://docs.github.com/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. For more information, see "[Rate limits for the API](https://docs.github.com/rest/using-the-rest-api/rate-limits-for-the-rest-api#about-secondary-rate-limits)" and "[Best practices for using the REST API](https://docs.github.com/rest/guides/best-practices-for-using-the-rest-api)."
+env: null
+vars: null
+setup: null
+tests:
+- name: Create a release
+  description: |-
+    Users with push access to the repository can create a release.
+
+    This endpoint triggers [notifications](https://docs.github.com/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. For more information, see "[Rate limits for the API](https://docs.github.com/rest/using-the-rest-api/rate-limits-for-the-rest-api#about-secondary-rate-limits)" and "[Best practices for using the REST API](https://docs.github.com/rest/guides/best-practices-for-using-the-rest-api)."
+  request:
+    method: POST
+    url: https://api.github.com/repos/{owner}/{repo}/releases
+    headers: null
+    params: null
+    body: |-
+      {
+        "body": "example",
+        "discussion_category_name": "example",
+        "draft": true,
+        "generate_release_notes": true,
+        "make_latest": "example",
+        "name": "example",
+        "prerelease": true,
+        "tag_name": "example",
+        "target_commitish": "example"
+      }
+  expect:
+    status: 201
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

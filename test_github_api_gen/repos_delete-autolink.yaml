@@ -1,0 +1,27 @@
+name: Delete an autolink reference from a repository
+description: |-
+  This deletes a single autolink reference by ID that was configured for the given repository.
+
+  Information about autolinks are only available to repository administrators.
+env: null
+vars: null
+setup: null
+tests:
+- name: Delete an autolink reference from a repository
+  description: |-
+    This deletes a single autolink reference by ID that was configured for the given repository.
+
+    Information about autolinks are only available to repository administrators.
+  request:
+    method: DELETE
+    url: https://api.github.com/repos/{owner}/{repo}/autolinks/{autolink_id}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

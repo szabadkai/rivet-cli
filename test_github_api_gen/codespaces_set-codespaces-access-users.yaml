@@ -1,0 +1,38 @@
+name: Add users to Codespaces access for an organization
+description: |-
+  Codespaces for the specified users will be billed to the organization.
+
+  To use this endpoint, the access settings for the organization must be set to `selected_members`.
+  For information on how to change this setting, see "[Manage access control for organization codespaces](https://docs.github.com/rest/codespaces/organizations#manage-access-control-for-organization-codespaces)."
+
+  OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Add users to Codespaces access for an organization
+  description: |-
+    Codespaces for the specified users will be billed to the organization.
+
+    To use this endpoint, the access settings for the organization must be set to `selected_members`.
+    For information on how to change this setting, see "[Manage access control for organization codespaces](https://docs.github.com/rest/codespaces/organizations#manage-access-control-for-organization-codespaces)."
+
+    OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+  request:
+    method: POST
+    url: https://api.github.com/orgs/{org}/codespaces/access/selected_users
+    headers: null
+    params: null
+    body: |-
+      {
+        "selected_usernames": [
+          "example"
+        ]
+      }
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

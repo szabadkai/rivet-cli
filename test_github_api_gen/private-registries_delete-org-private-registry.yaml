@@ -1,0 +1,29 @@
+name: Delete a private registry for an organization
+description: |2-
+
+  Delete a private registry configuration at the organization-level.
+
+  OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Delete a private registry for an organization
+  description: |2-
+
+    Delete a private registry configuration at the organization-level.
+
+    OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+  request:
+    method: DELETE
+    url: https://api.github.com/orgs/{org}/private-registries/{secret_name}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,25 @@
+name: Get all custom properties for an organization
+description: |-
+  Gets all custom properties defined for an organization.
+  Organization members can read these properties.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get all custom properties for an organization
+  description: |-
+    Gets all custom properties defined for an organization.
+    Organization members can read these properties.
+  request:
+    method: GET
+    url: https://api.github.com/orgs/{org}/properties/schema
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

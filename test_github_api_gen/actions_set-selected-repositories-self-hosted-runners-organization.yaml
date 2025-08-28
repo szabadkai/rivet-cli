@@ -1,0 +1,32 @@
+name: Set repositories allowed to use self-hosted runners in an organization
+description: |-
+  Sets repositories that are allowed to use self-hosted runners in an organization.
+
+  OAuth app tokens and personal access tokens (classic) need the `admin:org` scope or the "Actions policies" fine-grained permission to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Set repositories allowed to use self-hosted runners in an organization
+  description: |-
+    Sets repositories that are allowed to use self-hosted runners in an organization.
+
+    OAuth app tokens and personal access tokens (classic) need the `admin:org` scope or the "Actions policies" fine-grained permission to use this endpoint.
+  request:
+    method: PUT
+    url: https://api.github.com/orgs/{org}/actions/permissions/self-hosted-runners/repositories
+    headers: null
+    params: null
+    body: |-
+      {
+        "selected_repository_ids": [
+          "example"
+        ]
+      }
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

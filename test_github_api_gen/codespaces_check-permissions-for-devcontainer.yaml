@@ -1,0 +1,29 @@
+name: Check if permissions defined by a devcontainer have been accepted by the authenticated user
+description: |-
+  Checks whether the permissions defined by a given devcontainer configuration have been accepted by the authenticated user.
+
+  OAuth app tokens and personal access tokens (classic) need the `codespace` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Check if permissions defined by a devcontainer have been accepted by the authenticated user
+  description: |-
+    Checks whether the permissions defined by a given devcontainer configuration have been accepted by the authenticated user.
+
+    OAuth app tokens and personal access tokens (classic) need the `codespace` scope to use this endpoint.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/codespaces/permissions_check
+    headers: null
+    params:
+      devcontainer_path: '{{queryValue}}'
+      ref: '{{queryValue}}'
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

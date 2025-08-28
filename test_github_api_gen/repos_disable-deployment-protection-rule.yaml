@@ -1,0 +1,31 @@
+name: Disable a custom protection rule for an environment
+description: |-
+  Disables a custom deployment protection rule for an environment.
+
+  The authenticated user must have admin or owner permissions to the repository to use this endpoint.
+
+  OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Disable a custom protection rule for an environment
+  description: |-
+    Disables a custom deployment protection rule for an environment.
+
+    The authenticated user must have admin or owner permissions to the repository to use this endpoint.
+
+    OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+  request:
+    method: DELETE
+    url: https://api.github.com/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,24 @@
+name: Create reaction for a commit comment
+description: Create a reaction to a [commit comment](https://docs.github.com/rest/commits/comments#get-a-commit-comment). A response with an HTTP `200` status means that you already added the reaction type to this commit comment.
+env: null
+vars: null
+setup: null
+tests:
+- name: Create reaction for a commit comment
+  description: Create a reaction to a [commit comment](https://docs.github.com/rest/commits/comments#get-a-commit-comment). A response with an HTTP `200` status means that you already added the reaction type to this commit comment.
+  request:
+    method: POST
+    url: https://api.github.com/repos/{owner}/{repo}/comments/{comment_id}/reactions
+    headers: null
+    params: null
+    body: |-
+      {
+        "content": "example"
+      }
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

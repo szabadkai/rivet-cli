@@ -1,0 +1,21 @@
+name: List repository invitations for the authenticated user
+description: When authenticating as a user, this endpoint will list all currently open repository invitations for that user.
+env: null
+vars: null
+setup: null
+tests:
+- name: List repository invitations for the authenticated user
+  description: When authenticating as a user, this endpoint will list all currently open repository invitations for that user.
+  request:
+    method: GET
+    url: https://api.github.com/user/repository_invitations
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

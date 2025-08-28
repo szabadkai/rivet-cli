@@ -1,0 +1,21 @@
+name: Get a diff of the dependencies between commits
+description: Gets the diff of the dependency changes between two commits of a repository, based on the changes to the dependency manifests made in those commits.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get a diff of the dependencies between commits
+  description: Gets the diff of the dependency changes between two commits of a repository, based on the changes to the dependency manifests made in those commits.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/dependency-graph/compare/{basehead}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

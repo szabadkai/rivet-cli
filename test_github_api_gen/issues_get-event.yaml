@@ -1,0 +1,21 @@
+name: Get an issue event
+description: Gets a single event by the event id.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get an issue event
+  description: Gets a single event by the event id.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/issues/events/{event_id}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

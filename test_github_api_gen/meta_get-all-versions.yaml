@@ -1,0 +1,21 @@
+name: Get all API versions
+description: Get all supported GitHub API versions.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get all API versions
+  description: Get all supported GitHub API versions.
+  request:
+    method: GET
+    url: https://api.github.com/versions
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

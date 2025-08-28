@@ -1,0 +1,21 @@
+name: Get a deployment
+description: ''
+env: null
+vars: null
+setup: null
+tests:
+- name: Get a deployment
+  description: ''
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/deployments/{deployment_id}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,31 @@
+name: Update an organization repository ruleset
+description: Update a ruleset for an organization.
+env: null
+vars: null
+setup: null
+tests:
+- name: Update an organization repository ruleset
+  description: Update a ruleset for an organization.
+  request:
+    method: PUT
+    url: https://api.github.com/orgs/{org}/rulesets/{ruleset_id}
+    headers: null
+    params: null
+    body: |-
+      {
+        "bypass_actors": [
+          "example"
+        ],
+        "name": "example",
+        "rules": [
+          "example"
+        ],
+        "target": "example"
+      }
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,23 @@
+name: List organization members
+description: List all users who are members of an organization. If the authenticated user is also a member of this organization then both concealed and public members will be returned.
+env: null
+vars: null
+setup: null
+tests:
+- name: List organization members
+  description: List all users who are members of an organization. If the authenticated user is also a member of this organization then both concealed and public members will be returned.
+  request:
+    method: GET
+    url: https://api.github.com/orgs/{org}/members
+    headers: null
+    params:
+      filter: '{{queryValue}}'
+      role: '{{queryValue}}'
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

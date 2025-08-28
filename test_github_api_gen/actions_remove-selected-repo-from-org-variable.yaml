@@ -1,0 +1,35 @@
+name: Remove selected repository from an organization variable
+description: |-
+  Removes a repository from an organization variable that is
+  available to selected repositories. Organization variables that are available to
+  selected repositories have their `visibility` field set to `selected`.
+
+  Authenticated users must have collaborator access to a repository to create, update, or read variables.
+
+  OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint. If the repository is private, the `repo` scope is also required.
+env: null
+vars: null
+setup: null
+tests:
+- name: Remove selected repository from an organization variable
+  description: |-
+    Removes a repository from an organization variable that is
+    available to selected repositories. Organization variables that are available to
+    selected repositories have their `visibility` field set to `selected`.
+
+    Authenticated users must have collaborator access to a repository to create, update, or read variables.
+
+    OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint. If the repository is private, the `repo` scope is also required.
+  request:
+    method: DELETE
+    url: https://api.github.com/orgs/{org}/actions/variables/{name}/repositories/{repository_id}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,38 @@
+name: Set the default repository access level for Dependabot
+description: |-
+  Sets the default level of repository access Dependabot will have while performing an update.  Available values are:
+  - 'public' - Dependabot will only have access to public repositories, unless access is explicitly granted to non-public repositories.
+  - 'internal' - Dependabot will only have access to public and internal repositories, unless access is explicitly granted to private repositories.
+
+  Unauthorized users will not see the existence of this endpoint.
+
+  This operation supports both server-to-server and user-to-server access.
+env: null
+vars: null
+setup: null
+tests:
+- name: Set the default repository access level for Dependabot
+  description: |-
+    Sets the default level of repository access Dependabot will have while performing an update.  Available values are:
+    - 'public' - Dependabot will only have access to public repositories, unless access is explicitly granted to non-public repositories.
+    - 'internal' - Dependabot will only have access to public and internal repositories, unless access is explicitly granted to private repositories.
+
+    Unauthorized users will not see the existence of this endpoint.
+
+    This operation supports both server-to-server and user-to-server access.
+  request:
+    method: PUT
+    url: https://api.github.com/organizations/{org}/dependabot/repository-access/default-level
+    headers: null
+    params: null
+    body: |-
+      {
+        "default_level": "example"
+      }
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

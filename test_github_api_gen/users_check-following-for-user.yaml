@@ -1,0 +1,21 @@
+name: Check if a user follows another user
+description: ''
+env: null
+vars: null
+setup: null
+tests:
+- name: Check if a user follows another user
+  description: ''
+  request:
+    method: GET
+    url: https://api.github.com/users/{username}/following/{target_user}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

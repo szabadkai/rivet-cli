@@ -1,0 +1,25 @@
+name: Update a reference
+description: Updates the provided reference to point to a new SHA. For more information, see "[Git References](https://git-scm.com/book/en/v2/Git-Internals-Git-References)" in the Git documentation.
+env: null
+vars: null
+setup: null
+tests:
+- name: Update a reference
+  description: Updates the provided reference to point to a new SHA. For more information, see "[Git References](https://git-scm.com/book/en/v2/Git-Internals-Git-References)" in the Git documentation.
+  request:
+    method: PATCH
+    url: https://api.github.com/repos/{owner}/{repo}/git/refs/{ref}
+    headers: null
+    params: null
+    body: |-
+      {
+        "force": true,
+        "sha": "example"
+      }
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

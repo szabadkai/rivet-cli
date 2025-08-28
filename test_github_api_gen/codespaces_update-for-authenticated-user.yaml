@@ -1,0 +1,38 @@
+name: Update a codespace for the authenticated user
+description: |-
+  Updates a codespace owned by the authenticated user. Currently only the codespace's machine type and recent folders can be modified using this endpoint.
+
+  If you specify a new machine type it will be applied the next time your codespace is started.
+
+  OAuth app tokens and personal access tokens (classic) need the `codespace` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Update a codespace for the authenticated user
+  description: |-
+    Updates a codespace owned by the authenticated user. Currently only the codespace's machine type and recent folders can be modified using this endpoint.
+
+    If you specify a new machine type it will be applied the next time your codespace is started.
+
+    OAuth app tokens and personal access tokens (classic) need the `codespace` scope to use this endpoint.
+  request:
+    method: PATCH
+    url: https://api.github.com/user/codespaces/{codespace_name}
+    headers: null
+    params: null
+    body: |-
+      {
+        "display_name": "example",
+        "machine": "example",
+        "recent_folders": [
+          "example"
+        ]
+      }
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,21 @@
+name: List accepted assignments for an assignment
+description: Lists any assignment repositories that have been created by students accepting a GitHub Classroom assignment. Accepted assignments will only be returned if the current user is an administrator of the GitHub Classroom for the assignment.
+env: null
+vars: null
+setup: null
+tests:
+- name: List accepted assignments for an assignment
+  description: Lists any assignment repositories that have been created by students accepting a GitHub Classroom assignment. Accepted assignments will only be returned if the current user is an administrator of the GitHub Classroom for the assignment.
+  request:
+    method: GET
+    url: https://api.github.com/assignments/{assignment_id}/accepted_assignments
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

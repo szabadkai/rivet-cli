@@ -1,0 +1,54 @@
+name: List code scanning analyses for a repository
+description: |-
+  Lists the details of all code scanning analyses for a repository,
+  starting with the most recent.
+  The response is paginated and you can use the `page` and `per_page` parameters
+  to list the analyses you're interested in.
+  By default 30 analyses are listed per page.
+
+  The `rules_count` field in the response give the number of rules
+  that were run in the analysis.
+  For very old analyses this data is not available,
+  and `0` is returned in this field.
+
+  > [!WARNING]
+  > **Closing down notice:** The `tool_name` field is closing down and will, in future, not be included in the response for this endpoint. The example response reflects this change. The tool name can now be found inside the `tool` field.
+
+  OAuth app tokens and personal access tokens (classic) need the `security_events` scope to use this endpoint with private or public repositories, or the `public_repo` scope to use this endpoint with only public repositories.
+env: null
+vars: null
+setup: null
+tests:
+- name: List code scanning analyses for a repository
+  description: |-
+    Lists the details of all code scanning analyses for a repository,
+    starting with the most recent.
+    The response is paginated and you can use the `page` and `per_page` parameters
+    to list the analyses you're interested in.
+    By default 30 analyses are listed per page.
+
+    The `rules_count` field in the response give the number of rules
+    that were run in the analysis.
+    For very old analyses this data is not available,
+    and `0` is returned in this field.
+
+    > [!WARNING]
+    > **Closing down notice:** The `tool_name` field is closing down and will, in future, not be included in the response for this endpoint. The example response reflects this change. The tool name can now be found inside the `tool` field.
+
+    OAuth app tokens and personal access tokens (classic) need the `security_events` scope to use this endpoint with private or public repositories, or the `public_repo` scope to use this endpoint with only public repositories.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/code-scanning/analyses
+    headers: null
+    params:
+      sarif_id: '{{queryValue}}'
+      sort: '{{queryValue}}'
+      ref: '{{queryValue}}'
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,39 @@
+name: Search commits
+description: |-
+  Find commits via various criteria on the default branch (usually `main`). This method returns up to 100 results [per page](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api).
+
+  When searching for commits, you can get text match metadata for the **message** field when you provide the `text-match` media type. For more details about how to receive highlighted search results, see [Text match
+  metadata](https://docs.github.com/rest/search/search#text-match-metadata).
+
+  For example, if you want to find commits related to CSS in the [octocat/Spoon-Knife](https://github.com/octocat/Spoon-Knife) repository. Your query would look something like this:
+
+  `q=repo:octocat/Spoon-Knife+css`
+env: null
+vars: null
+setup: null
+tests:
+- name: Search commits
+  description: |-
+    Find commits via various criteria on the default branch (usually `main`). This method returns up to 100 results [per page](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api).
+
+    When searching for commits, you can get text match metadata for the **message** field when you provide the `text-match` media type. For more details about how to receive highlighted search results, see [Text match
+    metadata](https://docs.github.com/rest/search/search#text-match-metadata).
+
+    For example, if you want to find commits related to CSS in the [octocat/Spoon-Knife](https://github.com/octocat/Spoon-Knife) repository. Your query would look something like this:
+
+    `q=repo:octocat/Spoon-Knife+css`
+  request:
+    method: GET
+    url: https://api.github.com/search/commits
+    headers: null
+    params:
+      sort: '{{queryValue}}'
+      q: '{{queryValue}}'
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

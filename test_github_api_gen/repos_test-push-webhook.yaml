@@ -1,0 +1,29 @@
+name: Test the push repository webhook
+description: |-
+  This will trigger the hook with the latest push to the current repository if the hook is subscribed to `push` events. If the hook is not subscribed to `push` events, the server will respond with 204 but no test POST will be generated.
+
+  > [!NOTE]
+  > Previously `/repos/:owner/:repo/hooks/:hook_id/test`
+env: null
+vars: null
+setup: null
+tests:
+- name: Test the push repository webhook
+  description: |-
+    This will trigger the hook with the latest push to the current repository if the hook is subscribed to `push` events. If the hook is not subscribed to `push` events, the server will respond with 204 but no test POST will be generated.
+
+    > [!NOTE]
+    > Previously `/repos/:owner/:repo/hooks/:hook_id/test`
+  request:
+    method: POST
+    url: https://api.github.com/repos/{owner}/{repo}/hooks/{hook_id}/tests
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

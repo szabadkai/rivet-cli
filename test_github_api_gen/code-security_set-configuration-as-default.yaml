@@ -1,0 +1,38 @@
+name: Set a code security configuration as a default for an organization
+description: |-
+  Sets a code security configuration as a default to be applied to new repositories in your organization.
+
+  This configuration will be applied to the matching repository type (all, none, public, private and internal) by default when they are created.
+
+  The authenticated user must be an administrator or security manager for the organization to use this endpoint.
+
+  OAuth app tokens and personal access tokens (classic) need the `write:org` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Set a code security configuration as a default for an organization
+  description: |-
+    Sets a code security configuration as a default to be applied to new repositories in your organization.
+
+    This configuration will be applied to the matching repository type (all, none, public, private and internal) by default when they are created.
+
+    The authenticated user must be an administrator or security manager for the organization to use this endpoint.
+
+    OAuth app tokens and personal access tokens (classic) need the `write:org` scope to use this endpoint.
+  request:
+    method: PUT
+    url: https://api.github.com/orgs/{org}/code-security/configurations/{configuration_id}/defaults
+    headers: null
+    params: null
+    body: |-
+      {
+        "default_for_new_repos": "example"
+      }
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,26 @@
+name: Merge a branch
+description: ''
+env: null
+vars: null
+setup: null
+tests:
+- name: Merge a branch
+  description: ''
+  request:
+    method: POST
+    url: https://api.github.com/repos/{owner}/{repo}/merges
+    headers: null
+    params: null
+    body: |-
+      {
+        "base": "example",
+        "commit_message": "example",
+        "head": "example"
+      }
+  expect:
+    status: 201
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,33 @@
+name: Update the access to organization resources via fine-grained personal access tokens
+description: |-
+  Updates the access organization members have to organization resources via fine-grained personal access tokens. Limited to revoking a token's existing access.
+
+  Only GitHub Apps can use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Update the access to organization resources via fine-grained personal access tokens
+  description: |-
+    Updates the access organization members have to organization resources via fine-grained personal access tokens. Limited to revoking a token's existing access.
+
+    Only GitHub Apps can use this endpoint.
+  request:
+    method: POST
+    url: https://api.github.com/orgs/{org}/personal-access-tokens
+    headers: null
+    params: null
+    body: |-
+      {
+        "action": "example",
+        "pat_ids": [
+          "example"
+        ]
+      }
+  expect:
+    status: 202
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

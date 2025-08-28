@@ -1,0 +1,30 @@
+name: List available machine types for a repository
+description: |-
+  List the machine types available for a given repository based on its configuration.
+
+  OAuth app tokens and personal access tokens (classic) need the `codespace` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: List available machine types for a repository
+  description: |-
+    List the machine types available for a given repository based on its configuration.
+
+    OAuth app tokens and personal access tokens (classic) need the `codespace` scope to use this endpoint.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/codespaces/machines
+    headers: null
+    params:
+      location: '{{queryValue}}'
+      ref: '{{queryValue}}'
+      client_ip: '{{queryValue}}'
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

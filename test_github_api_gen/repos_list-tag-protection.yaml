@@ -1,0 +1,33 @@
+name: Closing down - List tag protection states for a repository
+description: |-
+  > [!WARNING]
+  > **Closing down notice:** This operation is closing down and will be removed after August 30, 2024. Use the "[Repository Rulesets](https://docs.github.com/rest/repos/rules#get-all-repository-rulesets)" endpoint instead.
+
+  This returns the tag protection states of a repository.
+
+  This information is only available to repository administrators.
+env: null
+vars: null
+setup: null
+tests:
+- name: Closing down - List tag protection states for a repository
+  description: |-
+    > [!WARNING]
+    > **Closing down notice:** This operation is closing down and will be removed after August 30, 2024. Use the "[Repository Rulesets](https://docs.github.com/rest/repos/rules#get-all-repository-rulesets)" endpoint instead.
+
+    This returns the tag protection states of a repository.
+
+    This information is only available to repository administrators.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/tags/protection
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

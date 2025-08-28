@@ -1,0 +1,32 @@
+name: List CODEOWNERS errors
+description: |-
+  List any syntax errors that are detected in the CODEOWNERS
+  file.
+
+  For more information about the correct CODEOWNERS syntax,
+  see "[About code owners](https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners)."
+env: null
+vars: null
+setup: null
+tests:
+- name: List CODEOWNERS errors
+  description: |-
+    List any syntax errors that are detected in the CODEOWNERS
+    file.
+
+    For more information about the correct CODEOWNERS syntax,
+    see "[About code owners](https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners)."
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/codeowners/errors
+    headers: null
+    params:
+      ref: '{{queryValue}}'
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

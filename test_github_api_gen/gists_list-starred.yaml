@@ -1,0 +1,21 @@
+name: List starred gists
+description: 'List the authenticated user''s starred gists:'
+env: null
+vars: null
+setup: null
+tests:
+- name: List starred gists
+  description: 'List the authenticated user''s starred gists:'
+  request:
+    method: GET
+    url: https://api.github.com/gists/starred
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

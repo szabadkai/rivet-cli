@@ -1,0 +1,21 @@
+name: List gist forks
+description: ''
+env: null
+vars: null
+setup: null
+tests:
+- name: List gist forks
+  description: ''
+  request:
+    method: GET
+    url: https://api.github.com/gists/{gist_id}/forks
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

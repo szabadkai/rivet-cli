@@ -1,0 +1,32 @@
+name: Set repository access for a self-hosted runner group in an organization
+description: |-
+  Replaces the list of repositories that have access to a self-hosted runner group configured in an organization.
+
+  OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Set repository access for a self-hosted runner group in an organization
+  description: |-
+    Replaces the list of repositories that have access to a self-hosted runner group configured in an organization.
+
+    OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+  request:
+    method: PUT
+    url: https://api.github.com/orgs/{org}/actions/runner-groups/{runner_group_id}/repositories
+    headers: null
+    params: null
+    body: |-
+      {
+        "selected_repository_ids": [
+          "example"
+        ]
+      }
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

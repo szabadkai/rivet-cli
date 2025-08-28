@@ -1,0 +1,27 @@
+name: List check run annotations
+description: |-
+  Lists annotations for a check run using the annotation `id`.
+
+  OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint on a private repository.
+env: null
+vars: null
+setup: null
+tests:
+- name: List check run annotations
+  description: |-
+    Lists annotations for a check run using the annotation `id`.
+
+    OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint on a private repository.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/check-runs/{check_run_id}/annotations
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

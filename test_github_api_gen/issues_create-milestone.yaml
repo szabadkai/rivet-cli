@@ -1,0 +1,27 @@
+name: Create a milestone
+description: Creates a milestone.
+env: null
+vars: null
+setup: null
+tests:
+- name: Create a milestone
+  description: Creates a milestone.
+  request:
+    method: POST
+    url: https://api.github.com/repos/{owner}/{repo}/milestones
+    headers: null
+    params: null
+    body: |-
+      {
+        "description": "example",
+        "due_on": "example",
+        "state": "example",
+        "title": "example"
+      }
+  expect:
+    status: 201
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

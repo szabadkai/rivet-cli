@@ -1,0 +1,41 @@
+name: winget
+
+on:
+  workflow_dispatch: {}
+  release:
+    types: [published]
+
+jobs:
+  submit-winget-manifest:
+    name: Submit WinGet manifest PR
+    runs-on: windows-latest
+    env:
+      WINGET_IDENTIFIER: Szabadkai.Rivet
+    steps:
+      - name: Get version and asset URL
+        id: meta
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="${{ github.event.release.tag_name }}"
+          if [ -z "$VERSION" ]; then
+            echo "::error::Release tag name not found"; exit 1
+          fi
+          BASE_URL="https://github.com/${{ github.repository }}/releases/download/${VERSION}"
+          ZIP_NAME="rivet-${VERSION}-windows-x86_64.zip"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "asset_url=${BASE_URL}/${ZIP_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Submit to winget-pkgs via wingetcreate
+        uses: microsoft/winget-create@v1
+        with:
+          token: ${{ secrets.WINGET_TOKEN }}
+          packageIdentifier: ${{ env.WINGET_IDENTIFIER }}
+          version: ${{ steps.meta.outputs.version }}
+          installerUrls: |
+            ${{ steps.meta.outputs.asset_url }}
+          # Installer type is inferred from URL (.zip). The action will create/update manifests and open a PR.
+          submit: true
+          # Optional: automatically fork if needed
+          fork: true
+

@@ -1,0 +1,36 @@
+name: Restore a package for the authenticated user
+description: |-
+  Restores a package owned by the authenticated user.
+
+  You can restore a deleted package under the following conditions:
+    - The package was deleted within the last 30 days.
+    - The same package namespace and version is still available and not reused for a new package. If the same package namespace is not available, you will not be able to restore your package. In this scenario, to restore the deleted package, you must delete the new package that uses the deleted package's namespace first.
+
+  OAuth app tokens and personal access tokens (classic) need the `read:packages` and `write:packages` scopes to use this endpoint. For more information, see "[About permissions for GitHub Packages](https://docs.github.com/packages/learn-github-packages/about-permissions-for-github-packages#permissions-for-repository-scoped-packages)."
+env: null
+vars: null
+setup: null
+tests:
+- name: Restore a package for the authenticated user
+  description: |-
+    Restores a package owned by the authenticated user.
+
+    You can restore a deleted package under the following conditions:
+      - The package was deleted within the last 30 days.
+      - The same package namespace and version is still available and not reused for a new package. If the same package namespace is not available, you will not be able to restore your package. In this scenario, to restore the deleted package, you must delete the new package that uses the deleted package's namespace first.
+
+    OAuth app tokens and personal access tokens (classic) need the `read:packages` and `write:packages` scopes to use this endpoint. For more information, see "[About permissions for GitHub Packages](https://docs.github.com/packages/learn-github-packages/about-permissions-for-github-packages#permissions-for-repository-scoped-packages)."
+  request:
+    method: POST
+    url: https://api.github.com/user/packages/{package_type}/{package_name}/restore
+    headers: null
+    params:
+      token: '{{queryValue}}'
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,21 @@
+name: Get all organization repository rulesets
+description: Get all the repository rulesets for an organization.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get all organization repository rulesets
+  description: Get all the repository rulesets for an organization.
+  request:
+    method: GET
+    url: https://api.github.com/orgs/{org}/rulesets
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

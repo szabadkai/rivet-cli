@@ -1,0 +1,27 @@
+name: List deliveries for an app webhook
+description: |-
+  Returns a list of webhook deliveries for the webhook configured for a GitHub App.
+
+  You must use a [JWT](https://docs.github.com/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: List deliveries for an app webhook
+  description: |-
+    Returns a list of webhook deliveries for the webhook configured for a GitHub App.
+
+    You must use a [JWT](https://docs.github.com/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
+  request:
+    method: GET
+    url: https://api.github.com/app/hook/deliveries
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

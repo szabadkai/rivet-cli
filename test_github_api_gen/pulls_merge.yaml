@@ -1,0 +1,31 @@
+name: Merge a pull request
+description: |-
+  Merges a pull request into the base branch.
+  This endpoint triggers [notifications](https://docs.github.com/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. For more information, see "[Rate limits for the API](https://docs.github.com/rest/using-the-rest-api/rate-limits-for-the-rest-api#about-secondary-rate-limits)" and "[Best practices for using the REST API](https://docs.github.com/rest/guides/best-practices-for-using-the-rest-api)."
+env: null
+vars: null
+setup: null
+tests:
+- name: Merge a pull request
+  description: |-
+    Merges a pull request into the base branch.
+    This endpoint triggers [notifications](https://docs.github.com/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. For more information, see "[Rate limits for the API](https://docs.github.com/rest/using-the-rest-api/rate-limits-for-the-rest-api#about-secondary-rate-limits)" and "[Best practices for using the REST API](https://docs.github.com/rest/guides/best-practices-for-using-the-rest-api)."
+  request:
+    method: PUT
+    url: https://api.github.com/repos/{owner}/{repo}/pulls/{pull_number}/merge
+    headers: null
+    params: null
+    body: |-
+      {
+        "commit_message": "example",
+        "commit_title": "example",
+        "merge_method": "example",
+        "sha": "example"
+      }
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

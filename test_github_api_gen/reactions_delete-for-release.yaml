@@ -1,0 +1,29 @@
+name: Delete a release reaction
+description: |-
+  > [!NOTE]
+  > You can also specify a repository by `repository_id` using the route `DELETE delete /repositories/:repository_id/releases/:release_id/reactions/:reaction_id`.
+
+  Delete a reaction to a [release](https://docs.github.com/rest/releases/releases#get-a-release).
+env: null
+vars: null
+setup: null
+tests:
+- name: Delete a release reaction
+  description: |-
+    > [!NOTE]
+    > You can also specify a repository by `repository_id` using the route `DELETE delete /repositories/:repository_id/releases/:release_id/reactions/:reaction_id`.
+
+    Delete a reaction to a [release](https://docs.github.com/rest/releases/releases#get-a-release).
+  request:
+    method: DELETE
+    url: https://api.github.com/repos/{owner}/{repo}/releases/{release_id}/reactions/{reaction_id}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

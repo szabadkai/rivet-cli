@@ -1,0 +1,35 @@
+name: Create an environment variable
+description: |-
+  Create an environment variable that you can reference in a GitHub Actions workflow.
+
+  Authenticated users must have collaborator access to a repository to create, update, or read variables.
+
+  OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Create an environment variable
+  description: |-
+    Create an environment variable that you can reference in a GitHub Actions workflow.
+
+    Authenticated users must have collaborator access to a repository to create, update, or read variables.
+
+    OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+  request:
+    method: POST
+    url: https://api.github.com/repos/{owner}/{repo}/environments/{environment_name}/variables
+    headers: null
+    params: null
+    body: |-
+      {
+        "name": "example",
+        "value": "example"
+      }
+  expect:
+    status: 201
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

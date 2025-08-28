@@ -1,0 +1,21 @@
+name: Check if a pull request has been merged
+description: Checks if a pull request has been merged into the base branch. The HTTP status of the response indicates whether or not the pull request has been merged; the response body is empty.
+env: null
+vars: null
+setup: null
+tests:
+- name: Check if a pull request has been merged
+  description: Checks if a pull request has been merged into the base branch. The HTTP status of the response indicates whether or not the pull request has been merged; the response body is empty.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/pulls/{pull_number}/merge
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

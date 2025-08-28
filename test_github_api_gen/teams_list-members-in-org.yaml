@@ -1,0 +1,28 @@
+name: List team members
+description: |-
+  Team members will include the members of child teams.
+
+  To list members in a team, the team must be visible to the authenticated user.
+env: null
+vars: null
+setup: null
+tests:
+- name: List team members
+  description: |-
+    Team members will include the members of child teams.
+
+    To list members in a team, the team must be visible to the authenticated user.
+  request:
+    method: GET
+    url: https://api.github.com/orgs/{org}/teams/{team_slug}/members
+    headers: null
+    params:
+      role: '{{queryValue}}'
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

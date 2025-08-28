@@ -1,0 +1,21 @@
+name: Star a repository for the authenticated user
+description: Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP method](https://docs.github.com/rest/guides/getting-started-with-the-rest-api#http-method)."
+env: null
+vars: null
+setup: null
+tests:
+- name: Star a repository for the authenticated user
+  description: Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP method](https://docs.github.com/rest/guides/getting-started-with-the-rest-api#http-method)."
+  request:
+    method: PUT
+    url: https://api.github.com/user/starred/{owner}/{repo}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,27 @@
+name: List GitHub Actions caches for a repository
+description: |-
+  Lists the GitHub Actions caches for a repository.
+
+  OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: List GitHub Actions caches for a repository
+  description: |-
+    Lists the GitHub Actions caches for a repository.
+
+    OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/actions/caches
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

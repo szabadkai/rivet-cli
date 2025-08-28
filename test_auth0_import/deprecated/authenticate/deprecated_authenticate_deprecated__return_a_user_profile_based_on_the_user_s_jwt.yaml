@@ -1,0 +1,21 @@
+name: '[Deprecated] Return a user profile based on the user''s JWT'
+description: null
+env: null
+vars: null
+setup: null
+tests:
+- name: '[Deprecated] Return a user profile based on the user''s JWT'
+  description: null
+  request:
+    method: POST
+    url: https://{{auth0_domain}}/tokeninfo
+    headers: null
+    params: null
+    body: id_token=
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,21 @@
+name: Unfollow a user
+description: OAuth app tokens and personal access tokens (classic) need the `user:follow` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Unfollow a user
+  description: OAuth app tokens and personal access tokens (classic) need the `user:follow` scope to use this endpoint.
+  request:
+    method: DELETE
+    url: https://api.github.com/user/following/{username}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

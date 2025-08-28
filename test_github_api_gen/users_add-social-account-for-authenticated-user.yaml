@@ -1,0 +1,32 @@
+name: Add social accounts for the authenticated user
+description: |-
+  Add one or more social accounts to the authenticated user's profile.
+
+  OAuth app tokens and personal access tokens (classic) need the `user` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Add social accounts for the authenticated user
+  description: |-
+    Add one or more social accounts to the authenticated user's profile.
+
+    OAuth app tokens and personal access tokens (classic) need the `user` scope to use this endpoint.
+  request:
+    method: POST
+    url: https://api.github.com/user/social_accounts
+    headers: null
+    params: null
+    body: |-
+      {
+        "account_urls": [
+          "example"
+        ]
+      }
+  expect:
+    status: 201
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

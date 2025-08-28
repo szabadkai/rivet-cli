@@ -1,0 +1,24 @@
+name: Update an organization membership for the authenticated user
+description: Converts the authenticated user to an active member of the organization, if that user has a pending invitation from the organization.
+env: null
+vars: null
+setup: null
+tests:
+- name: Update an organization membership for the authenticated user
+  description: Converts the authenticated user to an active member of the organization, if that user has a pending invitation from the organization.
+  request:
+    method: PATCH
+    url: https://api.github.com/user/memberships/orgs/{org}
+    headers: null
+    params: null
+    body: |-
+      {
+        "state": "example"
+      }
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,21 @@
+name: List repositories in an organization migration
+description: List all the repositories for this organization migration.
+env: null
+vars: null
+setup: null
+tests:
+- name: List repositories in an organization migration
+  description: List all the repositories for this organization migration.
+  request:
+    method: GET
+    url: https://api.github.com/orgs/{org}/migrations/{migration_id}/repositories
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

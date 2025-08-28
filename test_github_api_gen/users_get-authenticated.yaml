@@ -1,0 +1,21 @@
+name: Get the authenticated user
+description: OAuth app tokens and personal access tokens (classic) need the `user` scope in order for the response to include private profile information.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get the authenticated user
+  description: OAuth app tokens and personal access tokens (classic) need the `user` scope in order for the response to include private profile information.
+  request:
+    method: GET
+    url: https://api.github.com/user
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

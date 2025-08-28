@@ -1,0 +1,21 @@
+name: Login using a social provider's access token
+description: null
+env: null
+vars: null
+setup: null
+tests:
+- name: Login using a social provider's access token
+  description: null
+  request:
+    method: POST
+    url: https://{{auth0_domain}}/oauth/access_token
+    headers: null
+    params: null
+    body: client_id=&access_token=&connection=&scope=openid
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

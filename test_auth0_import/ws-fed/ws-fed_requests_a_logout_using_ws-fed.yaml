@@ -1,0 +1,21 @@
+name: Requests a logout using WS-Fed
+description: null
+env: null
+vars: null
+setup: null
+tests:
+- name: Requests a logout using WS-Fed
+  description: null
+  request:
+    method: GET
+    url: https://{{auth0_domain}}/wsfed/:client_id?wa=wsignout1.0
+    headers: null
+    params: null
+    body: ''
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

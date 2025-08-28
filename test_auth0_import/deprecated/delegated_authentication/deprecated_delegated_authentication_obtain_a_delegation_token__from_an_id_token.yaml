@@ -1,0 +1,21 @@
+name: Obtain a delegation token (from an id_token)
+description: null
+env: null
+vars: null
+setup: null
+tests:
+- name: Obtain a delegation token (from an id_token)
+  description: null
+  request:
+    method: POST
+    url: https://{{auth0_domain}}/delegation
+    headers: null
+    params: null
+    body: client_id=&grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&id_token=&target=&scope=&api_type=
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,21 @@
+name: Get interaction restrictions for a repository
+description: Shows which type of GitHub user can interact with this repository and when the restriction expires. If there are no restrictions, you will see an empty response.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get interaction restrictions for a repository
+  description: Shows which type of GitHub user can interact with this repository and when the restriction expires. If there are no restrictions, you will see an empty response.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/interaction-limits
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

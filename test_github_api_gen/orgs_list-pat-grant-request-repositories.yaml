@@ -1,0 +1,27 @@
+name: List repositories requested to be accessed by a fine-grained personal access token
+description: |-
+  Lists the repositories a fine-grained personal access token request is requesting access to.
+
+  Only GitHub Apps can use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: List repositories requested to be accessed by a fine-grained personal access token
+  description: |-
+    Lists the repositories a fine-grained personal access token request is requesting access to.
+
+    Only GitHub Apps can use this endpoint.
+  request:
+    method: GET
+    url: https://api.github.com/orgs/{org}/personal-access-token-requests/{pat_request_id}/repositories
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

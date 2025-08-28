@@ -1,0 +1,21 @@
+name: List subscriptions for the authenticated user
+description: Lists the active subscriptions for the authenticated user.
+env: null
+vars: null
+setup: null
+tests:
+- name: List subscriptions for the authenticated user
+  description: Lists the active subscriptions for the authenticated user.
+  request:
+    method: GET
+    url: https://api.github.com/user/marketplace_purchases
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

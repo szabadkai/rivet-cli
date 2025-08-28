@@ -1,0 +1,31 @@
+name: Create a SSH signing key for the authenticated user
+description: |-
+  Creates an SSH signing key for the authenticated user's GitHub account.
+
+  OAuth app tokens and personal access tokens (classic) need the `write:ssh_signing_key` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Create a SSH signing key for the authenticated user
+  description: |-
+    Creates an SSH signing key for the authenticated user's GitHub account.
+
+    OAuth app tokens and personal access tokens (classic) need the `write:ssh_signing_key` scope to use this endpoint.
+  request:
+    method: POST
+    url: https://api.github.com/user/ssh_signing_keys
+    headers: null
+    params: null
+    body: |-
+      {
+        "key": "example",
+        "title": "example"
+      }
+  expect:
+    status: 201
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

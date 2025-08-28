@@ -1,0 +1,34 @@
+name: List discussions
+description: |-
+  List all discussions on a team's page.
+
+  > [!NOTE]
+  > You can also specify a team by `org_id` and `team_id` using the route `GET /organizations/{org_id}/team/{team_id}/discussions`.
+
+  OAuth app tokens and personal access tokens (classic) need the `read:discussion` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: List discussions
+  description: |-
+    List all discussions on a team's page.
+
+    > [!NOTE]
+    > You can also specify a team by `org_id` and `team_id` using the route `GET /organizations/{org_id}/team/{team_id}/discussions`.
+
+    OAuth app tokens and personal access tokens (classic) need the `read:discussion` scope to use this endpoint.
+  request:
+    method: GET
+    url: https://api.github.com/orgs/{org}/teams/{team_slug}/discussions
+    headers: null
+    params:
+      pinned: '{{queryValue}}'
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

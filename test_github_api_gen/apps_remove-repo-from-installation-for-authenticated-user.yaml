@@ -1,0 +1,21 @@
+name: Remove a repository from an app installation
+description: "Remove a single repository from an installation. The authenticated user must have admin access to the repository. The installation must have the `repository_selection` of `selected`. \n\nThis endpoint only works for PATs (classic) with the `repo` scope."
+env: null
+vars: null
+setup: null
+tests:
+- name: Remove a repository from an app installation
+  description: "Remove a single repository from an installation. The authenticated user must have admin access to the repository. The installation must have the `repository_selection` of `selected`. \n\nThis endpoint only works for PATs (classic) with the `repo` scope."
+  request:
+    method: DELETE
+    url: https://api.github.com/user/installations/{installation_id}/repositories/{repository_id}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

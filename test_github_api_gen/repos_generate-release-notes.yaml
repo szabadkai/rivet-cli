@@ -1,0 +1,27 @@
+name: Generate release notes content for a release
+description: Generate a name and body describing a [release](https://docs.github.com/rest/releases/releases#get-a-release). The body content will be markdown formatted and contain information like the changes since last release and users who contributed. The generated release notes are not saved anywhere. They are intended to be generated and used when creating a new release.
+env: null
+vars: null
+setup: null
+tests:
+- name: Generate release notes content for a release
+  description: Generate a name and body describing a [release](https://docs.github.com/rest/releases/releases#get-a-release). The body content will be markdown formatted and contain information like the changes since last release and users who contributed. The generated release notes are not saved anywhere. They are intended to be generated and used when creating a new release.
+  request:
+    method: POST
+    url: https://api.github.com/repos/{owner}/{repo}/releases/generate-notes
+    headers: null
+    params: null
+    body: |-
+      {
+        "configuration_file_path": "example",
+        "previous_tag_name": "example",
+        "tag_name": "example",
+        "target_commitish": "example"
+      }
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

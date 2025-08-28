@@ -1,0 +1,31 @@
+name: Create a repository security advisory
+description: |-
+  Creates a new repository security advisory.
+
+  In order to create a draft repository security advisory, the authenticated user must be a security manager or administrator of that repository.
+
+  OAuth app tokens and personal access tokens (classic) need the `repo` or `repository_advisories:write` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Create a repository security advisory
+  description: |-
+    Creates a new repository security advisory.
+
+    In order to create a draft repository security advisory, the authenticated user must be a security manager or administrator of that repository.
+
+    OAuth app tokens and personal access tokens (classic) need the `repo` or `repository_advisories:write` scope to use this endpoint.
+  request:
+    method: POST
+    url: https://api.github.com/repos/{owner}/{repo}/security-advisories
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 201
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

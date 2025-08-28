@@ -1,0 +1,25 @@
+name: List public events for a user
+description: |-
+  > [!NOTE]
+  > This API is not built to serve real-time use cases. Depending on the time of day, event latency can be anywhere from 30s to 6h.
+env: null
+vars: null
+setup: null
+tests:
+- name: List public events for a user
+  description: |-
+    > [!NOTE]
+    > This API is not built to serve real-time use cases. Depending on the time of day, event latency can be anywhere from 30s to 6h.
+  request:
+    method: GET
+    url: https://api.github.com/users/{username}/events/public
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

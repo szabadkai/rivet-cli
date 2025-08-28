@@ -1,0 +1,34 @@
+name: List reactions for a team discussion comment (Legacy)
+description: |-
+  > [!WARNING]
+  > **Endpoint closing down notice:** This endpoint route is closing down and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List reactions for a team discussion comment`](https://docs.github.com/rest/reactions/reactions#list-reactions-for-a-team-discussion-comment) endpoint.
+
+  List the reactions to a [team discussion comment](https://docs.github.com/rest/teams/discussion-comments#get-a-discussion-comment).
+
+  OAuth app tokens and personal access tokens (classic) need the `read:discussion` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: List reactions for a team discussion comment (Legacy)
+  description: |-
+    > [!WARNING]
+    > **Endpoint closing down notice:** This endpoint route is closing down and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List reactions for a team discussion comment`](https://docs.github.com/rest/reactions/reactions#list-reactions-for-a-team-discussion-comment) endpoint.
+
+    List the reactions to a [team discussion comment](https://docs.github.com/rest/teams/discussion-comments#get-a-discussion-comment).
+
+    OAuth app tokens and personal access tokens (classic) need the `read:discussion` scope to use this endpoint.
+  request:
+    method: GET
+    url: https://api.github.com/teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}/reactions
+    headers: null
+    params:
+      content: '{{queryValue}}'
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

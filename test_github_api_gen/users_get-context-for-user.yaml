@@ -1,0 +1,33 @@
+name: Get contextual information for a user
+description: |-
+  Provides hovercard information. You can find out more about someone in relation to their pull requests, issues, repositories, and organizations.
+
+    The `subject_type` and `subject_id` parameters provide context for the person's hovercard, which returns more information than without the parameters. For example, if you wanted to find out more about `octocat` who owns the `Spoon-Knife` repository, you would use a `subject_type` value of `repository` and a `subject_id` value of `1300192` (the ID of the `Spoon-Knife` repository).
+
+  OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get contextual information for a user
+  description: |-
+    Provides hovercard information. You can find out more about someone in relation to their pull requests, issues, repositories, and organizations.
+
+      The `subject_type` and `subject_id` parameters provide context for the person's hovercard, which returns more information than without the parameters. For example, if you wanted to find out more about `octocat` who owns the `Spoon-Knife` repository, you would use a `subject_type` value of `repository` and a `subject_id` value of `1300192` (the ID of the `Spoon-Knife` repository).
+
+    OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+  request:
+    method: GET
+    url: https://api.github.com/users/{username}/hovercard
+    headers: null
+    params:
+      subject_id: '{{queryValue}}'
+      subject_type: '{{queryValue}}'
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

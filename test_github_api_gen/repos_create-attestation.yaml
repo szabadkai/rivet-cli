@@ -1,0 +1,34 @@
+name: Create an attestation
+description: |-
+  Store an artifact attestation and associate it with a repository.
+
+  The authenticated user must have write permission to the repository and, if using a fine-grained access token, the `attestations:write` permission is required.
+
+  Artifact attestations are meant to be created using the [attest action](https://github.com/actions/attest). For more information, see our guide on [using artifact attestations to establish a build's provenance](https://docs.github.com/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds).
+env: null
+vars: null
+setup: null
+tests:
+- name: Create an attestation
+  description: |-
+    Store an artifact attestation and associate it with a repository.
+
+    The authenticated user must have write permission to the repository and, if using a fine-grained access token, the `attestations:write` permission is required.
+
+    Artifact attestations are meant to be created using the [attest action](https://github.com/actions/attest). For more information, see our guide on [using artifact attestations to establish a build's provenance](https://docs.github.com/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds).
+  request:
+    method: POST
+    url: https://api.github.com/repos/{owner}/{repo}/attestations
+    headers: null
+    params: null
+    body: |-
+      {
+        "bundle": {}
+      }
+  expect:
+    status: 201
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,26 @@
+name: Update a label
+description: Updates a label using the given label name.
+env: null
+vars: null
+setup: null
+tests:
+- name: Update a label
+  description: Updates a label using the given label name.
+  request:
+    method: PATCH
+    url: https://api.github.com/repos/{owner}/{repo}/labels/{name}
+    headers: null
+    params: null
+    body: |-
+      {
+        "color": "example",
+        "description": "example",
+        "new_name": "example"
+      }
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

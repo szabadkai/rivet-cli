@@ -1,0 +1,21 @@
+name: Get all requested reviewers for a pull request
+description: Gets the users or teams whose review is requested for a pull request. Once a requested reviewer submits a review, they are no longer considered a requested reviewer. Their review will instead be returned by the [List reviews for a pull request](https://docs.github.com/rest/pulls/reviews#list-reviews-for-a-pull-request) operation.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get all requested reviewers for a pull request
+  description: Gets the users or teams whose review is requested for a pull request. Once a requested reviewer submits a review, they are no longer considered a requested reviewer. Their review will instead be returned by the [List reviews for a pull request](https://docs.github.com/rest/pulls/reviews#list-reviews-for-a-pull-request) operation.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

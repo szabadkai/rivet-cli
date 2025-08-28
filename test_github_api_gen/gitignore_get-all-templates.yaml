@@ -1,0 +1,21 @@
+name: Get all gitignore templates
+description: List all templates available to pass as an option when [creating a repository](https://docs.github.com/rest/repos/repos#create-a-repository-for-the-authenticated-user).
+env: null
+vars: null
+setup: null
+tests:
+- name: Get all gitignore templates
+  description: List all templates available to pass as an option when [creating a repository](https://docs.github.com/rest/repos/repos#create-a-repository-for-the-authenticated-user).
+  request:
+    method: GET
+    url: https://api.github.com/gitignore/templates
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,33 @@
+name: Create a commit status
+description: |-
+  Users with push access in a repository can create commit statuses for a given SHA.
+
+  Note: there is a limit of 1000 statuses per `sha` and `context` within a repository. Attempts to create more than 1000 statuses will result in a validation error.
+env: null
+vars: null
+setup: null
+tests:
+- name: Create a commit status
+  description: |-
+    Users with push access in a repository can create commit statuses for a given SHA.
+
+    Note: there is a limit of 1000 statuses per `sha` and `context` within a repository. Attempts to create more than 1000 statuses will result in a validation error.
+  request:
+    method: POST
+    url: https://api.github.com/repos/{owner}/{repo}/statuses/{sha}
+    headers: null
+    params: null
+    body: |-
+      {
+        "context": "example",
+        "description": "example",
+        "state": "example",
+        "target_url": "example"
+      }
+  expect:
+    status: 201
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

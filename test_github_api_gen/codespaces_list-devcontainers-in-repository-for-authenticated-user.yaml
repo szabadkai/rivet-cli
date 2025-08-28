@@ -1,0 +1,29 @@
+name: List devcontainer configurations in a repository for the authenticated user
+description: |-
+  Lists the devcontainer.json files associated with a specified repository and the authenticated user. These files
+  specify launchpoint configurations for codespaces created within the repository.
+
+  OAuth app tokens and personal access tokens (classic) need the `codespace` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: List devcontainer configurations in a repository for the authenticated user
+  description: |-
+    Lists the devcontainer.json files associated with a specified repository and the authenticated user. These files
+    specify launchpoint configurations for codespaces created within the repository.
+
+    OAuth app tokens and personal access tokens (classic) need the `codespace` scope to use this endpoint.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/codespaces/devcontainers
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

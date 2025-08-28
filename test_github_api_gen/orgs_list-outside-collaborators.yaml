@@ -1,0 +1,22 @@
+name: List outside collaborators for an organization
+description: List all users who are outside collaborators of an organization.
+env: null
+vars: null
+setup: null
+tests:
+- name: List outside collaborators for an organization
+  description: List all users who are outside collaborators of an organization.
+  request:
+    method: GET
+    url: https://api.github.com/orgs/{org}/outside_collaborators
+    headers: null
+    params:
+      filter: '{{queryValue}}'
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

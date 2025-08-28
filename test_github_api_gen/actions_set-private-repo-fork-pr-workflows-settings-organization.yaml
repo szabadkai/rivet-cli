@@ -1,0 +1,21 @@
+name: Set private repo fork PR workflow settings for an organization
+description: Sets the settings for whether workflows from fork pull requests can run on private repositories in an organization.
+env: null
+vars: null
+setup: null
+tests:
+- name: Set private repo fork PR workflow settings for an organization
+  description: Sets the settings for whether workflows from fork pull requests can run on private repositories in an organization.
+  request:
+    method: PUT
+    url: https://api.github.com/orgs/{org}/actions/permissions/fork-pr-workflows-private-repos
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,27 @@
+name: Stop a codespace for an organization user
+description: |-
+  Stops a user's codespace.
+
+  OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Stop a codespace for an organization user
+  description: |-
+    Stops a user's codespace.
+
+    OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+  request:
+    method: POST
+    url: https://api.github.com/orgs/{org}/members/{username}/codespaces/{codespace_name}/stop
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

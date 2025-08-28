@@ -1,0 +1,40 @@
+name: Update a private registry for an organization
+description: |2-
+
+  Updates a private registry configuration with an encrypted value for an organization. Encrypt your secret using [LibSodium](https://libsodium.gitbook.io/doc/bindings_for_other_languages). For more information, see "[Encrypting secrets for the REST API](https://docs.github.com/rest/guides/encrypting-secrets-for-the-rest-api)."
+
+  OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Update a private registry for an organization
+  description: |2-
+
+    Updates a private registry configuration with an encrypted value for an organization. Encrypt your secret using [LibSodium](https://libsodium.gitbook.io/doc/bindings_for_other_languages). For more information, see "[Encrypting secrets for the REST API](https://docs.github.com/rest/guides/encrypting-secrets-for-the-rest-api)."
+
+    OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+  request:
+    method: PATCH
+    url: https://api.github.com/orgs/{org}/private-registries/{secret_name}
+    headers: null
+    params: null
+    body: |-
+      {
+        "encrypted_value": "example",
+        "key_id": "example",
+        "registry_type": "example",
+        "selected_repository_ids": [
+          "example"
+        ],
+        "url": "example",
+        "username": "example",
+        "visibility": "example"
+      }
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

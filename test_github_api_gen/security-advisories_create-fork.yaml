@@ -1,0 +1,29 @@
+name: Create a temporary private fork
+description: |-
+  Create a temporary private fork to collaborate on fixing a security vulnerability in your repository.
+
+  > [!NOTE]
+  > Forking a repository happens asynchronously. You may have to wait up to 5 minutes before you can access the fork.
+env: null
+vars: null
+setup: null
+tests:
+- name: Create a temporary private fork
+  description: |-
+    Create a temporary private fork to collaborate on fixing a security vulnerability in your repository.
+
+    > [!NOTE]
+    > Forking a repository happens asynchronously. You may have to wait up to 5 minutes before you can access the fork.
+  request:
+    method: POST
+    url: https://api.github.com/repos/{owner}/{repo}/security-advisories/{ghsa_id}/forks
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 202
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

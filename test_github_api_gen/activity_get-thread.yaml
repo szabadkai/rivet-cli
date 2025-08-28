@@ -1,0 +1,21 @@
+name: Get a thread
+description: Gets information about a notification thread.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get a thread
+  description: Gets information about a notification thread.
+  request:
+    method: GET
+    url: https://api.github.com/notifications/threads/{thread_id}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,24 @@
+name: Update a repository invitation
+description: ''
+env: null
+vars: null
+setup: null
+tests:
+- name: Update a repository invitation
+  description: ''
+  request:
+    method: PATCH
+    url: https://api.github.com/repos/{owner}/{repo}/invitations/{invitation_id}
+    headers: null
+    params: null
+    body: |-
+      {
+        "permissions": "example"
+      }
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

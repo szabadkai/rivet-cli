@@ -1,0 +1,22 @@
+name: List reactions for a release
+description: List the reactions to a [release](https://docs.github.com/rest/releases/releases#get-a-release).
+env: null
+vars: null
+setup: null
+tests:
+- name: List reactions for a release
+  description: List the reactions to a [release](https://docs.github.com/rest/releases/releases#get-a-release).
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/releases/{release_id}/reactions
+    headers: null
+    params:
+      content: '{{queryValue}}'
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

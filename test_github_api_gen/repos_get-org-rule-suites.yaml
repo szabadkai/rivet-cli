@@ -1,0 +1,25 @@
+name: List organization rule suites
+description: |-
+  Lists suites of rule evaluations at the organization level.
+  For more information, see "[Managing rulesets for repositories in your organization](https://docs.github.com/organizations/managing-organization-settings/managing-rulesets-for-repositories-in-your-organization#viewing-insights-for-rulesets)."
+env: null
+vars: null
+setup: null
+tests:
+- name: List organization rule suites
+  description: |-
+    Lists suites of rule evaluations at the organization level.
+    For more information, see "[Managing rulesets for repositories in your organization](https://docs.github.com/organizations/managing-organization-settings/managing-rulesets-for-repositories-in-your-organization#viewing-insights-for-rulesets)."
+  request:
+    method: GET
+    url: https://api.github.com/orgs/{org}/rulesets/rule-suites
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

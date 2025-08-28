@@ -1,0 +1,31 @@
+name: Get default code security configurations for an enterprise
+description: |-
+  Lists the default code security configurations for an enterprise.
+
+  The authenticated user must be an administrator of the enterprise in order to use this endpoint.
+
+  OAuth app tokens and personal access tokens (classic) need the `read:enterprise` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get default code security configurations for an enterprise
+  description: |-
+    Lists the default code security configurations for an enterprise.
+
+    The authenticated user must be an administrator of the enterprise in order to use this endpoint.
+
+    OAuth app tokens and personal access tokens (classic) need the `read:enterprise` scope to use this endpoint.
+  request:
+    method: GET
+    url: https://api.github.com/enterprises/{enterprise}/code-security/configurations/defaults
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

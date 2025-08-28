@@ -1,0 +1,21 @@
+name: List deploy keys
+description: ''
+env: null
+vars: null
+setup: null
+tests:
+- name: List deploy keys
+  description: ''
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/keys
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

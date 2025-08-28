@@ -1,0 +1,27 @@
+name: List plans (stubbed)
+description: |-
+  Lists all plans that are part of your GitHub Marketplace listing.
+
+  GitHub Apps must use a [JWT](https://docs.github.com/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint. OAuth apps must use [basic authentication](https://docs.github.com/rest/authentication/authenticating-to-the-rest-api#using-basic-authentication) with their client ID and client secret to access this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: List plans (stubbed)
+  description: |-
+    Lists all plans that are part of your GitHub Marketplace listing.
+
+    GitHub Apps must use a [JWT](https://docs.github.com/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint. OAuth apps must use [basic authentication](https://docs.github.com/rest/authentication/authenticating-to-the-rest-api#using-basic-authentication) with their client ID and client secret to access this endpoint.
+  request:
+    method: GET
+    url: https://api.github.com/marketplace_listing/stubbed/plans
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

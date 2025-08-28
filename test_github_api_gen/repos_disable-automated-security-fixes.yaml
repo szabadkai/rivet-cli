@@ -1,0 +1,21 @@
+name: Disable Dependabot security updates
+description: Disables Dependabot security updates for a repository. The authenticated user must have admin access to the repository. For more information, see "[Configuring Dependabot security updates](https://docs.github.com/articles/configuring-automated-security-fixes)".
+env: null
+vars: null
+setup: null
+tests:
+- name: Disable Dependabot security updates
+  description: Disables Dependabot security updates for a repository. The authenticated user must have admin access to the repository. For more information, see "[Configuring Dependabot security updates](https://docs.github.com/articles/configuring-automated-security-fixes)".
+  request:
+    method: DELETE
+    url: https://api.github.com/repos/{owner}/{repo}/automated-security-fixes
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

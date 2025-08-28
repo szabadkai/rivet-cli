@@ -1,0 +1,27 @@
+name: Get GitHub Actions permissions for an organization
+description: |-
+  Gets the GitHub Actions permissions policy for repositories and allowed actions and reusable workflows in an organization.
+
+  OAuth tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get GitHub Actions permissions for an organization
+  description: |-
+    Gets the GitHub Actions permissions policy for repositories and allowed actions and reusable workflows in an organization.
+
+    OAuth tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+  request:
+    method: GET
+    url: https://api.github.com/orgs/{org}/actions/permissions
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

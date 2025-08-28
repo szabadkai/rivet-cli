@@ -1,0 +1,33 @@
+name: Download a repository archive (tar)
+description: |-
+  Gets a redirect URL to download a tar archive for a repository. If you omit `:ref`, the repository’s default branch (usually
+  `main`) will be used. Please make sure your HTTP framework is configured to follow redirects or you will need to use
+  the `Location` header to make a second `GET` request.
+
+  > [!NOTE]
+  > For private repositories, these links are temporary and expire after five minutes.
+env: null
+vars: null
+setup: null
+tests:
+- name: Download a repository archive (tar)
+  description: |-
+    Gets a redirect URL to download a tar archive for a repository. If you omit `:ref`, the repository’s default branch (usually
+    `main`) will be used. Please make sure your HTTP framework is configured to follow redirects or you will need to use
+    the `Location` header to make a second `GET` request.
+
+    > [!NOTE]
+    > For private repositories, these links are temporary and expire after five minutes.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/tarball/{ref}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,21 @@
+name: Get organization membership for a user
+description: In order to get a user's membership with an organization, the authenticated user must be an organization member. The `state` parameter in the response can be used to identify the user's membership status.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get organization membership for a user
+  description: In order to get a user's membership with an organization, the authenticated user must be an organization member. The `state` parameter in the response can be used to identify the user's membership status.
+  request:
+    method: GET
+    url: https://api.github.com/orgs/{org}/memberships/{username}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

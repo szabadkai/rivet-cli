@@ -1,0 +1,27 @@
+name: Disable a workflow
+description: |-
+  Disables a workflow and sets the `state` of the workflow to `disabled_manually`. You can replace `workflow_id` with the workflow file name. For example, you could use `main.yaml`.
+
+  OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Disable a workflow
+  description: |-
+    Disables a workflow and sets the `state` of the workflow to `disabled_manually`. You can replace `workflow_id` with the workflow file name. For example, you could use `main.yaml`.
+
+    OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+  request:
+    method: PUT
+    url: https://api.github.com/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

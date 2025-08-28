@@ -1,0 +1,27 @@
+name: Unsuspend an app installation
+description: |-
+  Removes a GitHub App installation suspension.
+
+  You must use a [JWT](https://docs.github.com/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Unsuspend an app installation
+  description: |-
+    Removes a GitHub App installation suspension.
+
+    You must use a [JWT](https://docs.github.com/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
+  request:
+    method: DELETE
+    url: https://api.github.com/app/installations/{installation_id}/suspended
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -241,8 +241,10 @@ async fn main() -> anyhow::Result<()> {
                 "bash" => CompShell::Bash,
                 "zsh" => CompShell::Zsh,
                 "fish" => CompShell::Fish,
+                "powershell" | "pwsh" => CompShell::PowerShell,
+                "elvish" => CompShell::Elvish,
                 other => {
-                    eprintln!("Unsupported shell: {} (use bash|zsh|fish)", other);
+                    eprintln!("Unsupported shell: {} (use bash|zsh|fish|powershell|elvish)", other);
                     std::process::exit(2);
                 }
             };

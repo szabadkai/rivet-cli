@@ -1,0 +1,21 @@
+name: List labels for issues in a milestone
+description: Lists labels for issues in a milestone.
+env: null
+vars: null
+setup: null
+tests:
+- name: List labels for issues in a milestone
+  description: Lists labels for issues in a milestone.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/milestones/{milestone_number}/labels
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

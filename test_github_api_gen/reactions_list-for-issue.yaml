@@ -1,0 +1,22 @@
+name: List reactions for an issue
+description: List the reactions to an [issue](https://docs.github.com/rest/issues/issues#get-an-issue).
+env: null
+vars: null
+setup: null
+tests:
+- name: List reactions for an issue
+  description: List the reactions to an [issue](https://docs.github.com/rest/issues/issues#get-an-issue).
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/issues/{issue_number}/reactions
+    headers: null
+    params:
+      content: '{{queryValue}}'
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

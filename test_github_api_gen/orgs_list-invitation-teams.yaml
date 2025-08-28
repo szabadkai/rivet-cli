@@ -1,0 +1,21 @@
+name: List organization invitation teams
+description: List all teams associated with an invitation. In order to see invitations in an organization, the authenticated user must be an organization owner.
+env: null
+vars: null
+setup: null
+tests:
+- name: List organization invitation teams
+  description: List all teams associated with an invitation. In order to see invitations in an organization, the authenticated user must be an organization owner.
+  request:
+    method: GET
+    url: https://api.github.com/orgs/{org}/invitations/{invitation_id}/teams
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

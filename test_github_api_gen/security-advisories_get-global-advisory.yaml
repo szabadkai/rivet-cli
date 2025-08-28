@@ -1,0 +1,21 @@
+name: Get a global security advisory
+description: Gets a global security advisory using its GitHub Security Advisory (GHSA) identifier.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get a global security advisory
+  description: Gets a global security advisory using its GitHub Security Advisory (GHSA) identifier.
+  request:
+    method: GET
+    url: https://api.github.com/advisories/{ghsa_id}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

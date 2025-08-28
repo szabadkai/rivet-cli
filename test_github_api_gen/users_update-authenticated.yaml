@@ -1,0 +1,31 @@
+name: Update the authenticated user
+description: '**Note:** If your email is set to private and you send an `email` parameter as part of this request to update your profile, your privacy settings are still enforced: the email address will not be displayed on your public profile or via the API.'
+env: null
+vars: null
+setup: null
+tests:
+- name: Update the authenticated user
+  description: '**Note:** If your email is set to private and you send an `email` parameter as part of this request to update your profile, your privacy settings are still enforced: the email address will not be displayed on your public profile or via the API.'
+  request:
+    method: PATCH
+    url: https://api.github.com/user
+    headers: null
+    params: null
+    body: |-
+      {
+        "bio": "example",
+        "blog": "example",
+        "company": "example",
+        "email": "example",
+        "hireable": true,
+        "location": "example",
+        "name": "example",
+        "twitter_username": "example"
+      }
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

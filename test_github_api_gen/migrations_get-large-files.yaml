@@ -1,0 +1,29 @@
+name: Get large files
+description: |-
+  List files larger than 100MB found during the import
+
+  > [!WARNING]
+  > **Endpoint closing down notice:** Due to very low levels of usage and available alternatives, this endpoint is closing down and will no longer be available from 00:00 UTC on April 12, 2024. For more details and alternatives, see the [changelog](https://gh.io/source-imports-api-deprecation).
+env: null
+vars: null
+setup: null
+tests:
+- name: Get large files
+  description: |-
+    List files larger than 100MB found during the import
+
+    > [!WARNING]
+    > **Endpoint closing down notice:** Due to very low levels of usage and available alternatives, this endpoint is closing down and will no longer be available from 00:00 UTC on April 12, 2024. For more details and alternatives, see the [changelog](https://gh.io/source-imports-api-deprecation).
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/import/large_files
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

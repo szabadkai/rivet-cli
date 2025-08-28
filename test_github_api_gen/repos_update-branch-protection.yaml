@@ -1,0 +1,52 @@
+name: Update branch protection
+description: |-
+  Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+
+  Protecting a branch requires admin or owner permissions to the repository.
+
+  > [!NOTE]
+  > Passing new arrays of `users` and `teams` replaces their previous values.
+
+  > [!NOTE]
+  > The list of users, apps, and teams in total is limited to 100 items.
+env: null
+vars: null
+setup: null
+tests:
+- name: Update branch protection
+  description: |-
+    Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+
+    Protecting a branch requires admin or owner permissions to the repository.
+
+    > [!NOTE]
+    > Passing new arrays of `users` and `teams` replaces their previous values.
+
+    > [!NOTE]
+    > The list of users, apps, and teams in total is limited to 100 items.
+  request:
+    method: PUT
+    url: https://api.github.com/repos/{owner}/{repo}/branches/{branch}/protection
+    headers: null
+    params: null
+    body: |-
+      {
+        "allow_deletions": true,
+        "allow_force_pushes": true,
+        "allow_fork_syncing": true,
+        "block_creations": true,
+        "enforce_admins": true,
+        "lock_branch": true,
+        "required_conversation_resolution": true,
+        "required_linear_history": true,
+        "required_pull_request_reviews": {},
+        "required_status_checks": {},
+        "restrictions": {}
+      }
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

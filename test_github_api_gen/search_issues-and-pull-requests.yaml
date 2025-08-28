@@ -1,0 +1,29 @@
+name: Search issues and pull requests
+description: |-
+  > [!WARNING]
+  > **Notice:** Search for issues and pull requests will be overridden by advanced search on September 4, 2025.
+  > You can read more about this change on [the GitHub blog](https://github.blog/changelog/2025-03-06-github-issues-projects-api-support-for-issues-advanced-search-and-more/).
+env: null
+vars: null
+setup: null
+tests:
+- name: Search issues and pull requests
+  description: |-
+    > [!WARNING]
+    > **Notice:** Search for issues and pull requests will be overridden by advanced search on September 4, 2025.
+    > You can read more about this change on [the GitHub blog](https://github.blog/changelog/2025-03-06-github-issues-projects-api-support-for-issues-advanced-search-and-more/).
+  request:
+    method: GET
+    url: https://api.github.com/search/issues
+    headers: null
+    params:
+      q: '{{queryValue}}'
+      sort: '{{queryValue}}'
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

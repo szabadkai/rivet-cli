@@ -1,0 +1,31 @@
+name: Get a gitignore template
+description: |-
+  Get the content of a gitignore template.
+
+  This endpoint supports the following custom media types. For more information, see "[Media types](https://docs.github.com/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types)."
+
+  - **`application/vnd.github.raw+json`**: Returns the raw .gitignore contents.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get a gitignore template
+  description: |-
+    Get the content of a gitignore template.
+
+    This endpoint supports the following custom media types. For more information, see "[Media types](https://docs.github.com/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types)."
+
+    - **`application/vnd.github.raw+json`**: Returns the raw .gitignore contents.
+  request:
+    method: GET
+    url: https://api.github.com/gitignore/templates/{name}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

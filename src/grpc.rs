@@ -1,7 +1,7 @@
 use anyhow::{anyhow, Result};
 use jsonpath_rust::JsonPathFinder;
 use prost::Message;
-use prost_types::{DescriptorProto, FileDescriptorProto, FileDescriptorSet, MethodDescriptorProto, ServiceDescriptorProto};
+use prost_types::FileDescriptorSet;
 use serde_json::Value;
 use std::collections::HashMap;
 use std::fs;
@@ -9,7 +9,7 @@ use std::path::Path;
 use std::process::Command;
 use std::time::Duration;
 use tonic::transport::{Channel, Endpoint};
-use tonic::{Request, Response, Status};
+// tonic imports are available for potential future use
 use walkdir::WalkDir;
 
 pub struct GrpcClient {

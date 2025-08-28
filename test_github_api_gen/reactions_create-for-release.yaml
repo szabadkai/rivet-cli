@@ -1,0 +1,24 @@
+name: Create reaction for a release
+description: 'Create a reaction to a [release](https://docs.github.com/rest/releases/releases#get-a-release). A response with a `Status: 200 OK` means that you already added the reaction type to this release.'
+env: null
+vars: null
+setup: null
+tests:
+- name: Create reaction for a release
+  description: 'Create a reaction to a [release](https://docs.github.com/rest/releases/releases#get-a-release). A response with a `Status: 200 OK` means that you already added the reaction type to this release.'
+  request:
+    method: POST
+    url: https://api.github.com/repos/{owner}/{repo}/releases/{release_id}/reactions
+    headers: null
+    params: null
+    body: |-
+      {
+        "content": "example"
+      }
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

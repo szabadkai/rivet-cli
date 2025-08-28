@@ -1,0 +1,27 @@
+name: Delete a hosted compute network configuration from an organization
+description: |-
+  Deletes a hosted compute network configuration from an organization.
+
+  OAuth app tokens and personal access tokens (classic) need the `write:network_configurations` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Delete a hosted compute network configuration from an organization
+  description: |-
+    Deletes a hosted compute network configuration from an organization.
+
+    OAuth app tokens and personal access tokens (classic) need the `write:network_configurations` scope to use this endpoint.
+  request:
+    method: DELETE
+    url: https://api.github.com/orgs/{org}/settings/network-configurations/{network_configuration_id}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,21 @@
+name: Get subject stats
+description: Get API request statistics for all subjects within an organization within a specified time frame. Subjects can be users or GitHub Apps.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get subject stats
+  description: Get API request statistics for all subjects within an organization within a specified time frame. Subjects can be users or GitHub Apps.
+  request:
+    method: GET
+    url: https://api.github.com/orgs/{org}/insights/api/subject-stats
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

@@ -1,0 +1,21 @@
+name: Get top referral paths
+description: Get the top 10 popular contents over the last 14 days.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get top referral paths
+  description: Get the top 10 popular contents over the last 14 days.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/traffic/popular/paths
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

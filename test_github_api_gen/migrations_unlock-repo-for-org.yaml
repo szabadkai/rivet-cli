@@ -1,0 +1,21 @@
+name: Unlock an organization repository
+description: Unlocks a repository that was locked for migration. You should unlock each migrated repository and [delete them](https://docs.github.com/rest/repos/repos#delete-a-repository) when the migration is complete and you no longer need the source data.
+env: null
+vars: null
+setup: null
+tests:
+- name: Unlock an organization repository
+  description: Unlocks a repository that was locked for migration. You should unlock each migrated repository and [delete them](https://docs.github.com/rest/repos/repos#delete-a-repository) when the migration is complete and you no longer need the source data.
+  request:
+    method: DELETE
+    url: https://api.github.com/orgs/{org}/migrations/{migration_id}/repos/{repo_name}/lock
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 204
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

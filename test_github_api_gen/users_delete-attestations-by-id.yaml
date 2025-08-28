@@ -1,0 +1,21 @@
+name: Delete attestations by ID
+description: Delete an artifact attestation by unique ID that is associated with a repository owned by a user.
+env: null
+vars: null
+setup: null
+tests:
+- name: Delete attestations by ID
+  description: Delete an artifact attestation by unique ID that is associated with a repository owned by a user.
+  request:
+    method: DELETE
+    url: https://api.github.com/users/{username}/attestations/{attestation_id}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

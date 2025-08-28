@@ -1,0 +1,29 @@
+name: Get a repository public key
+description: |-
+  Gets your public key, which you need to encrypt secrets. You need to
+  encrypt a secret before you can create or update secrets.
+
+  If the repository is private, OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get a repository public key
+  description: |-
+    Gets your public key, which you need to encrypt secrets. You need to
+    encrypt a secret before you can create or update secrets.
+
+    If the repository is private, OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+  request:
+    method: GET
+    url: https://api.github.com/repos/{owner}/{repo}/codespaces/secrets/public-key
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

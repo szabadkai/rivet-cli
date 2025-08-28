@@ -1,0 +1,21 @@
+name: Get organization ruleset version
+description: Get a version of an organization ruleset.
+env: null
+vars: null
+setup: null
+tests:
+- name: Get organization ruleset version
+  description: Get a version of an organization ruleset.
+  request:
+    method: GET
+    url: https://api.github.com/orgs/{org}/rulesets/{ruleset_id}/history/{version_id}
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

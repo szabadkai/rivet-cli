@@ -1,0 +1,29 @@
+name: List organizations
+description: |-
+  Lists all organizations, in the order that they were created.
+
+  > [!NOTE]
+  > Pagination is powered exclusively by the `since` parameter. Use the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers) to get the URL for the next page of organizations.
+env: null
+vars: null
+setup: null
+tests:
+- name: List organizations
+  description: |-
+    Lists all organizations, in the order that they were created.
+
+    > [!NOTE]
+    > Pagination is powered exclusively by the `since` parameter. Use the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers) to get the URL for the next page of organizations.
+  request:
+    method: GET
+    url: https://api.github.com/organizations
+    headers: null
+    params: null
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null

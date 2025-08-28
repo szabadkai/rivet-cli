@@ -1,0 +1,22 @@
+name: Get Octocat
+description: Get the octocat as ASCII art
+env: null
+vars: null
+setup: null
+tests:
+- name: Get Octocat
+  description: Get the octocat as ASCII art
+  request:
+    method: GET
+    url: https://api.github.com/octocat
+    headers: null
+    params:
+      s: '{{queryValue}}'
+    body: null
+  expect:
+    status: 200
+    schema: null
+    jsonpath: null
+    headers: null
+dataset: null
+teardown: null
