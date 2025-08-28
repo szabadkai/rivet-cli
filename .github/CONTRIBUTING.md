@@ -11,9 +11,9 @@ The repository is set up with automatic code quality checks:
 A pre-push git hook is already configured that will:
 - ✅ Check code formatting with `cargo fmt --check`
 - ✅ Run library tests to ensure nothing is broken
-- ⚠️ Show clippy warnings (informational only)
+- ❌ Enforce clippy warnings as errors (will block push)
 
-This means **you can't push unformatted code or failing tests** - the hook will prevent it automatically.
+This means **you can't push unformatted code, failing tests, or clippy warnings** - the hook will prevent it automatically.
 
 ### Development Commands
 
@@ -39,7 +39,7 @@ make build    # Build in release mode
 
 - **Formatting**: All code must be formatted with `cargo fmt` (enforced by hooks)
 - **Tests**: All tests must pass (enforced by hooks)
-- **Clippy**: Address clippy warnings when practical (shown but not blocking)
+- **Clippy**: All clippy warnings must be fixed (enforced by hooks)
 - **Documentation**: Update relevant docs for new features
 
 ## Performance Testing

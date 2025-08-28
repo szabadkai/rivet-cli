@@ -182,5 +182,4 @@ fn test_protoc_availability() {
     }
 
     // This test always passes - it's just informational
-    assert!(true);
 }

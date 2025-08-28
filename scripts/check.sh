@@ -11,9 +11,9 @@ echo "🔍 Running development checks..."
 echo "📝 Formatting code with cargo fmt..."
 cargo fmt
 
-# Run clippy to catch potential issues (warn only for now)
+# Run clippy to catch potential issues
 echo "🔧 Running cargo clippy..."
-cargo clippy --all-targets --all-features
+cargo clippy --all-targets --all-features -- -D warnings
 
 # Run all tests
 echo "🧪 Running all tests..."

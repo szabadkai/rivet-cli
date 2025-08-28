@@ -8,9 +8,11 @@ The repository includes a pre-push git hook that automatically runs before every
 
 - **Code formatting check**: Ensures all code is properly formatted with `cargo fmt`
 - **Tests**: Runs library tests to catch regressions
-- **Clippy warnings**: Shows lint warnings (doesn't block pushes)
+- **Clippy enforcement**: All clippy warnings treated as errors (blocks pushes)
 
 The hook is located at `.git/hooks/pre-push` and is executable.
+
+**All clippy warnings are treated as errors and will block pushes.**
 
 ## Development Commands
 
@@ -55,7 +57,7 @@ cargo build --release                         # Release build
 
 - **Formatting**: All code must be formatted with `cargo fmt`
 - **Tests**: New features should include tests, all tests must pass
-- **Clippy**: Address clippy warnings when possible (currently warnings-only)
+- **Clippy**: All clippy warnings must be fixed (enforced by pre-push hook)
 - **Documentation**: Update README.md for new features
 
 ## Performance Testing Module

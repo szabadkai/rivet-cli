@@ -2,7 +2,7 @@ use anyhow::{anyhow, Result};
 use owo_colors::OwoColorize;
 use std::collections::HashMap;
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use crate::config::{Expectation, Request, RivetConfig, StatusExpectation, TestStep};
 
@@ -136,7 +136,7 @@ async fn generate_test_for_operation(
     path: &str,
     operation: &openapiv3::Operation,
     base_url: &str,
-    out_dir: &PathBuf,
+    out_dir: &Path,
     test_count: &mut usize,
 ) -> Result<()> {
     let operation_id = operation
@@ -182,18 +182,14 @@ async fn generate_test_for_operation(
 
     // Generate request body for POST/PUT/PATCH
     let body = if matches!(method, "POST" | "PUT" | "PATCH") {
-        if let Some(request_body) = &operation.request_body {
-            if let openapiv3::ReferenceOr::Item(body) = request_body {
-                // Convert IndexMap to HashMap
-                let content_map: HashMap<String, openapiv3::MediaType> = body
-                    .content
-                    .iter()
-                    .map(|(k, v)| (k.clone(), v.clone()))
-                    .collect();
-                generate_example_body(&content_map).await
-            } else {
-                None
-            }
+        if let Some(openapiv3::ReferenceOr::Item(body)) = &operation.request_body {
+            // Convert IndexMap to HashMap
+            let content_map: HashMap<String, openapiv3::MediaType> = body
+                .content
+                .iter()
+                .map(|(k, v)| (k.clone(), v.clone()))
+                .collect();
+            generate_example_body(&content_map).await
         } else {
             None
         }
@@ -375,8 +371,7 @@ async fn generate_expectation_from_responses(
 
 fn sanitize_path(path: &str) -> String {
     path.replace('/', "_")
-        .replace('{', "")
-        .replace('}', "")
+        .replace(['{', '}'], "")
         .trim_matches('_')
         .to_lowercase()
 }

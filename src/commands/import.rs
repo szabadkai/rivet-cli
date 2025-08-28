@@ -3,7 +3,7 @@ use owo_colors::OwoColorize;
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use crate::config::{Expectation, Request, RivetConfig, StatusExpectation, TestStep};
 
@@ -61,7 +61,7 @@ struct PostmanInfo {
 enum PostmanItem {
     // Try folder first since it has the 'item' field that's distinctive
     Folder(PostmanFolderItem),
-    Request(PostmanRequestItem),
+    Request(Box<PostmanRequestItem>),
 }
 
 #[derive(Debug, Deserialize)]
@@ -240,7 +240,7 @@ async fn import_postman_collection(file: PathBuf, out: PathBuf) -> Result<()> {
 
 fn process_postman_items(
     items: &[PostmanItem],
-    base_path: &PathBuf,
+    base_path: &Path,
     folder_prefix: &str,
     test_count: &mut usize,
     folder_count: &mut usize,

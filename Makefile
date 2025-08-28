@@ -17,7 +17,7 @@ check:
 	@echo "📝 Formatting code..."
 	cargo fmt
 	@echo "🔧 Running clippy..."
-	cargo clippy --all-targets --all-features
+	cargo clippy --all-targets --all-features -- -D warnings
 	@echo "🧪 Running tests..."
 	cargo test
 	@echo "🏗️  Building release..."
@@ -32,7 +32,7 @@ fmt:
 # Run clippy
 clippy:
 	@echo "🔧 Running cargo clippy..."
-	cargo clippy --all-targets --all-features
+	cargo clippy --all-targets --all-features -- -D warnings
 
 # Run tests
 test:
