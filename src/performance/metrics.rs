@@ -112,6 +112,7 @@ impl PerformanceMetrics {
         }
     }
 
+    #[allow(dead_code)]
     pub fn merge(&mut self, other: &PerformanceMetrics) {
         self.response_times.extend(other.response_times.iter());
         self.error_count += other.error_count;

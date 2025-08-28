@@ -3,7 +3,7 @@ use owo_colors::OwoColorize;
 use std::path::PathBuf;
 use std::time::Duration;
 
-use crate::performance::PerformanceTestRunner;
+use crate::performance::{LoadPattern, PerformanceTestRunner};
 use crate::utils::parse_timeout;
 
 pub struct PerfOptions {
@@ -43,9 +43,9 @@ pub async fn handle_perf(options: PerfOptions) -> Result<()> {
 
     // Validate load pattern
     let load_pattern = match options.pattern.as_str() {
-        "constant" => crate::performance::LoadPattern::Constant,
-        "ramp-up" => crate::performance::LoadPattern::RampUp,
-        "spike" => crate::performance::LoadPattern::Spike,
+        "constant" => LoadPattern::Constant,
+        "ramp-up" => LoadPattern::RampUp,
+        "spike" => LoadPattern::Spike,
         _ => {
             anyhow::bail!(
                 "Invalid load pattern '{}'. Use: constant, ramp-up, spike",

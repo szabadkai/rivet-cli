@@ -39,6 +39,10 @@ impl VariableContext {
         self
     }
 
+    pub fn set_variable(&mut self, key: String, value: String) {
+        self.vars.insert(key, value);
+    }
+
     pub fn substitute_variables(&self, text: &str) -> String {
         let var_regex = Regex::new(r"\{\{(\w+)\}\}").unwrap();
         let env_regex = Regex::new(r"\$\{([^:}]+)(?::([^}]*))?\}").unwrap();

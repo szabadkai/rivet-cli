@@ -6,6 +6,7 @@ use std::path::PathBuf;
 mod commands;
 mod config;
 mod grpc;
+mod performance;
 mod report;
 mod runner;
 mod ui;
