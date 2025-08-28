@@ -1,0 +1,114 @@
+name: GraphQL User API Tests
+description: Example GraphQL tests demonstrating queries, mutations, and data-driven testing
+
+vars:
+  baseUrl: ${BASE_URL:https://api.example.com}
+  token: ${GRAPHQL_TOKEN}
+
+tests:
+  - name: Get all users
+    description: Query to fetch all users with pagination
+    request:
+      method: POST
+      url: "{{baseUrl}}/graphql"
+      headers:
+        Content-Type: application/json
+        Authorization: "Bearer {{token}}"
+      body: |
+        {
+          "query": "query GetUsers($first: Int, $after: String) { users(first: $first, after: $after) { edges { node { id name email createdAt } } pageInfo { hasNextPage endCursor } } }",
+          "variables": {
+            "first": 10,
+            "after": null
+          }
+        }
+    expect:
+      status: 200
+      jsonpath:
+        "$.data.users.edges": "array"
+        "$.data.users.edges[0].node.id": "exists"
+        "$.data.users.pageInfo.hasNextPage": "boolean"
+        "$.errors": null
+
+  - name: Get user by ID
+    description: Query to fetch a specific user by ID
+    request:
+      method: POST
+      url: "{{baseUrl}}/graphql"
+      headers:
+        Content-Type: application/json
+        Authorization: "Bearer {{token}}"
+      body: |
+        {
+          "query": "query GetUser($id: ID!) { user(id: $id) { id name email profile { bio avatar } createdAt } }",
+          "variables": {
+            "id": "{{userId}}"
+          }
+        }
+    expect:
+      status: 200
+      jsonpath:
+        "$.data.user.id": "{{userId}}"
+        "$.data.user.name": "*"
+        "$.data.user.email": "*"
+        "$.errors": null
+
+  - name: Create new user
+    description: Mutation to create a new user
+    request:
+      method: POST
+      url: "{{baseUrl}}/graphql"
+      headers:
+        Content-Type: application/json
+        Authorization: "Bearer {{token}}"
+      body: |
+        {
+          "query": "mutation CreateUser($input: CreateUserInput!) { createUser(input: $input) { user { id name email } errors { field message } } }",
+          "variables": {
+            "input": {
+              "name": "{{userName}}",
+              "email": "{{userEmail}}",
+              "password": "{{userPassword}}"
+            }
+          }
+        }
+    expect:
+      status: 200
+      jsonpath:
+        "$.data.createUser.user.name": "{{userName}}"
+        "$.data.createUser.user.email": "{{userEmail}}"
+        "$.data.createUser.errors": null
+        "$.errors": null
+
+  - name: Update user profile
+    description: Mutation to update user profile information
+    request:
+      method: POST
+      url: "{{baseUrl}}/graphql"
+      headers:
+        Content-Type: application/json
+        Authorization: "Bearer {{token}}"
+      body: |
+        {
+          "query": "mutation UpdateUser($id: ID!, $input: UpdateUserInput!) { updateUser(id: $id, input: $input) { user { id name profile { bio } } errors { field message } } }",
+          "variables": {
+            "id": "{{userId}}",
+            "input": {
+              "name": "{{updatedName}}",
+              "profile": {
+                "bio": "{{updatedBio}}"
+              }
+            }
+          }
+        }
+    expect:
+      status: 200
+      jsonpath:
+        "$.data.updateUser.user.id": "{{userId}}"
+        "$.data.updateUser.user.name": "{{updatedName}}"
+        "$.data.updateUser.errors": null
+        "$.errors": null
+
+dataset:
+  file: examples/graphql/data/users.csv
+  parallel: 4

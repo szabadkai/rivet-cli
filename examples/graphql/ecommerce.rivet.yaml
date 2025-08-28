@@ -1,0 +1,144 @@
+name: GraphQL E-commerce API Tests
+description: Example GraphQL tests for an e-commerce API with products, orders, and inventory
+
+vars:
+  baseUrl: ${BASE_URL:https://api.shop.example.com}
+  adminToken: ${ADMIN_TOKEN}
+  userToken: ${USER_TOKEN}
+
+tests:
+  - name: Get product catalog
+    description: Query to fetch products with filtering and pagination
+    request:
+      method: POST
+      url: "{{baseUrl}}/graphql"
+      headers:
+        Content-Type: application/json
+      body: |
+        {
+          "query": "query GetProducts($category: String, $first: Int, $orderBy: ProductOrderBy) { products(category: $category, first: $first, orderBy: $orderBy) { edges { node { id name description price currency category inventory { quantity inStock } images { url alt } } } pageInfo { hasNextPage endCursor } totalCount } }",
+          "variables": {
+            "category": "{{productCategory}}",
+            "first": 20,
+            "orderBy": "PRICE_ASC"
+          }
+        }
+    expect:
+      status: 200
+      jsonpath:
+        "$.data.products.edges": "array"
+        "$.data.products.totalCount": "number"
+        "$.errors": null
+
+  - name: Get product details
+    description: Query for detailed product information
+    request:
+      method: POST
+      url: "{{baseUrl}}/graphql"
+      headers:
+        Content-Type: application/json
+      body: |
+        {
+          "query": "query GetProduct($id: ID!) { product(id: $id) { id name description price currency category inventory { quantity inStock lowStockThreshold } images { url alt } reviews { rating comment author { name } createdAt } } }",
+          "variables": {
+            "id": "{{productId}}"
+          }
+        }
+    expect:
+      status: 200
+      jsonpath:
+        "$.data.product.id": "{{productId}}"
+        "$.data.product.name": "*"
+        "$.data.product.price": "number"
+        "$.data.product.inventory.inStock": "boolean"
+        "$.errors": null
+
+  - name: Create order
+    description: Mutation to create a new order
+    request:
+      method: POST
+      url: "{{baseUrl}}/graphql"
+      headers:
+        Content-Type: application/json
+        Authorization: "Bearer {{userToken}}"
+      body: |
+        {
+          "query": "mutation CreateOrder($input: CreateOrderInput!) { createOrder(input: $input) { order { id orderNumber status total currency items { product { name } quantity price } shippingAddress { street city country } } errors { field message } } }",
+          "variables": {
+            "input": {
+              "items": [
+                {
+                  "productId": "{{productId}}",
+                  "quantity": {{quantity}}
+                }
+              ],
+              "shippingAddress": {
+                "street": "{{shippingStreet}}",
+                "city": "{{shippingCity}}",
+                "country": "{{shippingCountry}}"
+              }
+            }
+          }
+        }
+    expect:
+      status: 200
+      jsonpath:
+        "$.data.createOrder.order.id": "exists"
+        "$.data.createOrder.order.status": "PENDING"
+        "$.data.createOrder.order.items[0].quantity": "{{quantity}}"
+        "$.data.createOrder.errors": null
+        "$.errors": null
+
+  - name: Update inventory (admin only)
+    description: Admin mutation to update product inventory
+    request:
+      method: POST
+      url: "{{baseUrl}}/graphql"
+      headers:
+        Content-Type: application/json
+        Authorization: "Bearer {{adminToken}}"
+      body: |
+        {
+          "query": "mutation UpdateInventory($productId: ID!, $quantity: Int!) { updateInventory(productId: $productId, quantity: $quantity) { product { id inventory { quantity inStock } } success errors { message } } }",
+          "variables": {
+            "productId": "{{productId}}",
+            "quantity": {{newQuantity}}
+          }
+        }
+    expect:
+      status: 200
+      jsonpath:
+        "$.data.updateInventory.product.inventory.quantity": "{{newQuantity}}"
+        "$.data.updateInventory.success": true
+        "$.errors": null
+
+  - name: Search products
+    description: Full-text search across products
+    request:
+      method: POST
+      url: "{{baseUrl}}/graphql"
+      headers:
+        Content-Type: application/json
+      body: |
+        {
+          "query": "query SearchProducts($query: String!, $filters: ProductFilters) { searchProducts(query: $query, filters: $filters) { products { id name description price category } totalCount facets { category { name count } priceRange { min max } } } }",
+          "variables": {
+            "query": "{{searchQuery}}",
+            "filters": {
+              "priceRange": {
+                "min": 0,
+                "max": 1000
+              }
+            }
+          }
+        }
+    expect:
+      status: 200
+      jsonpath:
+        "$.data.searchProducts.products": "array"
+        "$.data.searchProducts.totalCount": "number"
+        "$.errors": null
+
+dataset:
+  file: examples/graphql/data/products.csv
+  parallel: 6

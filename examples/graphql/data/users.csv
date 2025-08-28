@@ -1,0 +1,6 @@
+userId,userName,userEmail,userPassword,updatedName,updatedBio
+1,Alice Johnson,alice@example.com,password123,Alice J. Smith,Software engineer passionate about GraphQL
+2,Bob Wilson,bob@example.com,securepass456,Robert Wilson,Full-stack developer and coffee enthusiast  
+3,Carol Davis,carol@example.com,mypass789,Caroline Davis,UI/UX designer who loves creating amazing experiences
+4,David Brown,david@example.com,pass321,Dave Brown,Backend developer specializing in distributed systems
+5,Eve Martinez,eve@example.com,secret654,Eva Martinez,DevOps engineer automating all the things

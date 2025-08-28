@@ -12,6 +12,8 @@ Rivet is a modern API testing tool designed for command-line workflows. It allow
 - 📝 **OpenAPI Integration**: Generate tests from OpenAPI specs and track endpoint coverage
 - 📥 **Import Support**: Import collections from Postman, Insomnia, Bruno, and cURL
 - 🔗 **gRPC Support**: Make gRPC unary calls with metadata and field assertions
+- 📈 **GraphQL Ready**: Full GraphQL support via HTTP with query validation and performance testing
+- ⚡ **Performance Testing**: Load test APIs with multiple patterns (constant, ramp-up, spike)
 - 🎨 **Beautiful Terminal UI**: Spinners, progress bars, and colored output that works great in CI/CD
 
 ## Installation
@@ -171,6 +173,23 @@ rivet import postman collection.json --out tests/
 rivet grpc --proto ./protos --call svc.Users/GetUser --data '{"id": 42}'
 ```
 
+### GraphQL queries
+
+GraphQL is fully supported using HTTP requests. Create test files for GraphQL APIs:
+
+```bash
+# Run GraphQL tests
+rivet run tests/graphql/
+
+# Performance test GraphQL endpoint
+rivet perf tests/graphql/ --concurrent 10 --duration 30s
+
+# Try the included examples
+rivet run examples/graphql/
+```
+
+See [examples/graphql/](examples/graphql/) for comprehensive GraphQL testing examples.
+
 ## Test File Format
 
 Rivet uses YAML files for test definitions:
@@ -197,6 +216,63 @@ tests:
 
 dataset:
   file: data/users.csv
+  parallel: 4
+```
+
+### GraphQL Example
+
+```yaml
+name: GraphQL API Tests
+vars:
+  baseUrl: ${BASE_URL:https://api.example.com}
+  token: ${TOKEN}
+
+tests:
+  - name: Get users with GraphQL
+    request:
+      method: POST
+      url: "{{baseUrl}}/graphql"
+      headers:
+        Content-Type: application/json
+        Authorization: "Bearer {{token}}"
+      body: |
+        {
+          "query": "query GetUsers($limit: Int) { users(limit: $limit) { id name email createdAt } }",
+          "variables": { "limit": 10 }
+        }
+    expect:
+      status: 200
+      jsonpath:
+        "$.data.users": "exists"
+        "$.data.users[0].id": "*"
+        "$.errors": null
+
+  - name: Create user mutation
+    request:
+      method: POST
+      url: "{{baseUrl}}/graphql"
+      headers:
+        Content-Type: application/json
+        Authorization: "Bearer {{token}}"
+      body: |
+        {
+          "query": "mutation CreateUser($input: CreateUserInput!) { createUser(input: $input) { id name email } }",
+          "variables": {
+            "input": {
+              "name": "{{userName}}",
+              "email": "{{userEmail}}"
+            }
+          }
+        }
+    expect:
+      status: 200
+      jsonpath:
+        "$.data.createUser.id": "exists"
+        "$.data.createUser.email": "{{userEmail}}"
+        "$.errors": null
+
+dataset:
+  file: data/users.csv  # columns: userName, userEmail
   parallel: 4
 ```
 

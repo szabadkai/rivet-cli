@@ -1,0 +1,6 @@
+productId,productCategory,quantity,newQuantity,shippingStreet,shippingCity,shippingCountry,searchQuery
+prod_1,electronics,2,150,123 Main St,New York,USA,smartphone
+prod_2,books,1,75,456 Oak Ave,San Francisco,USA,programming
+prod_3,clothing,3,200,789 Pine Rd,Chicago,USA,winter jacket
+prod_4,home,1,50,321 Elm St,Austin,USA,coffee maker
+prod_5,sports,2,100,654 Maple Dr,Seattle,USA,running shoes

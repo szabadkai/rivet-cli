@@ -1,0 +1,127 @@
+name: GraphQL Error Handling Tests
+description: Example tests demonstrating GraphQL error handling patterns
+
+vars:
+  baseUrl: ${BASE_URL:https://api.example.com}
+  token: ${TOKEN}
+
+tests:
+  - name: Valid query with no errors
+    description: Baseline test that should succeed
+    request:
+      method: POST
+      url: "{{baseUrl}}/graphql"
+      headers:
+        Content-Type: application/json
+        Authorization: "Bearer {{token}}"
+      body: |
+        {
+          "query": "query { viewer { id name } }"
+        }
+    expect:
+      status: 200
+      jsonpath:
+        "$.data.viewer.id": "exists"
+        "$.errors": null
+
+  - name: Query with syntax error
+    description: Test handling of GraphQL syntax errors
+    request:
+      method: POST
+      url: "{{baseUrl}}/graphql"
+      headers:
+        Content-Type: application/json
+        Authorization: "Bearer {{token}}"
+      body: |
+        {
+          "query": "query { viewer id name } }"
+        }
+    expect:
+      status: 400
+      jsonpath:
+        "$.errors": "array"
+        "$.errors[0].message": "*syntax*"
+        "$.data": null
+
+  - name: Query with field error
+    description: Test handling of field-level errors
+    request:
+      method: POST
+      url: "{{baseUrl}}/graphql"
+      headers:
+        Content-Type: application/json
+        Authorization: "Bearer {{token}}"
+      body: |
+        {
+          "query": "query { nonExistentField }"
+        }
+    expect:
+      status: 400
+      jsonpath:
+        "$.errors": "array"
+        "$.errors[0].message": "*Cannot query field*"
+
+  - name: Mutation with validation errors
+    description: Test handling of mutation validation errors
+    request:
+      method: POST
+      url: "{{baseUrl}}/graphql"
+      headers:
+        Content-Type: application/json
+        Authorization: "Bearer {{token}}"
+      body: |
+        {
+          "query": "mutation CreateUser($input: CreateUserInput!) { createUser(input: $input) { user { id } errors { field message } } }",
+          "variables": {
+            "input": {
+              "name": "",
+              "email": "invalid-email"
+            }
+          }
+        }
+    expect:
+      status: 200
+      jsonpath:
+        "$.data.createUser.user": null
+        "$.data.createUser.errors": "array"
+        "$.data.createUser.errors[0].field": "*"
+        "$.data.createUser.errors[0].message": "*"
+        "$.errors": null
+
+  - name: Unauthorized access
+    description: Test handling of authentication errors
+    request:
+      method: POST
+      url: "{{baseUrl}}/graphql"
+      headers:
+        Content-Type: application/json
+        Authorization: "Bearer invalid-token"
+      body: |
+        {
+          "query": "query { viewer { id name email } }"
+        }
+    expect:
+      status: 200
+      jsonpath:
+        "$.errors": "array"
+        "$.errors[0].message": "*Unauthorized*"
+        "$.data.viewer": null
+
+  - name: Rate limit exceeded
+    description: Test handling of rate limiting
+    request:
+      method: POST
+      url: "{{baseUrl}}/graphql"
+      headers:
+        Content-Type: application/json
+        Authorization: "Bearer {{token}}"
+        X-Test-Rate-Limit: "true"
+      body: |
+        {
+          "query": "query { heavyQuery { results } }"
+        }
+    expect:
+      status: 429
+      jsonpath:
+        "$.errors": "array"
+        "$.errors[0].extensions.code": "RATE_LIMITED"
