@@ -42,7 +42,7 @@ impl GrpcClient {
         // Load and compile protobuf descriptors
         let descriptors = Self::compile_protos(proto_path)?;
         let services = Self::parse_services(&descriptors)?;
-        
+
         // Create gRPC channel - fail if server is unreachable
         let channel = Endpoint::from_shared(endpoint.to_string())?
             .connect()
@@ -58,19 +58,28 @@ impl GrpcClient {
 
     fn compile_protos(proto_path: &Path) -> Result<FileDescriptorSet> {
         if !proto_path.exists() {
-            return Err(anyhow!("Proto directory does not exist: {}", proto_path.display()));
+            return Err(anyhow!(
+                "Proto directory does not exist: {}",
+                proto_path.display()
+            ));
         }
 
         // Find all .proto files
         let proto_files: Vec<_> = WalkDir::new(proto_path)
             .into_iter()
             .filter_map(|e| e.ok())
-            .filter(|e| e.file_type().is_file() && e.path().extension().and_then(|s| s.to_str()) == Some("proto"))
+            .filter(|e| {
+                e.file_type().is_file()
+                    && e.path().extension().and_then(|s| s.to_str()) == Some("proto")
+            })
             .map(|e| e.path().to_path_buf())
             .collect();
 
         if proto_files.is_empty() {
-            return Err(anyhow!("No .proto files found in directory: {}", proto_path.display()));
+            return Err(anyhow!(
+                "No .proto files found in directory: {}",
+                proto_path.display()
+            ));
         }
 
         // Create temporary directory for compilation
@@ -80,9 +89,9 @@ impl GrpcClient {
         // Use protoc to compile proto files to FileDescriptorSet
         let mut cmd = Command::new("protoc");
         cmd.arg("--descriptor_set_out")
-           .arg(&descriptor_path)
-           .arg("--include_imports")
-           .arg("--include_source_info");
+            .arg(&descriptor_path)
+            .arg("--include_imports")
+            .arg("--include_source_info");
 
         // Add proto path
         cmd.arg(format!("--proto_path={}", proto_path.display()));
@@ -119,17 +128,23 @@ impl GrpcClient {
                     let input_type = method_desc.input_type.clone().unwrap_or_default();
                     let output_type = method_desc.output_type.clone().unwrap_or_default();
 
-                    methods.insert(method_name.clone(), MethodInfo {
-                        method_name,
-                        input_type,
-                        output_type,
-                    });
+                    methods.insert(
+                        method_name.clone(),
+                        MethodInfo {
+                            method_name,
+                            input_type,
+                            output_type,
+                        },
+                    );
                 }
 
-                services.insert(service_name.clone(), ServiceInfo {
-                    service_name,
-                    methods,
-                });
+                services.insert(
+                    service_name.clone(),
+                    ServiceInfo {
+                        service_name,
+                        methods,
+                    },
+                );
             }
         }
 
@@ -145,17 +160,26 @@ impl GrpcClient {
         // Validate service/method format
         let parts: Vec<&str> = service_method.split('/').collect();
         if parts.len() != 2 || parts[0].is_empty() || parts[1].is_empty() {
-            return Err(anyhow!("Invalid service/method format. Expected 'Service/Method'"));
+            return Err(anyhow!(
+                "Invalid service/method format. Expected 'Service/Method'"
+            ));
         }
         let (service_name, method_name) = (parts[0], parts[1]);
 
         // Check if service exists
-        let service = self.services.get(service_name)
+        let service = self
+            .services
+            .get(service_name)
             .ok_or_else(|| anyhow!("Service '{}' not found in proto files", service_name))?;
 
         // Check if method exists
-        let _method = service.methods.get(method_name)
-            .ok_or_else(|| anyhow!("Method '{}' not found in service '{}'", method_name, service_name))?;
+        let _method = service.methods.get(method_name).ok_or_else(|| {
+            anyhow!(
+                "Method '{}' not found in service '{}'",
+                method_name,
+                service_name
+            )
+        })?;
 
         // Parse request data
         let request_json: Value = match request_data {
@@ -165,9 +189,12 @@ impl GrpcClient {
         };
 
         // Make the actual gRPC call with timeout
-        tokio::time::timeout(timeout, self.make_grpc_call(service_name, method_name, &request_json))
-            .await
-            .map_err(|_| anyhow!("gRPC call timed out after {:?}", timeout))?
+        tokio::time::timeout(
+            timeout,
+            self.make_grpc_call(service_name, method_name, &request_json),
+        )
+        .await
+        .map_err(|_| anyhow!("gRPC call timed out after {:?}", timeout))?
     }
 
     async fn make_grpc_call(
@@ -181,7 +208,7 @@ impl GrpcClient {
         // 1. Convert JSON to protobuf message using the type information
         // 2. Make the actual gRPC call using tonic
         // 3. Convert the protobuf response back to JSON
-        
+
         // This requires dynamic protobuf handling which is complex
         // For demonstration, return an error indicating the service is not mocked
         Err(anyhow!(
@@ -197,7 +224,8 @@ impl GrpcClient {
 
     #[allow(dead_code)] // Reserved for future gRPC introspection functionality
     pub fn list_methods(&self, service_name: &str) -> Vec<String> {
-        self.services.get(service_name)
+        self.services
+            .get(service_name)
             .map(|service| service.methods.keys().cloned().collect())
             .unwrap_or_default()
     }
@@ -214,7 +242,7 @@ impl GrpcClient {
             let finder = JsonPathFinder::from_str(&response_str, expectation)
                 .map_err(|e| anyhow!("JSONPath error: {}", e))?;
             let found = finder.find();
-            
+
             match found {
                 Value::Null => {
                     results.push(format!("❌ JSONPath '{}' not found", expectation));
@@ -229,12 +257,11 @@ impl GrpcClient {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
-    use tempfile::TempDir;
     use std::fs;
+    use tempfile::TempDir;
 
     #[test]
     fn test_proto_compilation_no_directory() {
@@ -247,13 +274,16 @@ mod tests {
     #[test]
     fn test_proto_compilation_no_proto_files() {
         let temp_dir = TempDir::new().unwrap();
-        
+
         // Create some non-proto files
         fs::write(temp_dir.path().join("test.txt"), "not a proto file").unwrap();
-        
+
         let result = GrpcClient::compile_protos(temp_dir.path());
         assert!(result.is_err());
-        assert!(result.unwrap_err().to_string().contains("No .proto files found"));
+        assert!(result
+            .unwrap_err()
+            .to_string()
+            .contains("No .proto files found"));
     }
 
     #[test]
@@ -261,7 +291,7 @@ mod tests {
         let invalid_formats = vec![
             "InvalidFormat",
             "Too/Many/Slashes",
-            "/MissingService", 
+            "/MissingService",
             "MissingMethod/",
             "",
         ];
@@ -274,15 +304,15 @@ mod tests {
         }
 
         for format in invalid_formats {
-            assert!(!validate_format(format), "Expected '{}' to be invalid", format);
+            assert!(
+                !validate_format(format),
+                "Expected '{}' to be invalid",
+                format
+            );
         }
 
         // Valid formats
-        let valid_formats = vec![
-            "Users/GetUser",
-            "Products/ListProducts", 
-            "Auth/Login",
-        ];
+        let valid_formats = vec!["Users/GetUser", "Products/ListProducts", "Auth/Login"];
 
         for format in valid_formats {
             assert!(validate_format(format), "Expected '{}' to be valid", format);
@@ -293,7 +323,7 @@ mod tests {
     fn test_validate_expectations() {
         // Test JSONPath validation without needing a full client
         use jsonpath_rust::JsonPathFinder;
-        
+
         let response = serde_json::json!({
             "user": {
                 "id": "123",
@@ -309,7 +339,7 @@ mod tests {
         let found = finder.find();
         assert_ne!(found, serde_json::Value::Null);
 
-        // Test failed path  
+        // Test failed path
         let finder = JsonPathFinder::from_str(&response_str, "$.nonexistent").unwrap();
         let found = finder.find();
         assert_eq!(found, serde_json::Value::Null);

@@ -39,16 +39,25 @@ pub async fn handle_grpc(
     // Display available services and methods
     let services = client.list_services();
     if !services.is_empty() {
-        println!("{} Available services: {}", "→".cyan(), services.join(", ").bright_green());
+        println!(
+            "{} Available services: {}",
+            "→".cyan(),
+            services.join(", ").bright_green()
+        );
     }
 
     // Make the gRPC call
     println!("{} Calling {}...", "→".cyan(), call.bright_white());
-    let response = client.call(&call, data.as_deref(), timeout_duration).await?;
+    let response = client
+        .call(&call, data.as_deref(), timeout_duration)
+        .await?;
 
     // Display response
     println!("\n{} Response:", "✓".green().bold());
-    println!("{}", serde_json::to_string_pretty(&response)?.bright_white());
+    println!(
+        "{}",
+        serde_json::to_string_pretty(&response)?.bright_white()
+    );
 
     // Validate expectations
     if !expect_jsonpath.is_empty() {

@@ -134,6 +134,35 @@ enum Commands {
         #[arg(long = "timeout", default_value = "30s")]
         timeout: String,
     },
+    /// Run performance tests
+    Perf {
+        /// File or directory to performance test
+        target: PathBuf,
+        /// Test duration (e.g., "30s", "5m")
+        #[arg(long = "duration", default_value = "30s")]
+        duration: String,
+        /// Target requests per second
+        #[arg(long = "rps")]
+        rps: Option<u32>,
+        /// Number of concurrent connections
+        #[arg(long = "concurrent", default_value = "10")]
+        concurrent: u32,
+        /// Warmup period before measuring
+        #[arg(long = "warmup", default_value = "5s")]
+        warmup: String,
+        /// Report interval during test
+        #[arg(long = "report-interval", default_value = "5s")]
+        report_interval: String,
+        /// Performance report output file
+        #[arg(long = "output")]
+        output: Option<PathBuf>,
+        /// Load pattern (constant, ramp-up, spike)
+        #[arg(long = "pattern", default_value = "constant")]
+        pattern: String,
+        /// Environment to use
+        #[arg(long = "env")]
+        env: Option<String>,
+    },
     /// Generate shell completions (internal)
     #[command(hide = true)]
     Completions {
@@ -231,7 +260,32 @@ async fn main() -> anyhow::Result<()> {
             expect_jsonpath,
             timeout,
         } => {
-            commands::grpc::handle_grpc(server, proto, call, data, expect_jsonpath, timeout).await?;
+            commands::grpc::handle_grpc(server, proto, call, data, expect_jsonpath, timeout)
+                .await?;
+        }
+        Commands::Perf {
+            target,
+            duration,
+            rps,
+            concurrent,
+            warmup,
+            report_interval,
+            output,
+            pattern,
+            env,
+        } => {
+            commands::perf::handle_perf(commands::perf::PerfOptions {
+                target,
+                duration,
+                rps,
+                concurrent,
+                warmup,
+                report_interval,
+                output,
+                pattern,
+                env,
+            })
+            .await?;
         }
         Commands::Completions { shell } => {
             // Generate completions to stdout for the requested shell
@@ -244,7 +298,10 @@ async fn main() -> anyhow::Result<()> {
                 "powershell" | "pwsh" => CompShell::PowerShell,
                 "elvish" => CompShell::Elvish,
                 other => {
-                    eprintln!("Unsupported shell: {} (use bash|zsh|fish|powershell|elvish)", other);
+                    eprintln!(
+                        "Unsupported shell: {} (use bash|zsh|fish|powershell|elvish)",
+                        other
+                    );
                     std::process::exit(2);
                 }
             };

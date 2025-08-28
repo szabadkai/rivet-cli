@@ -8,7 +8,10 @@ use tempfile::TempDir;
 #[test]
 fn test_parse_timeout_formats() {
     assert_eq!(parse_timeout("30s").unwrap(), Duration::from_secs(30));
-    assert_eq!(parse_timeout("5000ms").unwrap(), Duration::from_millis(5000));
+    assert_eq!(
+        parse_timeout("5000ms").unwrap(),
+        Duration::from_millis(5000)
+    );
     assert_eq!(parse_timeout("10").unwrap(), Duration::from_secs(10));
     assert_eq!(parse_timeout("0s").unwrap(), Duration::from_secs(0));
     assert_eq!(parse_timeout("1ms").unwrap(), Duration::from_millis(1));
@@ -35,7 +38,7 @@ fn test_service_method_format_validation() {
         "Auth/Login",
         "Service.Name/Method_Name",
     ];
-    
+
     for call in valid_calls {
         assert!(validate_format(call), "Expected '{}' to be valid", call);
     }
@@ -48,7 +51,7 @@ fn test_service_method_format_validation() {
         "MissingMethod/",
         "",
     ];
-    
+
     for call in invalid_calls {
         assert!(!validate_format(call), "Expected '{}' to be invalid", call);
     }
@@ -58,7 +61,7 @@ fn test_service_method_format_validation() {
 fn test_jsonpath_expectations() {
     use jsonpath_rust::JsonPathFinder;
     use serde_json::json;
-    
+
     let response = json!({
         "user": {
             "id": "123",
@@ -70,7 +73,7 @@ fn test_jsonpath_expectations() {
         "status": "success",
         "count": 42
     });
-    
+
     let response_str = serde_json::to_string(&response).unwrap();
 
     // Test successful paths
@@ -78,7 +81,12 @@ fn test_jsonpath_expectations() {
     for path in success_paths {
         let finder = JsonPathFinder::from_str(&response_str, path).unwrap();
         let found = finder.find();
-        assert_ne!(found, serde_json::Value::Null, "Expected to find path: {}", path);
+        assert_ne!(
+            found,
+            serde_json::Value::Null,
+            "Expected to find path: {}",
+            path
+        );
     }
 
     // Test failed paths
@@ -86,11 +94,16 @@ fn test_jsonpath_expectations() {
     for path in fail_paths {
         let finder = JsonPathFinder::from_str(&response_str, path).unwrap();
         let found = finder.find();
-        assert_eq!(found, serde_json::Value::Null, "Expected path to fail: {}", path);
+        assert_eq!(
+            found,
+            serde_json::Value::Null,
+            "Expected path to fail: {}",
+            path
+        );
     }
 }
 
-#[test] 
+#[test]
 fn test_proto_directory_validation() {
     // Test non-existent directory
     let non_existent = std::path::Path::new("/non/existent/path");
@@ -99,24 +112,24 @@ fn test_proto_directory_validation() {
     // Test directory with no proto files
     let temp_dir = TempDir::new().unwrap();
     fs::write(temp_dir.path().join("test.txt"), "not a proto file").unwrap();
-    
+
     // Find proto files (should be none)
     let proto_files: Vec<_> = walkdir::WalkDir::new(temp_dir.path())
         .into_iter()
         .filter_map(|e| e.ok())
         .filter(|e| {
-            e.file_type().is_file() 
-            && e.path().extension().and_then(|s| s.to_str()) == Some("proto")
+            e.file_type().is_file()
+                && e.path().extension().and_then(|s| s.to_str()) == Some("proto")
         })
         .collect();
-    
+
     assert!(proto_files.is_empty(), "Should find no proto files");
 }
 
 #[test]
 fn test_create_sample_proto_file() {
     let temp_dir = TempDir::new().unwrap();
-    
+
     // Create a sample proto file
     let proto_content = r#"
 syntax = "proto3";
@@ -137,10 +150,10 @@ message GetUserResponse {
   string email = 3;
 }
 "#;
-    
+
     let proto_file = temp_dir.path().join("test.proto");
     fs::write(&proto_file, proto_content).unwrap();
-    
+
     assert!(proto_file.exists());
     let content = fs::read_to_string(&proto_file).unwrap();
     assert!(content.contains("service TestService"));
@@ -151,9 +164,9 @@ message GetUserResponse {
 #[test]
 fn test_protoc_availability() {
     use std::process::Command;
-    
+
     let output = Command::new("protoc").arg("--version").output();
-    
+
     match output {
         Ok(output) => {
             if output.status.success() {
@@ -167,7 +180,7 @@ fn test_protoc_availability() {
             println!("protoc is not available - this is expected in CI/test environments");
         }
     }
-    
+
     // This test always passes - it's just informational
     assert!(true);
 }

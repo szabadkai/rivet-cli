@@ -8,7 +8,12 @@ use std::path::PathBuf;
 use crate::config::{Expectation, Request, RivetConfig, StatusExpectation, TestStep};
 
 pub async fn handle_import(tool: String, file: PathBuf, out: PathBuf) -> Result<()> {
-    println!("{} Importing from {}: {}", "→".cyan(), tool, file.display().to_string().bright_white());
+    println!(
+        "{} Importing from {}: {}",
+        "→".cyan(),
+        tool,
+        file.display().to_string().bright_white()
+    );
     println!("{} Output directory: {}", "→".cyan(), out.display());
 
     match tool.to_lowercase().as_str() {
@@ -152,17 +157,24 @@ struct PostmanVariable {
 
 async fn import_postman_collection(file: PathBuf, out: PathBuf) -> Result<()> {
     println!("{} Reading Postman collection...", "→".cyan());
-    
+
     if !file.exists() {
-        return Err(anyhow!("Postman collection file does not exist: {}", file.display()));
+        return Err(anyhow!(
+            "Postman collection file does not exist: {}",
+            file.display()
+        ));
     }
 
     let contents = fs::read_to_string(&file)?;
     let collection: PostmanCollection = serde_json::from_str(&contents)
         .map_err(|e| anyhow!("Failed to parse Postman collection: {}", e))?;
 
-    println!("{} Parsed collection: {}", "✓".green(), collection.info.name.bright_white());
-    
+    println!(
+        "{} Parsed collection: {}",
+        "✓".green(),
+        collection.info.name.bright_white()
+    );
+
     // Create output directory if it doesn't exist
     fs::create_dir_all(&out)?;
 
@@ -172,7 +184,10 @@ async fn import_postman_collection(file: PathBuf, out: PathBuf) -> Result<()> {
     // Convert collection variables to rivet variables
     let mut variables = HashMap::new();
     // Check both 'variable' and 'variables' fields
-    let vars_to_process = collection.variable.as_ref().or(collection.variables.as_ref());
+    let vars_to_process = collection
+        .variable
+        .as_ref()
+        .or(collection.variables.as_ref());
     if let Some(vars) = vars_to_process {
         for var in vars {
             variables.insert(var.key.clone(), var.value.clone());
@@ -180,14 +195,25 @@ async fn import_postman_collection(file: PathBuf, out: PathBuf) -> Result<()> {
     }
 
     // Process all items (requests and folders)
-    process_postman_items(&collection.item, &out, "", &mut test_count, &mut folder_count, &variables)?;
+    process_postman_items(
+        &collection.item,
+        &out,
+        "",
+        &mut test_count,
+        &mut folder_count,
+        &variables,
+    )?;
 
     // Create a main rivet config file
     let main_config = RivetConfig {
         name: collection.info.name.clone(),
         description: collection.info.description.clone(),
         env: None,
-        vars: if variables.is_empty() { None } else { Some(variables) },
+        vars: if variables.is_empty() {
+            None
+        } else {
+            Some(variables)
+        },
         setup: None,
         tests: vec![], // Individual test files will be referenced
         dataset: None,
@@ -199,8 +225,15 @@ async fn import_postman_collection(file: PathBuf, out: PathBuf) -> Result<()> {
     fs::write(&config_path, config_yaml)?;
 
     println!("\n{} Import completed successfully!", "✓".green().bold());
-    println!("  {} tests created in {} folders", test_count.to_string().bright_white(), folder_count.to_string().bright_white());
-    println!("  Main config: {}", config_path.display().to_string().bright_blue());
+    println!(
+        "  {} tests created in {} folders",
+        test_count.to_string().bright_white(),
+        folder_count.to_string().bright_white()
+    );
+    println!(
+        "  Main config: {}",
+        config_path.display().to_string().bright_blue()
+    );
 
     Ok(())
 }
@@ -217,9 +250,10 @@ fn process_postman_items(
         match item {
             PostmanItem::Request(request_item) => {
                 // Convert postman request synchronously
-                let rivet_request = convert_postman_request_to_rivet(&request_item.request, variables)?;
+                let rivet_request =
+                    convert_postman_request_to_rivet(&request_item.request, variables)?;
                 let expectation = create_expectation_from_responses(&request_item.response);
-                
+
                 let request_name = sanitize_filename(&request_item.name);
                 let filename = if folder_prefix.is_empty() {
                     format!("{}.yaml", request_name)
@@ -264,13 +298,19 @@ fn process_postman_items(
                     format!("{}_{}", folder_prefix, folder_name)
                 };
 
-                process_postman_items(&folder_item.item, &folder_path, &new_prefix, test_count, folder_count, variables)?;
+                process_postman_items(
+                    &folder_item.item,
+                    &folder_path,
+                    &new_prefix,
+                    test_count,
+                    folder_count,
+                    variables,
+                )?;
             }
         }
     }
     Ok(())
 }
-
 
 fn convert_postman_request_to_rivet(
     postman_request: &PostmanRequest,
@@ -285,18 +325,23 @@ fn convert_postman_request_to_rivet(
             } else {
                 // Reconstruct URL from parts
                 let protocol = url_obj.protocol.as_deref().unwrap_or("https");
-                let host = url_obj.host.as_ref()
+                let host = url_obj
+                    .host
+                    .as_ref()
                     .map(|h| h.join("."))
                     .unwrap_or_else(|| "localhost".to_string());
-                let path = url_obj.path.as_ref()
+                let path = url_obj
+                    .path
+                    .as_ref()
                     .map(|p| "/".to_string() + &p.join("/"))
                     .unwrap_or_else(|| "/".to_string());
-                
+
                 let mut url = format!("{}://{}{}", protocol, host, path);
-                
+
                 // Add query parameters
                 if let Some(query) = &url_obj.query {
-                    let params: Vec<String> = query.iter()
+                    let params: Vec<String> = query
+                        .iter()
                         .filter(|q| !q.disabled.unwrap_or(false))
                         .map(|q| format!("{}={}", q.key, q.value))
                         .collect();
@@ -318,7 +363,11 @@ fn convert_postman_request_to_rivet(
                 header_map.insert(header.key.clone(), header.value.clone());
             }
         }
-        if header_map.is_empty() { None } else { Some(header_map) }
+        if header_map.is_empty() {
+            None
+        } else {
+            Some(header_map)
+        }
     } else {
         None
     };
@@ -330,11 +379,16 @@ fn convert_postman_request_to_rivet(
             Some("formdata") => {
                 // Convert form data to form-encoded string
                 if let Some(form_data) = &postman_body.formdata {
-                    let params: Vec<String> = form_data.iter()
+                    let params: Vec<String> = form_data
+                        .iter()
                         .filter(|f| !f.disabled.unwrap_or(false))
                         .map(|f| format!("{}={}", f.key, f.value.as_deref().unwrap_or("")))
                         .collect();
-                    if params.is_empty() { None } else { Some(params.join("&")) }
+                    if params.is_empty() {
+                        None
+                    } else {
+                        Some(params.join("&"))
+                    }
                 } else {
                     None
                 }
@@ -342,11 +396,16 @@ fn convert_postman_request_to_rivet(
             Some("urlencoded") => {
                 // Convert URL encoded data
                 if let Some(form_data) = &postman_body.urlencoded {
-                    let params: Vec<String> = form_data.iter()
+                    let params: Vec<String> = form_data
+                        .iter()
                         .filter(|f| !f.disabled.unwrap_or(false))
                         .map(|f| format!("{}={}", f.key, f.value.as_deref().unwrap_or("")))
                         .collect();
-                    if params.is_empty() { None } else { Some(params.join("&")) }
+                    if params.is_empty() {
+                        None
+                    } else {
+                        Some(params.join("&"))
+                    }
                 } else {
                     None
                 }
@@ -369,7 +428,9 @@ fn convert_postman_request_to_rivet(
     })
 }
 
-fn create_expectation_from_responses(responses: &Option<Vec<serde_json::Value>>) -> Option<Expectation> {
+fn create_expectation_from_responses(
+    responses: &Option<Vec<serde_json::Value>>,
+) -> Option<Expectation> {
     if let Some(response_examples) = responses {
         if let Some(first_response) = response_examples.first() {
             // Try to extract status code from response example
@@ -383,7 +444,7 @@ fn create_expectation_from_responses(responses: &Option<Vec<serde_json::Value>>)
             }
         }
     }
-    
+
     // Default expectation for successful requests
     Some(Expectation {
         status: Some(StatusExpectation::Number(200)),
