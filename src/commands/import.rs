@@ -47,6 +47,7 @@ struct PostmanCollection {
 struct PostmanInfo {
     name: String,
     description: Option<String>,
+    #[allow(dead_code)] // Used for validation but not processing
     schema: String,
 }
 
@@ -64,12 +65,14 @@ struct PostmanRequestItem {
     request: PostmanRequest,
     response: Option<Vec<serde_json::Value>>,
     #[serde(default)]
+    #[allow(dead_code)] // Reserved for future test script processing
     event: Option<Vec<serde_json::Value>>, // For test scripts
 }
 
 #[derive(Debug, Deserialize)]
 struct PostmanFolderItem {
     name: String,
+    #[allow(dead_code)] // Reserved for future folder description processing
     description: Option<String>,
     item: Vec<PostmanItem>,
 }
@@ -83,6 +86,7 @@ struct PostmanRequest {
     #[serde(default)]
     body: Option<PostmanBody>,
     #[serde(default)]
+    #[allow(dead_code)] // Reserved for future request description processing
     description: Option<String>,
 }
 
@@ -136,6 +140,7 @@ struct PostmanFormData {
     #[serde(default)]
     disabled: Option<bool>,
     #[serde(default)]
+    #[allow(dead_code)] // Reserved for future form data type processing
     r#type: Option<String>, // "text", "file", etc.
 }
 

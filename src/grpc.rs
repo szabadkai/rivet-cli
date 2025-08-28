@@ -13,21 +13,27 @@ use tonic::transport::{Channel, Endpoint};
 use walkdir::WalkDir;
 
 pub struct GrpcClient {
+    #[allow(dead_code)] // Reserved for future gRPC communication
     channel: Channel,
+    #[allow(dead_code)] // Reserved for future dynamic protobuf handling
     descriptors: FileDescriptorSet,
     services: HashMap<String, ServiceInfo>,
 }
 
 #[derive(Debug, Clone)]
 struct ServiceInfo {
+    #[allow(dead_code)] // Reserved for future service metadata
     service_name: String,
     methods: HashMap<String, MethodInfo>,
 }
 
 #[derive(Debug, Clone)]
 struct MethodInfo {
+    #[allow(dead_code)] // Reserved for future method metadata
     method_name: String,
+    #[allow(dead_code)] // Reserved for future dynamic protobuf handling
     input_type: String,
+    #[allow(dead_code)] // Reserved for future dynamic protobuf handling
     output_type: String,
 }
 
@@ -189,6 +195,7 @@ impl GrpcClient {
         self.services.keys().cloned().collect()
     }
 
+    #[allow(dead_code)] // Reserved for future gRPC introspection functionality
     pub fn list_methods(&self, service_name: &str) -> Vec<String> {
         self.services.get(service_name)
             .map(|service| service.methods.keys().cloned().collect())

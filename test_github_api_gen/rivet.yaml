@@ -1,9 +1,0 @@
-name: GitHub v3 REST API Tests
-description: GitHub's v3 REST API.
-env: null
-vars:
-  baseUrl: https://api.github.com
-setup: null
-tests: []
-dataset: null
-teardown: null
