@@ -8,6 +8,10 @@ repository = "https://github.com/szabadkai/rivet-cli"
 keywords = ["api", "testing", "cli", "http", "grpc"]
 categories = ["command-line-utilities", "development-tools::testing"]
 
+[lib]
+name = "rivet"
+path = "src/lib.rs"
+
 [[bin]]
 name = "rivet"
 path = "src/main.rs"
@@ -15,14 +19,22 @@ path = "src/main.rs"
 [dependencies]
 # CLI and argument parsing
 clap = { version = "4.4", features = ["derive", "color"] }
+clap_complete = "4.5"
+clap_mangen = "0.2"
 
 # HTTP client
 reqwest = { version = "0.11", features = ["json", "rustls-tls", "stream"] }
 hyper-rustls = "0.24"
 
 # gRPC
-tonic = { version = "0.10", features = ["tls"] }
+tonic = { version = "0.10", features = ["tls", "transport"] }
 prost = "0.12"
+prost-types = "0.12"
+tonic-reflection = "0.10"
+
+# Proto compilation
+prost-build = "0.12"
+tonic-build = "0.10"
 
 # Async runtime
 tokio = { version = "1.0", features = ["full"] }
@@ -55,6 +67,7 @@ thiserror = "1.0"
 
 # File handling
 walkdir = "2.4"
+tempfile = "3.8"
 
 # CSV handling
 csv = "1.3"
@@ -71,3 +84,20 @@ regex = "1.10"
 [dev-dependencies]
 # Testing utilities
 tempfile = "3.8"
+
+[package.metadata.deb]
+# Package name for Debian/Ubuntu (avoid collisions with other 'rivet')
+name = "rivet-cli"
+# Update before publishing
+maintainer = "Levente Szabadkai <levente@szabadkai.com>"
+section = "utils"
+priority = "optional"
+# Use crate description/license/repository from [package]
+# Install the compiled binary to /usr/bin and include shell completions and man page
+assets = [
+    ["target/release/rivet", "/usr/bin/rivet", "755"],
+    ["packaging/assets/completions/rivet.bash", "/usr/share/bash-completion/completions/rivet", "644"],
+    ["packaging/assets/completions/_rivet", "/usr/share/zsh/vendor-completions/_rivet", "644"],
+    ["packaging/assets/completions/rivet.fish", "/usr/share/fish/vendor_completions.d/rivet.fish", "644"],
+    ["packaging/assets/man/rivet.1", "/usr/share/man/man1/rivet.1", "644"],
+]

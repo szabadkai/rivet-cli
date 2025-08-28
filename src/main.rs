@@ -1,4 +1,5 @@
-use clap::{Parser, Subcommand};
+use clap::{CommandFactory, Parser, Subcommand};
+use clap_complete::{generate, Shell as CompShell};
 use owo_colors::OwoColorize;
 use std::path::PathBuf;
 
@@ -114,6 +115,9 @@ enum Commands {
     },
     /// Make gRPC calls
     Grpc {
+        /// gRPC server address (e.g., http://localhost:50051)
+        #[arg(long = "server")]
+        server: String,
         /// Proto files directory
         #[arg(long = "proto")]
         proto: PathBuf,
@@ -130,6 +134,15 @@ enum Commands {
         #[arg(long = "timeout", default_value = "30s")]
         timeout: String,
     },
+    /// Generate shell completions (internal)
+    #[command(hide = true)]
+    Completions {
+        /// Shell: bash, zsh, fish
+        shell: String,
+    },
+    /// Generate man page (internal)
+    #[command(hide = true)]
+    Man,
 }
 
 pub fn print_banner() {
@@ -153,8 +166,11 @@ pub fn print_banner() {
 async fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
 
-    // Print banner for most commands
-    if !matches!(cli.command, Commands::Send { .. }) {
+    // Print banner for user-facing commands only
+    if !matches!(
+        cli.command,
+        Commands::Send { .. } | Commands::Completions { .. } | Commands::Man
+    ) {
         print_banner();
     }
 
@@ -208,13 +224,35 @@ async fn main() -> anyhow::Result<()> {
             import::handle_import(tool, file, out).await?;
         }
         Commands::Grpc {
+            server,
             proto,
             call,
             data,
             expect_jsonpath,
             timeout,
         } => {
-            commands::grpc::handle_grpc(proto, call, data, expect_jsonpath, timeout).await?;
+            commands::grpc::handle_grpc(server, proto, call, data, expect_jsonpath, timeout).await?;
+        }
+        Commands::Completions { shell } => {
+            // Generate completions to stdout for the requested shell
+            let mut cmd = Cli::command();
+            let name = cmd.get_name().to_string();
+            let sh = match shell.as_str() {
+                "bash" => CompShell::Bash,
+                "zsh" => CompShell::Zsh,
+                "fish" => CompShell::Fish,
+                other => {
+                    eprintln!("Unsupported shell: {} (use bash|zsh|fish)", other);
+                    std::process::exit(2);
+                }
+            };
+            generate(sh, &mut cmd, name, &mut std::io::stdout());
+        }
+        Commands::Man => {
+            // Generate a man page to stdout using clap_mangen
+            let cmd = Cli::command();
+            let man = clap_mangen::Man::new(cmd);
+            man.render(&mut std::io::stdout())?;
         }
     }
 
