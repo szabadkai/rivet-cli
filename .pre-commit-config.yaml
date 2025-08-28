@@ -39,3 +39,11 @@ repos:
       - id: check-yaml
       - id: check-toml
       - id: check-json
+
+  - repo: local
+    hooks:
+      - id: actionlint
+        name: actionlint (validate GitHub workflows)
+        entry: bash -lc 'if command -v actionlint >/dev/null 2>&1; then actionlint; else echo "actionlint not installed; skipping"; fi'
+        language: system
+        files: ^\.github/workflows/.*

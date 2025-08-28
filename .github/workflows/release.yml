@@ -65,7 +65,7 @@ jobs:
         run: cargo build --release --target ${{ matrix.target }}
 
       - name: Generate completions and man (Linux only)
-        if: matrix.target == 'x86_64-unknown-linux-gnu'
+        if: ${{ matrix.target == 'x86_64-unknown-linux-gnu' }}
         run: |
           set -euo pipefail
           BIN="target/${{ matrix.target }}/release/${{ matrix.artifact_name }}"
@@ -78,21 +78,21 @@ jobs:
           "$BIN" man               > artifacts/gen/rivet.1
 
       - name: Upload completions/man (Linux only)
-        if: matrix.target == 'x86_64-unknown-linux-gnu'
+        if: ${{ matrix.target == 'x86_64-unknown-linux-gnu' }}
         uses: actions/upload-artifact@v4
         with:
           name: rivet-completions-man
           path: artifacts/gen/*
 
       - name: Prepare artifact (Unix)
-        if: matrix.os != 'windows-latest'
+        if: ${{ matrix.os != 'windows-latest' }}
         run: |
           mkdir -p artifacts
           cp target/${{ matrix.target }}/release/${{ matrix.artifact_name }} artifacts/${{ matrix.asset_name }}
           chmod +x artifacts/${{ matrix.asset_name }}
 
       - name: Prepare artifact (Windows)
-        if: matrix.os == 'windows-latest'
+        if: ${{ matrix.os == 'windows-latest' }}
         run: |
           mkdir artifacts
           copy target\${{ matrix.target }}\release\${{ matrix.artifact_name }} artifacts\${{ matrix.asset_name }}
@@ -122,6 +122,19 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -la artifacts/
 
+      - name: Get version from tag
+        id: get_version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            INP="${{ github.event.inputs.version }}"
+            case "$INP" in
+              v*) echo "VERSION=$INP" >> $GITHUB_OUTPUT ;;
+              *)  echo "VERSION=v$INP" >> $GITHUB_OUTPUT ;;
+            esac
+          else
+            echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          fi
+
       - name: Prepare release assets
         run: |
           mkdir -p release-assets
@@ -149,19 +162,6 @@ jobs:
           fi
           (cd tmp-zip && zip -9 ../release-assets/rivet-${VERSION}-windows-x86_64.zip *)
           rm -rf tmp-zip
-
-      - name: Get version from tag
-        id: get_version
-        run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            INP="${{ github.event.inputs.version }}"
-            case "$INP" in
-              v*) echo "VERSION=$INP" >> $GITHUB_OUTPUT ;;
-              *)  echo "VERSION=v$INP" >> $GITHUB_OUTPUT ;;
-            esac
-          else
-            echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          fi
 
       - name: Package Homebrew archives
         id: hb
