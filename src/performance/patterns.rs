@@ -54,7 +54,7 @@ impl LoadController {
                 // Create spikes every 30 seconds
                 let cycle_duration = Duration::from_secs(30);
                 let cycle_elapsed = elapsed.as_secs_f64() % cycle_duration.as_secs_f64();
-                
+
                 if cycle_elapsed < 5.0 {
                     // 5-second spike at 2x the base rate
                     base_rps * 2.0
@@ -84,7 +84,7 @@ impl LoadController {
             LoadPattern::Spike => {
                 let cycle_duration = Duration::from_secs(30);
                 let cycle_elapsed = elapsed.as_secs_f64() % cycle_duration.as_secs_f64();
-                
+
                 if cycle_elapsed < 5.0 {
                     // Spike: double the concurrent users
                     self.concurrent_users * 2
@@ -112,7 +112,8 @@ impl LoadController {
             LoadPattern::Constant => "Constant load".to_string(),
             LoadPattern::RampUp => {
                 if elapsed < self.warmup_duration {
-                    let progress = (elapsed.as_secs_f64() / self.warmup_duration.as_secs_f64() * 100.0) as u32;
+                    let progress =
+                        (elapsed.as_secs_f64() / self.warmup_duration.as_secs_f64() * 100.0) as u32;
                     format!("Ramping up ({}%)", progress)
                 } else {
                     "Full load".to_string()
@@ -121,7 +122,7 @@ impl LoadController {
             LoadPattern::Spike => {
                 let cycle_duration = Duration::from_secs(30);
                 let cycle_elapsed = elapsed.as_secs_f64() % cycle_duration.as_secs_f64();
-                
+
                 if cycle_elapsed < 5.0 {
                     format!("Spike phase ({:.1}s remaining)", 5.0 - cycle_elapsed)
                 } else {

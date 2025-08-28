@@ -1,17 +1,17 @@
 use crate::config::RivetConfig;
-use crate::performance::{LoadPattern, PerformanceMetrics, PerformanceResults};
 use crate::performance::monitor::PerformanceMonitor;
 use crate::performance::patterns::LoadController;
+use crate::performance::{LoadPattern, PerformanceMetrics, PerformanceResults};
 use crate::runner::executor::RequestExecutor;
 use crate::runner::parser::load_test_suite;
 use crate::runner::variables::VariableContext;
 use anyhow::{Context, Result};
+use futures::stream::{FuturesUnordered, StreamExt};
 use std::path::Path;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 use tokio::sync::Mutex;
 use tokio::time::sleep;
-use futures::stream::{FuturesUnordered, StreamExt};
 
 pub struct PerformanceTestRunner {
     concurrent_users: u32,
@@ -53,7 +53,8 @@ impl PerformanceTestRunner {
         env: Option<&str>,
     ) -> Result<PerformanceResults> {
         // Load test suites
-        let test_suites = load_test_suite(target).await
+        let test_suites = load_test_suite(target)
+            .await
             .context("Failed to load test suite for performance testing")?;
 
         if test_suites.is_empty() {
@@ -62,7 +63,7 @@ impl PerformanceTestRunner {
 
         // For performance testing, we'll focus on the first test suite
         let (suite_name, config) = &test_suites[0];
-        
+
         if config.tests.is_empty() {
             anyhow::bail!("Test suite '{}' contains no tests", suite_name);
         }
@@ -87,11 +88,13 @@ impl PerformanceTestRunner {
 
         // Setup monitoring
         let monitor = PerformanceMonitor::new(self.report_interval, self.load_pattern.clone());
-        monitor.start_background_monitoring(
-            Arc::clone(&metrics),
-            self.test_duration,
-            Arc::clone(&load_controller),
-        ).await;
+        monitor
+            .start_background_monitoring(
+                Arc::clone(&metrics),
+                self.test_duration,
+                Arc::clone(&load_controller),
+            )
+            .await;
 
         // Warmup phase
         if self.warmup_duration > Duration::ZERO {
@@ -100,10 +103,10 @@ impl PerformanceTestRunner {
         }
 
         println!("\n🔥 Starting load generation...");
-        
+
         // Start the performance test
         let test_start = Instant::now();
-        
+
         // Run the load generation
         self.generate_load(
             config,
@@ -111,7 +114,8 @@ impl PerformanceTestRunner {
             Arc::clone(&metrics),
             Arc::clone(&load_controller),
             test_start,
-        ).await?;
+        )
+        .await?;
 
         // Wait for any remaining requests to complete (with timeout)
         sleep(Duration::from_secs(2)).await;
@@ -119,7 +123,7 @@ impl PerformanceTestRunner {
         // Generate final results
         let final_metrics = metrics.lock().await;
         let results = final_metrics.calculate_results();
-        
+
         // Print final summary
         let monitor = PerformanceMonitor::new(self.report_interval, self.load_pattern.clone());
         monitor.print_final_summary(&final_metrics);
@@ -156,7 +160,8 @@ impl PerformanceTestRunner {
                     load_controller,
                     test_start,
                     total_duration,
-                ).await
+                )
+                .await
             }));
         }
 
@@ -205,7 +210,7 @@ impl PerformanceTestRunner {
     ) -> Result<()> {
         // Create variable context for this worker
         let mut context = VariableContext::new();
-        
+
         // Load environment variables if specified
         if let Some(_env_name) = env {
             if let Some(env_vars) = config.vars.as_ref() {
@@ -217,7 +222,7 @@ impl PerformanceTestRunner {
 
         let test_count = config.tests.len();
         let mut current_test_index = 0;
-        
+
         // Worker runs for the specified duration
         let worker_start = Instant::now();
 
@@ -227,24 +232,31 @@ impl PerformanceTestRunner {
             current_test_index = (current_test_index + 1) % test_count;
 
             let _request_start = Instant::now();
-            
+
             // Execute the request
-            let test_result = executor.execute_test(
-                &format!("worker_{}_test_{}", worker_id, current_test_index),
-                &test_step.request,
-                test_step.expect.as_ref(),
-                &context,
-            ).await;
+            let test_result = executor
+                .execute_test(
+                    &format!("worker_{}_test_{}", worker_id, current_test_index),
+                    &test_step.request,
+                    test_step.expect.as_ref(),
+                    &context,
+                )
+                .await;
 
             let response_time = test_result.duration;
             let is_error = !test_result.passed;
             let status_code = test_result.response_status.unwrap_or(0);
-            
+
             // Estimate request/response size (simplified)
-            let bytes_sent = test_step.request.body.as_ref()
+            let bytes_sent = test_step
+                .request
+                .body
+                .as_ref()
                 .map(|b| b.len() as u64)
                 .unwrap_or(100); // Estimate header size
-            let bytes_received = test_result.response_body.as_ref()
+            let bytes_received = test_result
+                .response_body
+                .as_ref()
                 .map(|b| b.len() as u64)
                 .unwrap_or(0);
 

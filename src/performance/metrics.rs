@@ -31,14 +31,21 @@ impl PerformanceMetrics {
         }
     }
 
-    pub fn record_request(&mut self, response_time: Duration, status_code: u16, bytes_sent: u64, bytes_received: u64, is_error: bool) {
+    pub fn record_request(
+        &mut self,
+        response_time: Duration,
+        status_code: u16,
+        bytes_sent: u64,
+        bytes_received: u64,
+        is_error: bool,
+    ) {
         self.response_times.push(response_time);
         self.request_count += 1;
         self.bytes_sent += bytes_sent;
         self.bytes_received += bytes_received;
-        
+
         *self.status_codes.entry(status_code).or_insert(0) += 1;
-        
+
         if is_error {
             self.error_count += 1;
         }
@@ -52,7 +59,7 @@ impl PerformanceMetrics {
     pub fn calculate_results(&self) -> PerformanceResults {
         let total_duration = self.start_time.elapsed();
         let total_requests = self.request_count + self.connection_errors;
-        
+
         if self.response_times.is_empty() {
             return PerformanceResults {
                 total_requests,
@@ -85,7 +92,8 @@ impl PerformanceMetrics {
         };
 
         let avg_response_time = Duration::from_nanos(
-            (sorted_times.iter().map(|d| d.as_nanos()).sum::<u128>() / sorted_times.len() as u128) as u64
+            (sorted_times.iter().map(|d| d.as_nanos()).sum::<u128>() / sorted_times.len() as u128)
+                as u64,
         );
 
         let p50_index = sorted_times.len() * 50 / 100;
@@ -101,9 +109,18 @@ impl PerformanceMetrics {
             average_response_time: avg_response_time,
             min_response_time: sorted_times.first().copied().unwrap_or(Duration::ZERO),
             max_response_time: sorted_times.last().copied().unwrap_or(Duration::ZERO),
-            p50_response_time: sorted_times.get(p50_index).copied().unwrap_or(Duration::ZERO),
-            p95_response_time: sorted_times.get(p95_index).copied().unwrap_or(Duration::ZERO),
-            p99_response_time: sorted_times.get(p99_index).copied().unwrap_or(Duration::ZERO),
+            p50_response_time: sorted_times
+                .get(p50_index)
+                .copied()
+                .unwrap_or(Duration::ZERO),
+            p95_response_time: sorted_times
+                .get(p95_index)
+                .copied()
+                .unwrap_or(Duration::ZERO),
+            p99_response_time: sorted_times
+                .get(p99_index)
+                .copied()
+                .unwrap_or(Duration::ZERO),
             status_code_distribution: self.status_codes.clone(),
             bytes_per_second_sent: self.bytes_sent as f64 / total_duration.as_secs_f64(),
             bytes_per_second_received: self.bytes_received as f64 / total_duration.as_secs_f64(),
@@ -120,7 +137,7 @@ impl PerformanceMetrics {
         self.bytes_sent += other.bytes_sent;
         self.bytes_received += other.bytes_received;
         self.connection_errors += other.connection_errors;
-        
+
         for (status, count) in &other.status_codes {
             *self.status_codes.entry(*status).or_insert(0) += count;
         }
@@ -134,7 +151,7 @@ pub struct PerformanceResults {
     pub failed_requests: u64,
     pub success_rate: f64,
     pub requests_per_second: f64,
-    
+
     #[serde(with = "duration_serde")]
     pub average_response_time: Duration,
     #[serde(with = "duration_serde")]
@@ -147,12 +164,12 @@ pub struct PerformanceResults {
     pub p95_response_time: Duration,
     #[serde(with = "duration_serde")]
     pub p99_response_time: Duration,
-    
+
     pub status_code_distribution: HashMap<u16, u64>,
     pub bytes_per_second_sent: f64,
     pub bytes_per_second_received: f64,
     pub connection_errors: u64,
-    
+
     #[serde(with = "duration_serde")]
     pub total_duration: Duration,
 }
