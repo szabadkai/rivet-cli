@@ -47,7 +47,7 @@ serde_yaml = "0.9"
 
 # JSONPath and schema validation
 jsonpath-rust = "0.3"
-jsonschema = "0.17"
+jsonschema = "0.33"
 
 # OpenAPI and API imports
 openapiv3 = "2.0"
