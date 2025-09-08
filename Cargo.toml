@@ -64,7 +64,7 @@ tera = "1.19"
 
 # Error handling
 anyhow = "1.0"
-thiserror = "1.0"
+thiserror = "2.0"
 
 # File handling
 walkdir = "2.4"
