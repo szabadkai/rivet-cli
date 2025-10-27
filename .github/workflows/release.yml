@@ -79,7 +79,7 @@ jobs:
 
       - name: Upload completions/man (Linux only)
         if: ${{ matrix.target == 'x86_64-unknown-linux-gnu' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: rivet-completions-man
           path: artifacts/gen/*
@@ -98,7 +98,7 @@ jobs:
           copy target\${{ matrix.target }}\release\${{ matrix.artifact_name }} artifacts\${{ matrix.asset_name }}
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ matrix.asset_name }}
           path: artifacts/${{ matrix.asset_name }}
